@@ -2,16 +2,24 @@
 
 namespace App\Database\Migration;
 
-use App\Lib\Database\DB;
-use App\Lib\Http\ApiResponse;
-use App\Lib\Http\DefaultController;
+use Lib\Http\ApiResponse;
+use Lib\Database\DBAccess;
+use Lib\Database\DefaultModel;
+use Lib\Http\DefaultController;
 
 class Migration extends DefaultController
 {
     public function start(array $args = []): bool
     {
-        if (is_null(DB::$dbh)) {
-            DB::connect();
+        if (is_null(DBAccess::$connection)) {
+            DBAccess::connect(
+                drive: DB_CONFIG['mainrdb']['drive'],
+                host: DB_CONFIG['mainrdb']['host'],
+                port: DB_CONFIG['mainrdb']['port'],
+                name: DB_CONFIG['mainrdb']['name'],
+                user: DB_CONFIG['mainrdb']['user'],
+                password: DB_CONFIG['mainrdb']['password'],
+            );
         }
 
         $this->migrate();
@@ -25,7 +33,7 @@ class Migration extends DefaultController
 
     public function migrate()
     {
-        DB::executeCommand("CREATE TABLE IF NOT EXISTS products(
+        (new DefaultModel())->DBA->executeCommand("CREATE TABLE IF NOT EXISTS products(
             id serial4 NOT NULL,
             title varchar(255) NULL,
             description varchar(255) NULL,

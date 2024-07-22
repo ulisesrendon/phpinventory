@@ -1,11 +1,13 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../app/Config/routes.php';
+require __DIR__ . '/../Config/routes.php';
 
-use App\Lib\Http\Router;
-use App\Lib\Http\RequestData;
-use App\Lib\Http\RequestParamHelper;
+use Lib\Http\Router;
+use Lib\Http\RequestData;
+use Lib\Http\RequestParamHelper;
+
+define('DB_CONFIG', require __DIR__ . '/../Config/database.php');
 
 $RequestData = new RequestData(
     headers: getallheaders(),

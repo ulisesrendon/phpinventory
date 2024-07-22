@@ -1,8 +1,8 @@
 <?php
 
-use App\Lib\Http\Router;
+use Lib\Http\Router;
+use Lib\Http\DefaultController;
 use App\Database\Migration\Migration;
-use App\Lib\Http\DefaultController;
 use App\Product\Controller\ProductController;
 
 Router::any('/', [DefaultController::class, 'home']);

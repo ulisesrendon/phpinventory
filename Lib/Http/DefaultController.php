@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Lib\Http;
+namespace Lib\Http;
 
-use App\Lib\Http\ApiResponse;
+use Lib\Http\ApiResponse;
+use Lib\Http\RequestData;
 
 class DefaultController
 {

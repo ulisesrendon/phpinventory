@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Lib\Http;
+namespace Lib\Http;
+
+use Lib\Http\RequestData;
 
 class Router
 {

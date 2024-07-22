@@ -1,5 +1,5 @@
 <?php
-namespace App\Lib\Http;
+namespace Lib\Http;
 
 class RequestData
 {

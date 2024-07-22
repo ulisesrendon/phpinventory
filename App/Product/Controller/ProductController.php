@@ -2,9 +2,9 @@
 
 namespace App\Product\Controller;
 
-use App\Lib\Http\ApiResponse;
+use Lib\Http\ApiResponse;
+use Lib\Http\DefaultController;
 use App\Product\Model\ProductModel;
-use App\Lib\Http\DefaultController;
 
 class ProductController extends DefaultController
 {
