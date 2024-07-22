@@ -1,0 +1,19 @@
+{
+    "name": "neuralpin/phpinventory",
+    "description": "PHP Inventory Project",
+    "type": "project",
+    "license": "private",
+    "authors": [
+        {
+            "name": "Ulises Rendon",
+            "email": "fdulises@outlook.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}
