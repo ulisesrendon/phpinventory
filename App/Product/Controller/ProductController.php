@@ -12,17 +12,18 @@ class ProductController extends DefaultController
     public function getById(int $id)
     {
         $Product = (new ProductModel)->getByID($id);
+        $ProductList = (new ProductOptionGrouping($Product))->get();
 
         if(empty($Product)){
             ApiResponse::json([
                 'id' => $id,
-                'product' => $Product,
+                'product' => [],
             ], 404);
         }
 
         ApiResponse::json([
             'id' => $id,
-            'product' => $Product,
+            'product' => $ProductList[0],
         ]);
 
         return true;
