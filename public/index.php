@@ -3,10 +3,13 @@
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../Config/routes.php';
 
+use Dotenv\Dotenv;
 use Lib\Http\Router;
 use Lib\Http\RequestData;
 use Lib\Http\RequestParamHelper;
 
+$dotenv = Dotenv::createImmutable(__DIR__.'/..');
+$dotenv->safeLoad();
 define('DB_CONFIG', require __DIR__ . '/../Config/database.php');
 
 $RequestData = new RequestData(
