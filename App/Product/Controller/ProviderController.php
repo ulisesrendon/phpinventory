@@ -5,15 +5,14 @@ namespace App\Product\Controller;
 use Lib\Http\ApiResponse;
 use Lib\Http\DefaultController;
 use App\Product\Model\ProductModel;
-use App\Product\Presentor\ProductOptionGrouping;
 
-class ProductController extends DefaultController
+class ProviderController extends DefaultController
 {
     public function getById(int $id)
     {
         $Product = (new ProductModel)->getByID($id);
 
-        if(empty($Product)){
+        if (empty($Product)) {
             ApiResponse::json([
                 'id' => $id,
                 'product' => $Product,
@@ -23,19 +22,6 @@ class ProductController extends DefaultController
         ApiResponse::json([
             'id' => $id,
             'product' => $Product,
-        ]);
-
-        return true;
-    }
-
-    public function list()
-    {
-        $ProductBaseList = (new ProductModel)->list();
-        $ProductList = (new ProductOptionGrouping($ProductBaseList))->get();
-
-        ApiResponse::json([
-            'count' => count($ProductList),
-            'list' => $ProductList,
         ]);
 
         return true;

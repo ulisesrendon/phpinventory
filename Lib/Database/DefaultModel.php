@@ -6,7 +6,7 @@ use Lib\Database\DBAccess;
 
 class DefaultModel
 {
-    public $DBA;
+    public DBAccess $DBA;
     public function __construct()
     {
         if (is_null(DBAccess::$connection)){

@@ -9,6 +9,8 @@ use Lib\Http\DefaultController;
 
 class Migration extends DefaultController
 {
+    public DBAccess $DBA;
+
     public function start(array $args = []): bool
     {
         if (is_null(DBAccess::$connection)) {
@@ -22,6 +24,8 @@ class Migration extends DefaultController
             );
         }
 
+        $this->DBA = (new DefaultModel())->DBA;
+
         $this->migrate();
 
         ApiResponse::json([
@@ -33,14 +37,95 @@ class Migration extends DefaultController
 
     public function migrate()
     {
-        (new DefaultModel())->DBA->executeCommand("CREATE TABLE IF NOT EXISTS products(
-            id serial4 NOT NULL,
-            title varchar(255) NULL,
-            description varchar(255) NULL,
-            deleted_at timestamp(0) NULL,
-            created_at timestamp(0) NULL DEFAULT now(),
-            updated_at timestamp(0) NULL DEFAULT now(),
-            CONSTRAINT products_pkey PRIMARY KEY (id)
-        )");
+        try{
+            $this->DBA::$connection->beginTransaction();
+
+            $this->DBA->executeCommand("CREATE table if not exists products(
+                id serial4 not null primary key,
+                code varchar(255) null unique,
+                title varchar(255) null,
+                description varchar(255) null,
+                price numeric(10, 2) not null default 0,
+                deleted_at timestamp(0) null,
+                created_at timestamp(0) null default now(),
+                updated_at timestamp(0) null default now()
+            )");
+
+            $this->DBA->executeCommand("INSERT INTO 
+                products (code, title, price)
+                VALUES 
+                    ('700000001', 'Teclado Kumara Dragon Switches Blue', 1200),
+                    ('700000002', 'Teclado Kumara Dragon Switches Red', 1170),
+                    ('700000003', 'Mouse Logitech G505 Hero', 1000)
+                ON CONFLICT (code) DO NOTHING
+            ");
+
+            $this->DBA->executeCommand("CREATE table if not exists product_entries(
+                id serial4 not null primary key,
+                product_id bigint not null,
+                quantity integer not null,
+                provider_id integer not null,
+                cost numeric(10, 2) not null default 0,
+                lot varchar(255) null,
+                expiration_date timestamp(0) null,
+                stock_sync boolean not null default false,
+                deleted_at timestamp(0) null,
+                created_at timestamp(0) null default now(),
+                updated_at timestamp(0) null default now()
+            )");
+
+            $this->DBA->executeCommand("INSERT INTO 
+                product_entries (product_id, quantity, provider_id, cost, stock_sync)
+                VALUES 
+                    (1, 10, 1, 800, true),
+                    (1, 2, 2, 700, true),
+                    (2, 10, 1, 790, true),
+                    (3, 15, 3, 650, true)
+            ");
+
+            $this->DBA->executeCommand("CREATE table if not exists product_stocks(
+                id serial4 not null primary key,
+                product_id bigint not null,
+                product_entry_id bigint null unique,
+                stock integer not null default 0,
+                price numeric(10, 2) null,
+                created_at timestamp(0) null default now(),
+                updated_at timestamp(0) null default now()
+            )");
+
+            $this->DBA->executeCommand("INSERT INTO 
+                product_stocks (product_id, product_entry_id, stock)
+                VALUES 
+                    (1, 1, 10),
+                    (1, 2, 2),
+                    (2, 3, 10),
+                    (3, 4, 15)
+            ");
+
+            $this->DBA->executeCommand("CREATE table if not exists providers(
+                id serial4 not null primary key,
+                title varchar(255) null,
+                description varchar(255) null,
+                deleted_at timestamp(0) null,
+                created_at timestamp(0) null default now(),
+                updated_at timestamp(0) null default now()
+            )");
+
+            $this->DBA->executeCommand("INSERT INTO 
+                providers (title)
+                VALUES 
+                    ('Provider #1 el principal'),
+                    ('Provider #2 el bueno'),
+                    ('Provider #3 el otro')
+            ");
+
+            $this->DBA::$connection->commit();
+        }catch(\Exception $e){
+            $this->DBA::$connection->rollBack();
+
+            ApiResponse::json([
+                'data' => 'Migration Failed!'
+            ], 500);
+        }
     }
 }
