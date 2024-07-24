@@ -14,7 +14,7 @@ Router::post('/product', [ProductController::class, 'create']);
 Router::get('/product', [ProductController::class, 'list']);
 Router::get('/product/:id', [ProductController::class, 'getById']);
 Router::patch('/product/:id', [ProductController::class, 'update']);
-Router::delete('/product/:id', [ProductController::class, 'delete']);
+Router::delete('/product/:id', [ProductController::class, 'deleteById']);
 
 Router::get('/provider', [ProviderController::class, 'list']);
 Router::post('/provider', [ProviderController::class, 'create']);

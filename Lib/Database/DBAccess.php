@@ -4,6 +4,9 @@ namespace Lib\Database;
 use PDO;
 use PDOStatement;
 
+/**
+ * DBAccess - Database Access Layer
+ */
 class DBAccess
 {
 
@@ -55,7 +58,7 @@ class DBAccess
     {
         $replacement = [];
         foreach ($params as $key => $value) {
-            $replacement["/$key/"] = (is_string($value)) ? "\"$value\"" : $value;
+            $replacement["/\:$key/"] = (is_string($value)) ? "\"$value\"" : $value;
         }
         return (string) preg_replace(array_keys($replacement), array_values($replacement), $query);
     }
@@ -70,6 +73,19 @@ class DBAccess
     {
         $PDOStatement = self::$connection->prepare($query);
         return $PDOStatement->execute($params);
+    }
+
+    /**
+     * Execute a database insert command and return last inserted id
+     * @param string $query
+     * @param array $params
+     * @return bool|string|null
+     */
+    public function singleInsertCommand(string $query, array $params = []): bool|string|null
+    {
+        $PDOStatement = self::$connection->prepare($query);
+        $result = $PDOStatement->execute($params);
+        return $result ? self::$connection->lastInsertId() : null;
     }
 
     /**
@@ -109,13 +125,29 @@ class DBAccess
      * Fetch the first result of a query
      * @param string $query
      * @param array $params
-     * @return mixed
+     * @return array|object
      */
     public function fetchFirst(string $query, array $params = []): ?object
     {
         $result = self::fetchQuery($query, $params);
-        if ($result) {
+        if (!empty($result)) {
             return $result[0];
+        }
+        return null;
+    }
+
+    /**
+     * Fetch a scalar result from query
+     * @param string $query
+     * @param array $params
+     * @return mixed
+     */
+    public function fetchScalar(string $query, array $params = []): mixed
+    {
+        $PDOStatement = self::$connection->prepare($query);
+        $result = $PDOStatement->execute($params);
+        if ($result) {
+            return $PDOStatement->fetchColumn();
         }
         return null;
     }
