@@ -1,10 +1,10 @@
 <?php
-namespace App\Product\Model;
+namespace App\Product\DAO;
 
 use Lib\Database\DBAccess;
 use Lib\Database\DefaultModel;
 
-class ProductModel extends DefaultModel
+class ProductDAO extends DefaultModel
 {
 
     /**

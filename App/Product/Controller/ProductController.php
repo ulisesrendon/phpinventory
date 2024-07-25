@@ -3,18 +3,18 @@
 namespace App\Product\Controller;
 
 use Lib\Http\ApiResponse;
+use App\Product\DAO\ProductDAO;
 use Lib\Http\DefaultController;
-use App\Product\Model\ProductModel;
 use App\Product\Presentor\ProductOptionGrouping;
 
 class ProductController extends DefaultController
 {
     public function getById(int $id)
     {
-        $Product = (new ProductModel)->getByID($id);
-        $ProductList = (new ProductOptionGrouping($Product))->get();
+        $ProductOptions = (new ProductOptionGrouping((new ProductDAO)->getByID($id)))->get();
+        $Product = empty($ProductOptions) ? null : $ProductOptions[0];
 
-        if(empty($Product)){
+        if(is_null($Product)){
             ApiResponse::json([
                 'id' => $id,
                 'product' => [],
@@ -23,7 +23,7 @@ class ProductController extends DefaultController
 
         ApiResponse::json([
             'id' => $id,
-            'product' => $ProductList[0],
+            'product' => $Product,
         ]);
 
         return true;
@@ -31,7 +31,7 @@ class ProductController extends DefaultController
 
     public function list()
     {
-        $ProductBaseList = (new ProductModel)->list();
+        $ProductBaseList = (new ProductDAO)->list();
         $ProductList = (new ProductOptionGrouping($ProductBaseList))->get();
 
         ApiResponse::json([
@@ -44,7 +44,7 @@ class ProductController extends DefaultController
 
     public function create()
     {
-        $ProductModel = new ProductModel();
+        $ProductDAO = new ProductDAO();
 
         $code = $this->Request->body['code'] ?? null;
         $title = $this->Request->body['title'] ?? null;
@@ -57,7 +57,7 @@ class ProductController extends DefaultController
             ], 400);
         }
 
-        if ($ProductModel->codeExists($code)) {
+        if ($ProductDAO->codeExists($code)) {
             ApiResponse::json([
                 'error' => 'Product code already exists',
             ], 400);
@@ -69,7 +69,7 @@ class ProductController extends DefaultController
             ], 400);
         }
 
-        $result = $ProductModel->create(
+        $result = $ProductDAO->create(
             code: $code,
             title: $title,
             description: $description,
@@ -86,42 +86,58 @@ class ProductController extends DefaultController
 
     public function update(int $id)
     {
-        $ProductModel = new ProductModel();
+        $ProductDAO = new ProductDAO();
 
         $code = $this->Request->body['code'] ?? null;
         $title = $this->Request->body['title'] ?? null;
         $description = $this->Request->body['description'] ?? '';
         $price = $this->Request->body['price'] ?? 0;
 
-        //[TODO]
-        $OlderProductData = $ProductModel->getByID($id);
+        $OlderProductOptions = (new ProductOptionGrouping($ProductDAO->getByID($id)))->get();
+        $OlderProductData = empty($OlderProductOptions) ? null : $OlderProductOptions[0];
 
-        if (empty($code)) {
+        if (empty($OlderProductData)) {
+            ApiResponse::json([
+                'error' => 'Product not found',
+            ], 404);
+        }
+
+        if (!is_null($code) && empty($code)) {
             ApiResponse::json([
                 'error' => 'Product code is required',
             ], 400);
         }
 
-        if ($ProductModel->codeExists($code)) {
+        if ($code != $OlderProductData->code && $ProductDAO->codeExists($code)) {
             ApiResponse::json([
                 'error' => 'Product code already exists',
             ], 400);
         }
 
-        if (empty($title)) {
+        if (!is_null($code) && empty($title)) {
             ApiResponse::json([
                 'error' => 'Product title is required',
             ], 400);
         }
 
-        $result = $ProductModel->update(
+        $fields = [];
+
+        if(!is_null($code)){
+            $fields['code'] = (string) $code;
+        }
+        if(!is_null($title)){
+            $fields['title'] = (string) $title;
+        }
+        if(!is_null($description)){
+            $fields['description'] = (string) $description;
+        }
+        if (!is_null($price)) {
+            $fields['price'] = (float) $price;
+        }
+
+        $result = $ProductDAO->update(
             id: $id,
-            fields: [
-                'code' => $code,
-                'title' => $title,
-                'description' => $description,
-                'price' => $price,
-            ]
+            fields: $fields
         );
 
         ApiResponse::json([
@@ -133,7 +149,7 @@ class ProductController extends DefaultController
 
     public function deleteById(int $id)
     {
-        $ProductModel = new ProductModel();
+        $ProductDAO = new ProductDAO();
 
         if(empty($id)){
             ApiResponse::json([
@@ -141,7 +157,7 @@ class ProductController extends DefaultController
             ], 400);
         }
 
-        $result = $ProductModel->deleteByID($id);
+        $result = $ProductDAO->deleteByID($id);
 
         ApiResponse::json([
             'status' => !empty($result) ? 'success' : 'something went wrong',
