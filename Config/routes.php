@@ -23,7 +23,7 @@ Router::patch('/provider/:id', [ProviderController::class, 'update']);
 Router::delete('/provider/:id', [ProviderController::class, 'delete']);
 
 Router::get('/stock', [StockController::class, 'list']);
+Router::get('/stock/:id', [StockController::class, 'getByProductId']);
 Router::post('/stock', [StockController::class, 'create']);
-Router::get('/stock/:id', [StockController::class, 'getById']);
 Router::post('/stock/:id/sync', [StockController::class, 'productStockSync']);
 Router::delete('/stock/:id', [StockController::class, 'delete']);

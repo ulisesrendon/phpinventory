@@ -11,6 +11,5 @@ class RequestData
         public string $uri = '/',
     )
     {
-
     }
 }

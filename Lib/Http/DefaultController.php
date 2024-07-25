@@ -7,14 +7,12 @@ use Lib\Http\RequestData;
 
 class DefaultController
 {
-    public function __construct(public RequestData $Request){
-
+    public function __construct(public RequestData $Request)
+    {
     }
     public function home(array $args = []): bool
     {
-        ApiResponse::json([
-            'data' => 'Hello, world!'
-        ]);
+        ApiResponse::json('Hello, world!');
 
         return true;
     }
