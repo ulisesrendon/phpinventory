@@ -90,8 +90,8 @@ class ProductController extends DefaultController
 
         $code = $this->Request->body['code'] ?? null;
         $title = $this->Request->body['title'] ?? null;
-        $description = $this->Request->body['description'] ?? '';
-        $price = $this->Request->body['price'] ?? 0;
+        $description = $this->Request->body['description'] ?? null;
+        $price = $this->Request->body['price'] ?? null;
 
         $OlderProductOptions = (new ProductOptionGrouping($ProductDAO->getByID($id)))->get();
         $OlderProductData = empty($OlderProductOptions) ? null : $OlderProductOptions[0];
