@@ -43,9 +43,15 @@ class StockController extends DefaultController
 
     public function create()
     {
-        // $code = $this->Request->body['code'] ?? null;
+        $stock = $this->Request->body['stock'] ?? null;
 
-        // $StockDAO = new StockDAO();
+        if(empty($stock) || gettype($stock) != 'array'){
+            ApiResponse::json([
+                'error' => 'No product stock received',
+            ], 404);
+        }
+
+        $StockDAO = new StockDAO();
 
         // $result = $StockDAO->create(
         //     code: $code,
