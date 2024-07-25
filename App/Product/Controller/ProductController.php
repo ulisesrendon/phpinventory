@@ -44,12 +44,12 @@ class ProductController extends DefaultController
 
     public function create()
     {
-        $ProductDAO = new ProductDAO();
-
         $code = $this->Request->body['code'] ?? null;
         $title = $this->Request->body['title'] ?? null;
         $description = $this->Request->body['description'] ?? '';
         $price = $this->Request->body['price'] ?? 0;
+
+        $ProductDAO = new ProductDAO();
 
         if(empty($code)){
             ApiResponse::json([
@@ -108,7 +108,11 @@ class ProductController extends DefaultController
             ], 400);
         }
 
-        if ($code != $OlderProductData->code && $ProductDAO->codeExists($code)) {
+        if (
+            !empty($code)
+            && $code != $OlderProductData->code 
+            && $ProductDAO->codeExists($code)
+        ) {
             ApiResponse::json([
                 'error' => 'Product code already exists',
             ], 400);
@@ -120,7 +124,9 @@ class ProductController extends DefaultController
             ], 400);
         }
 
-        $fields = [];
+        $fields = [
+            'updated_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+        ];
 
         if(!is_null($code)){
             $fields['code'] = (string) $code;
@@ -142,22 +148,14 @@ class ProductController extends DefaultController
 
         ApiResponse::json([
             'status' => !empty($result) ? 'success' : 'something went wrong',
-        ], 201);
+        ], 200);
 
         return true;
     }
 
     public function deleteById(int $id)
     {
-        $ProductDAO = new ProductDAO();
-
-        if(empty($id)){
-            ApiResponse::json([
-                'error' => 'Product identifier not provided',
-            ], 400);
-        }
-
-        $result = $ProductDAO->deleteByID($id);
+        $result = (new ProductDAO())->deleteByID($id);
 
         ApiResponse::json([
             'status' => !empty($result) ? 'success' : 'something went wrong',

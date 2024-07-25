@@ -1,7 +1,6 @@
 <?php
 namespace App\Product\DAO;
 
-use Lib\Database\DBAccess;
 use Lib\Database\DefaultModel;
 
 class ProductDAO extends DefaultModel
