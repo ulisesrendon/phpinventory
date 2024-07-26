@@ -6,42 +6,44 @@ use Lib\Database\DefaultModel;
 class StockDAO extends DefaultModel
 {
 
-    /**
-     * Save new product data
-     * @param string $code
-     * @param string $title
-     * @param string $description
-     * @param float $price
-     * @return bool|int|null
-     */
     public function create(
-        string $code, 
-        string $title,
-        string $description = '',
-        float $price = 0,
+        int $product_id,
+        int $quantity,
+        ?int $provider_id = null,
+        float $cost = 0,
+        ?string $lot = null,
+        ?string $expiration_date = null,
     ): bool|string|null
     {
-        return $this->DBA->singleInsertCommand("INSERT INTO products(
-                code,
-                title,
-                description,
-                price
+        return $this->DBA->singleInsertCommand("INSERT INTO product_entries(
+                product_id,
+                quantity,
+                provider_id,
+                cost,
+                lot,
+                expiration_date
             ) VALUES(
-                :code,
-                :title,
-                :description,
-                :price
+                :product_id,
+                :quantity,
+                :provider_id,
+                :cost,
+                :lot,
+                :expiration_date
             )", [
-                'code' => $code,
-                'title' => $title,
-                'description' => $description,
-                'price' => $price,
+                'product_id' => $product_id,
+                'quantity' => $quantity,
+                'provider_id' => $provider_id,
+                'cost' => $cost,
+                'lot' => $lot,
+                'expiration_date' => $expiration_date,
             ]);
     }
 
     public function deleteByID(int $id): bool
     {
-        return $this->DBA->executeCommand("DELETE FROM products WHERE id = :id", [$id]);
+        return $this->DBA->executeCommand("DELETE FROM product_entries 
+            WHERE id = :id and stock_sync is not true
+            ", [$id]);
     }
 
     public function getByProductID(int $id): ?array
@@ -53,11 +55,16 @@ class StockDAO extends DefaultModel
                 product_stocks.stock,
                 product_entries.stock_sync,
                 products.price as base_price,
-                product_stocks.price as price_alt
+                product_stocks.price as price_alt,
+                product_entries.provider_id,
+                providers.title as provider_title,
+                product_entries.created_at
             from product_entries
             left join products on products.id = product_entries.product_id
             left join product_stocks on product_stocks.product_entry_id = product_entries.id
+            left join providers on providers.id = product_entries.provider_id
             where product_entries.product_id = :id
+            order by product_entries.created_at desc
         ", [$id]);
     }
 
@@ -78,11 +85,11 @@ class StockDAO extends DefaultModel
         ", [$id]);
     }
 
-    public function codeExists(string $code): ?bool
+    public function productIdExists(int $id): ?bool
     {
         return $this->DBA->fetchScalar("SELECT exists(
-            SELECT products.code from products where products.code = :code
-        )", [$code]);
+            SELECT id from products where id = :id
+        )", [$id]);
     }
 
     public function list(): ?array
@@ -115,7 +122,7 @@ class StockDAO extends DefaultModel
         }
         $FieldsString = implode(', ', $FieldsCompacted);
 
-        return $this->DBA->executeCommand("UPDATE products SET $FieldsString WHERE id = :id", [
+        return $this->DBA->executeCommand("UPDATE product_entries SET $FieldsString WHERE id = :id", [
             'id' => $id,
             ...$fields,
         ]);

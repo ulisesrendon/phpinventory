@@ -46,6 +46,7 @@ class Migration extends DefaultController
                 title varchar(255) null,
                 description varchar(255) null,
                 price numeric(10, 2) not null default 0,
+                is_active boolean not null default false,
                 deleted_at timestamp(0) null,
                 created_at timestamp(0) null default now(),
                 updated_at timestamp(0) null default now()

@@ -26,4 +26,4 @@ Router::get('/stock', [StockController::class, 'list']);
 Router::get('/stock/:id', [StockController::class, 'getByProductId']);
 Router::post('/stock', [StockController::class, 'create']);
 Router::post('/stock/:id/sync', [StockController::class, 'productStockSync']);
-Router::delete('/stock/:id', [StockController::class, 'delete']);
+Router::delete('/stock', [StockController::class, 'delete']);
