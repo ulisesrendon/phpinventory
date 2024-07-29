@@ -46,7 +46,7 @@ class Migration extends DefaultController
                 title varchar(255) null,
                 description varchar(255) null,
                 price numeric(10, 2) not null default 0,
-                is_active boolean not null default false,
+                active boolean not null default false,
                 deleted_at timestamp(0) null,
                 created_at timestamp(0) null default now(),
                 updated_at timestamp(0) null default now()
@@ -69,19 +69,18 @@ class Migration extends DefaultController
                 cost numeric(10, 2) not null default 0,
                 lot varchar(255) null,
                 expiration_date timestamp(0) null,
-                stock_sync boolean not null default false,
                 deleted_at timestamp(0) null,
                 created_at timestamp(0) null default now(),
                 updated_at timestamp(0) null default now()
             )");
 
             $this->DBA->executeCommand("INSERT INTO 
-                product_entries (product_id, quantity, provider_id, cost, stock_sync)
+                product_entries (product_id, quantity, provider_id, cost)
                 VALUES 
-                    (1, 10, 1, 800, true),
-                    (1, 2, 2, 700, true),
-                    (2, 10, 1, 790, true),
-                    (3, 15, 3, 650, true)
+                    (1, 10, 1, 800),
+                    (1, 2, 2, 700),
+                    (2, 10, 1, 790),
+                    (3, 15, 3, 650)
             ");
 
             $this->DBA->executeCommand("CREATE table if not exists product_stocks(

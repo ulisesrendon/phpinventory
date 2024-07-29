@@ -138,7 +138,7 @@ class StockController extends DefaultController
         }
 
         foreach($entries as $id){
-            $result = (new StockDAO())->deleteByID($id);
+            $result = (new StockDAO())->deleteEntryByID($id);
         }
 
         ApiResponse::json([

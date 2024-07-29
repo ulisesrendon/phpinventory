@@ -39,31 +39,30 @@ class StockDAO extends DefaultModel
             ]);
     }
 
-    public function deleteByID(int $id): bool
+    public function deleteEntryByID(int $id): bool
     {
-        return $this->DBA->executeCommand("DELETE FROM product_entries 
-            WHERE id = :id and stock_sync is not true
-            ", [$id]);
+        return $this->DBA->executeCommand("DELETE FROM product_entries WHERE id = :id", [$id]);
     }
 
     public function getByProductID(int $id): ?array
     {
         return $this->DBA->fetchQuery("SELECT 
-                product_entries.id,
+                products.id as product_id,
+                product_stocks.id as stock_id,
+                product_entries.id as entry_id,
                 product_entries.lot,
                 product_entries.quantity,
                 product_stocks.stock,
-                product_entries.stock_sync,
                 products.price as base_price,
                 product_stocks.price as price_alt,
                 product_entries.provider_id,
                 providers.title as provider_title,
                 product_entries.created_at
-            from product_entries
-            left join products on products.id = product_entries.product_id
-            left join product_stocks on product_stocks.product_entry_id = product_entries.id
+            from product_stocks
+            left join products on products.id = product_stocks.product_id
+            left join product_entries on product_stocks.product_entry_id = product_entries.id
             left join providers on providers.id = product_entries.provider_id
-            where product_entries.product_id = :id
+            where product_stocks.product_id = :id
             order by product_entries.created_at desc
         ", [$id]);
     }
