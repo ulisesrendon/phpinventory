@@ -5,16 +5,10 @@ use PDO;
 use PDOStatement;
 
 /**
- * DBAccess - Database Access Layer
+ * DataBaseAccess - Database Access Layer
  */
-class DBAccess
+class DataBaseAccess implements DatabaseTransaction, DatabaseFetchQuery
 {
-
-    /**
-     * Database Connection
-     * @var 
-     */
-    static public $connection;
 
     /**
      * Summary of connect
@@ -26,26 +20,8 @@ class DBAccess
      * @param string $password
      * @return PDO
      */
-    public static function connect(
-        string $drive = 'pgsql',
-        string $host = 'localhost',
-        int $port = 5432,
-        string $name = 'postgres',
-        string $user = 'postgres',
-        string $password = '',
-    )
+    public function __construct(private readonly PDO $PDO)
     {
-        self::$connection = new PDO(
-            "$drive:host=$host;port=$port;dbname=$name",
-            $user,
-            $password,
-            [
-                PDO::ATTR_PERSISTENT => false,
-                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
-            ]
-        );
-
-        return self::$connection;
     }
 
     /**
@@ -71,7 +47,7 @@ class DBAccess
      */
     public function executeCommand(string $query, array $params = []): bool
     {
-        $PDOStatement = self::$connection->prepare($query);
+        $PDOStatement = $this->PDO->prepare($query);
         return $PDOStatement->execute($params);
     }
 
@@ -83,9 +59,8 @@ class DBAccess
      */
     public function singleInsertCommand(string $query, array $params = []): bool|string|null
     {
-        $PDOStatement = self::$connection->prepare($query);
-        $result = $PDOStatement->execute($params);
-        return $result ? self::$connection->lastInsertId() : null;
+        $result = $this->executeCommand($query, $params);
+        return $result ? $this->PDO->lastInsertId() : null;
     }
 
     /**
@@ -96,7 +71,7 @@ class DBAccess
      */
     public function sendCommand(string $command, array $params = []): PDOStatement
     {
-        $PDOStatement = self::$connection->prepare($command);
+        $PDOStatement = $this->PDO->prepare($command);
         $PDOStatement->execute($params);
         return $PDOStatement;
     }
@@ -109,7 +84,7 @@ class DBAccess
      */
     public function fetchQuery(string $query, array $params = []): ?array
     {
-        $PDOStatement = self::$connection->prepare($query);
+        $PDOStatement = $this->PDO->prepare($query);
         $result = $PDOStatement->execute($params);
         if ($result) {
             $rows = [];
@@ -144,11 +119,26 @@ class DBAccess
      */
     public function fetchScalar(string $query, array $params = []): mixed
     {
-        $PDOStatement = self::$connection->prepare($query);
+        $PDOStatement = $this->PDO->prepare($query);
         $result = $PDOStatement->execute($params);
         if ($result) {
             return $PDOStatement->fetchColumn();
         }
         return null;
+    }
+
+    public function beginTransaction(): bool
+    {
+        return $this->PDO->beginTransaction();
+    }
+
+    public function commit(): bool
+    {
+        return $this->PDO->commit();
+    }
+
+    public function rollBack(): bool
+    {
+        return $this->PDO->rollBack();
     }
 }

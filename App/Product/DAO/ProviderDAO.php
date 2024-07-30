@@ -1,10 +1,16 @@
 <?php
 namespace App\Product\DAO;
 
-use Lib\Database\DefaultModel;
+use Lib\Database\DataBaseAccess;
 
-class ProviderDAO extends DefaultModel
+class ProviderDAO
 {
+
+    public DataBaseAccess $DBA;
+    public function __construct(DataBaseAccess $DataBaseAccess)
+    {
+        $this->DBA = $DataBaseAccess;
+    }
 
     /**
      * Save new product data
@@ -48,7 +54,7 @@ class ProviderDAO extends DefaultModel
         ", [$id]);
     }
 
-    public function exists(string $title): ?bool
+    public function titleExists(string $title): ?bool
     {
         return $this->DBA->fetchScalar("SELECT exists(
             SELECT title from providers where title ilike :title

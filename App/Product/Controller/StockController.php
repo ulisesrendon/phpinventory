@@ -3,14 +3,22 @@
 namespace App\Product\Controller;
 
 use Lib\Http\ApiResponse;
+use Lib\Http\RequestData;
 use App\Product\DAO\StockDAO;
 use Lib\Http\DefaultController;
 
 class StockController extends DefaultController
 {
+    private readonly StockDAO $StockDAO;
+    public function __construct(public RequestData $Request)
+    {
+        parent::__construct($Request);
+        $this->StockDAO = new StockDAO($this->DataBaseAccess);
+    }
+
     public function list()
     {
-        $List = (new StockDAO)->list();
+        $List = $this->StockDAO->list();
 
         ApiResponse::json([
             'count' => count($List),
@@ -23,8 +31,8 @@ class StockController extends DefaultController
     public function getByProductId(int $id)
     {
 
-        $ProductData = (new StockDAO)->getProductDataByID($id);
-        $Entries = (new StockDAO)->getByProductID($id);
+        $ProductData = $this->StockDAO->getProductDataByID($id);
+        $Entries = $this->StockDAO->getByProductID($id);
 
         if (is_null($ProductData)) {
             ApiResponse::json([
@@ -50,15 +58,13 @@ class StockController extends DefaultController
             ], 400);
         }
 
-        $StockDAO = new StockDAO();
-
         $TotalAdded = 0;
         foreach($stock as $ProductStock){
 
             if(
                 !isset($ProductStock['product_id']) 
                 || !is_numeric($ProductStock['product_id'])
-                || !$StockDAO->productIdExists($ProductStock['product_id'])
+                || !$this->StockDAO->productIdExists($ProductStock['product_id'])
             ){
                 continue;
             }
@@ -93,7 +99,7 @@ class StockController extends DefaultController
                 continue;
             }
 
-            $StockDAO->create(
+            $this->StockDAO->create(
                 product_id: $ProductStock['product_id'],
                 quantity: $ProductStock['quantity'],
                 provider_id: $ProductStock['provider_id'] ?? null,
@@ -138,7 +144,7 @@ class StockController extends DefaultController
         }
 
         foreach($entries as $id){
-            $result = (new StockDAO())->deleteEntryByID($id);
+            $result = $this->StockDAO->deleteEntryById($id);
         }
 
         ApiResponse::json([

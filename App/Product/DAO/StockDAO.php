@@ -1,10 +1,15 @@
 <?php
 namespace App\Product\DAO;
 
-use Lib\Database\DefaultModel;
+use Lib\Database\DataBaseAccess;
 
-class StockDAO extends DefaultModel
+class StockDAO
 {
+    public DataBaseAccess $DBA;
+    public function __construct(DataBaseAccess $DataBaseAccess)
+    {
+        $this->DBA = $DataBaseAccess;
+    }
 
     public function create(
         int $product_id,
@@ -39,7 +44,7 @@ class StockDAO extends DefaultModel
             ]);
     }
 
-    public function deleteEntryByID(int $id): bool
+    public function deleteEntryById(int $id): bool
     {
         return $this->DBA->executeCommand("DELETE FROM product_entries WHERE id = :id", [$id]);
     }

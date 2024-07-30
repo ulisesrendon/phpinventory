@@ -6,7 +6,7 @@ use Lib\Http\RequestData;
 
 class Router
 {
-
+    // [TODO] Improve controller collection
     public static array $routes = [
         'get' => [],
         'post' => [],
@@ -22,6 +22,7 @@ class Router
         self::$routes[$method][$path] = $callable;
     }
 
+    // [TODO] Improve method calling
     public static function get(string $path, object|array $callable)
     {
         self::addRoute('get', $path, $callable);
@@ -64,10 +65,8 @@ class Router
         }
 
         foreach (self::$routes[strtolower($RequestData->method)] as $routeUrl => $controller) {
-
-            if (is_array($controller)) {
-                $controller = [new $controller[0]($RequestData), $controller[1]];
-            }
+            $urlFound = false;
+            $urlHasParams = false;
 
             // Check if the route URL contains parameters
             if (strpos($routeUrl, ':') !== false) {
@@ -80,13 +79,25 @@ class Router
                     preg_match_all('/:([a-zA-Z0-9]+)/', $routeUrl, $param_names);
                     $Params = array_combine($param_names[1], $Params);
 
-                    return call_user_func_array($controller, $Params);
+                    $urlFound = true;
+                    $urlHasParams = true;
                 }
             } else {
                 // If the route URL does not contain parameters, compare it directly to the URL
                 if ($RequestData->uri === $routeUrl) {
-                    return call_user_func($controller);
+                    $urlFound = true;
                 }
+            }
+
+            // [TODO] Improve controller validation
+            if ($urlFound && is_array($controller)) {
+                $controller = [new $controller[0]($RequestData), $controller[1]];
+            }
+
+            if($urlFound && !$urlHasParams){
+                return call_user_func($controller);
+            }else if($urlFound && $urlHasParams){
+                return call_user_func_array($controller, $Params);
             }
         }
 

@@ -3,15 +3,24 @@
 namespace App\Product\Controller;
 
 use Lib\Http\ApiResponse;
+use Lib\Http\RequestData;
 use Lib\Http\DefaultController;
 use App\Product\DAO\ProviderDAO;
-use App\Product\Model\ProductDAO;
 
 class ProviderController extends DefaultController
 {
+
+    private readonly ProviderDAO $ProviderDAO;
+
+    public function __construct(public RequestData $Request)
+    {
+        parent::__construct($Request);
+        $this->ProviderDAO = new ProviderDAO($this->DataBaseAccess);
+    }
+
     public function getById(int $id)
     {
-        $Provider = (new ProviderDAO)->getByID($id);
+        $Provider = $this->ProviderDAO->getByID($id);
 
         if (empty($Provider)) {
             ApiResponse::json([
@@ -26,7 +35,7 @@ class ProviderController extends DefaultController
 
     public function list()
     {
-        $List = (new ProviderDAO)->list();
+        $List = $this->ProviderDAO->list();
 
         ApiResponse::json([
             'count' => count($List),
@@ -41,21 +50,19 @@ class ProviderController extends DefaultController
         $title = $this->Request->body['title'] ?? null;
         $description = $this->Request->body['description'] ?? '';
 
-        $ProviderDAO = new ProviderDAO();
-
         if (empty($title)) {
             ApiResponse::json([
                 'error' => 'Provider title is required',
             ], 400);
         }
 
-        if ($ProviderDAO->exists($title)) {
+        if ($this->ProviderDAO->titleExists($title)) {
             ApiResponse::json([
                 'error' => 'Provider already exists',
             ], 400);
         }
 
-        $result = $ProviderDAO->create(
+        $result = $this->ProviderDAO->create(
             title: $title,
             description: $description,
         );
@@ -75,8 +82,7 @@ class ProviderController extends DefaultController
         $title = $this->Request->body['title'] ?? null;
         $description = $this->Request->body['description'] ?? null;
 
-        $ProviderDAO = new ProviderDAO();
-        $OlderData = $ProviderDAO->getByID($id);
+        $OlderData = $this->ProviderDAO->getByID($id);
 
         if (empty($OlderData)) {
             ApiResponse::json([
@@ -93,7 +99,7 @@ class ProviderController extends DefaultController
         if (
             !empty($title)
             && strtolower($title) != strtolower($OlderData->title) 
-            && $ProviderDAO->exists($title)
+            && $this->ProviderDAO->titleExists($title)
         ) {
             ApiResponse::json([
                 'error' => 'Provider already exists',
@@ -110,7 +116,7 @@ class ProviderController extends DefaultController
             $fields['description'] = (string) $description;
         }
 
-        $result = $ProviderDAO->update(
+        $result = $this->ProviderDAO->update(
             id: $id,
             fields: $fields
         );
@@ -124,7 +130,7 @@ class ProviderController extends DefaultController
 
     public function delete(int $id)
     {
-        $result = (new ProviderDAO())->deleteByID($id);
+        $result = $this->ProviderDAO->deleteByID($id);
 
         ApiResponse::json([
             'status' => !empty($result) ? 'success' : 'something went wrong',

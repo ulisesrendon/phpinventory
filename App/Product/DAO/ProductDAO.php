@@ -1,10 +1,15 @@
 <?php
 namespace App\Product\DAO;
 
-use Lib\Database\DefaultModel;
+use Lib\Database\DataBaseAccess;
 
-class ProductDAO extends DefaultModel
+class ProductDAO
 {
+    public DataBaseAccess $DBA;
+    public function __construct(DataBaseAccess $DataBaseAccess)
+    {
+        $this->DBA = $DataBaseAccess;
+    }
 
     /**
      * Save new product data
@@ -42,6 +47,24 @@ class ProductDAO extends DefaultModel
     public function deleteByID(int $id): bool
     {
         return $this->DBA->executeCommand("DELETE FROM products WHERE id = :id", [$id]);
+    }
+
+    public function update(int $id, array $fields): ?bool
+    {
+        if (empty($fields)) {
+            return null;
+        }
+
+        $FieldsCompacted = [];
+        foreach ($fields as $field => $value) {
+            $FieldsCompacted[] = "$field = :$field";
+        }
+        $FieldsString = implode(', ', $FieldsCompacted);
+
+        return $this->DBA->executeCommand("UPDATE products SET $FieldsString WHERE id = :id", [
+            'id' => $id,
+            ...$fields,
+        ]);
     }
 
     public function getByID(int $id): ?array
@@ -86,23 +109,5 @@ class ProductDAO extends DefaultModel
             where deleted_at is null
             order by products.title
         ");
-    }
-
-    public function update(int $id, array $fields): ?bool
-    {
-        if(empty($fields)){
-            return null;
-        }
-
-        $FieldsCompacted = [];
-        foreach($fields as $field => $value){
-            $FieldsCompacted[] = "$field = :$field";
-        }
-        $FieldsString = implode(', ', $FieldsCompacted);
-
-        return $this->DBA->executeCommand("UPDATE products SET $FieldsString WHERE id = :id", [
-            'id' => $id,
-            ...$fields,
-        ]);
     }
 }
