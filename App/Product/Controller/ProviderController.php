@@ -2,7 +2,7 @@
 
 namespace App\Product\Controller;
 
-use Lib\Http\ApiResponse;
+use Lib\Http\Response;
 use Lib\Http\RequestData;
 use Lib\Http\DefaultController;
 use App\Product\DAO\ProviderQuery;
@@ -26,12 +26,12 @@ class ProviderController extends DefaultController
         $Provider = $this->ProviderQuery->getByID($id);
 
         if (empty($Provider)) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Provider not found',
             ], 404);
         }
 
-        ApiResponse::json($Provider);
+        Response::json($Provider);
 
         return true;
     }
@@ -40,7 +40,7 @@ class ProviderController extends DefaultController
     {
         $List = $this->ProviderQuery->list();
 
-        ApiResponse::json([
+        Response::json([
             'count' => count($List),
             'list' => $List,
         ]);
@@ -54,13 +54,13 @@ class ProviderController extends DefaultController
         $description = $this->Request->body['description'] ?? '';
 
         if (empty($title)) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Provider title is required',
             ], 400);
         }
 
         if ($this->ProviderQuery->titleExists($title)) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Provider already exists',
             ], 400);
         }
@@ -70,7 +70,7 @@ class ProviderController extends DefaultController
             description: $description,
         );
 
-        ApiResponse::json([
+        Response::json([
             'status' => 'success',
             'id' => !empty($result) ? (int) $result : null,
         ], 201);
@@ -88,13 +88,13 @@ class ProviderController extends DefaultController
         $OlderData = $this->ProviderQuery->getByID($id);
 
         if (empty($OlderData)) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Provider not found',
             ], 404);
         }
 
         if (!is_null($title) && empty($title)) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Provider title is required',
             ], 400);
         }
@@ -104,7 +104,7 @@ class ProviderController extends DefaultController
             && strtolower($title) != strtolower($OlderData->title) 
             && $this->ProviderQuery->titleExists($title)
         ) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Provider already exists',
             ], 400);
         }
@@ -124,7 +124,7 @@ class ProviderController extends DefaultController
             fields: $fields
         );
 
-        ApiResponse::json([
+        Response::json([
             'status' => !empty($result) ? 'success' : 'something went wrong',
         ], 200);
 
@@ -135,7 +135,7 @@ class ProviderController extends DefaultController
     {
         $result = $this->ProviderCommand->deleteByID($id);
 
-        ApiResponse::json([
+        Response::json([
             'status' => !empty($result) ? 'success' : 'something went wrong',
         ], 200);
 

@@ -2,7 +2,7 @@
 
 namespace Lib\Http;
 
-use Lib\Http\ApiResponse;
+use Lib\Http\Response;
 use Lib\Http\RequestData;
 use Lib\Database\DataBaseAccess;
 use Lib\Database\PDOContainer;
@@ -24,7 +24,7 @@ class DefaultController
     }
     public function home(array $args = []): bool
     {
-        ApiResponse::json('Hello, world!');
+        Response::json('Hello, world!');
 
         return true;
     }

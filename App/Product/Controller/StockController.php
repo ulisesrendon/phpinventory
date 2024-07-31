@@ -2,7 +2,7 @@
 
 namespace App\Product\Controller;
 
-use Lib\Http\ApiResponse;
+use Lib\Http\Response;
 use Lib\Http\RequestData;
 use App\Product\DAO\StockQuery;
 use Lib\Http\DefaultController;
@@ -23,7 +23,7 @@ class StockController extends DefaultController
     {
         $List = $this->StockQuery->list();
 
-        ApiResponse::json([
+        Response::json([
             'count' => count($List),
             'list' => $List,
         ]);
@@ -38,12 +38,12 @@ class StockController extends DefaultController
         $Entries = $this->StockQuery->getByProductID($id);
 
         if (is_null($ProductData)) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Product not found',
             ], 404);
         }
 
-        ApiResponse::json([
+        Response::json([
             'product' => $ProductData,
             'entries' => $Entries,
         ]);
@@ -56,7 +56,7 @@ class StockController extends DefaultController
         $stock = $this->Request->body['stock'] ?? null;
 
         if(empty($stock) || gettype($stock) != 'array'){
-            ApiResponse::json([
+            Response::json([
                 'error' => 'No product stock received',
             ], 400);
         }
@@ -114,13 +114,13 @@ class StockController extends DefaultController
         }
 
         if($TotalAdded != count($stock)){
-            ApiResponse::json([
+            Response::json([
                 'status' => 'success',
                 'message' => 'Some data could not be saved due to data formatting issues',
             ], 201);
         }
 
-        ApiResponse::json([
+        Response::json([
             'status' => 'success',
             'message' => 'All data have been saved',
         ], 201);
@@ -133,14 +133,14 @@ class StockController extends DefaultController
         $entries = $this->Request->body['entries'] ?? null;
 
         if (!is_array($entries) || empty($entries)) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Invalid product data'
             ], 400);
         }
 
         foreach($entries as $id){
             if (!is_numeric($id) || empty($id)) {
-                ApiResponse::json([
+                Response::json([
                     'error' => 'Invalid product data'
                 ], 400);
             }
@@ -150,7 +150,7 @@ class StockController extends DefaultController
             $result = $this->StockCommand->deleteEntryById($id);
         }
 
-        ApiResponse::json([
+        Response::json([
             'status' => !empty($result) ? 'success' : 'something went wrong',
         ], 200);
 
@@ -159,7 +159,7 @@ class StockController extends DefaultController
 
     public function productStockSync()
     {
-        ApiResponse::json('Hello!');
+        Response::json('Hello!');
 
         return true;
     }

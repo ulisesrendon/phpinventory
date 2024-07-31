@@ -1,7 +1,7 @@
 <?php
 namespace Lib\Http;
 
-class ApiResponse
+class Response
 {
     public function __construct()
     {

@@ -11,5 +11,6 @@ class RequestData
         public string $uri = '/',
     )
     {
+        $this->method = strtolower($this->method);
     }
 }

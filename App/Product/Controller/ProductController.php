@@ -2,7 +2,7 @@
 
 namespace App\Product\Controller;
 
-use Lib\Http\ApiResponse;
+use Lib\Http\Response;
 use Lib\Http\RequestData;
 use Lib\Http\DefaultController;
 use App\Product\DAO\ProductQuery;
@@ -25,13 +25,13 @@ class ProductController extends DefaultController
         $Product = empty($ProductOptions) ? null : $ProductOptions[0];
 
         if(is_null($Product)){
-            ApiResponse::json([
+            Response::json([
                 'id' => $id,
                 'product' => [],
             ], 404);
         }
 
-        ApiResponse::json([
+        Response::json([
             'id' => $id,
             'product' => $Product,
         ]);
@@ -43,7 +43,7 @@ class ProductController extends DefaultController
     {
         $ProductList = (new ProductOptionGrouping($this->ProductQuery->list()))->get();
 
-        ApiResponse::json([
+        Response::json([
             'count' => count($ProductList),
             'list' => $ProductList,
         ]);
@@ -59,19 +59,19 @@ class ProductController extends DefaultController
         $price = $this->Request->body['price'] ?? 0;
 
         if(empty($code)){
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Product code is required',
             ], 400);
         }
 
         if ($this->ProductQuery->codeExists($code)) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Product code already exists',
             ], 400);
         }
 
         if(empty($title)){
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Product title is required',
             ], 400);
         }
@@ -83,7 +83,7 @@ class ProductController extends DefaultController
             price: $price,
         );
 
-        ApiResponse::json([
+        Response::json([
             'status' => 'success',
             'id' => !empty($result) ? (int) $result : null,
         ], 201);
@@ -103,13 +103,13 @@ class ProductController extends DefaultController
         $OlderProductData = empty($OlderProductOptions) ? null : $OlderProductOptions[0];
 
         if (empty($OlderProductData)) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Product not found',
             ], 404);
         }
 
         if (!is_null($code) && empty($code)) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Product code is required',
             ], 400);
         }
@@ -119,13 +119,13 @@ class ProductController extends DefaultController
             && $code != $OlderProductData->code 
             && $this->ProductQuery->codeExists($code)
         ) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Product code already exists',
             ], 400);
         }
 
         if (!is_null($code) && empty($title)) {
-            ApiResponse::json([
+            Response::json([
                 'error' => 'Product title is required',
             ], 400);
         }
@@ -152,7 +152,7 @@ class ProductController extends DefaultController
             fields: $fields
         );
 
-        ApiResponse::json([
+        Response::json([
             'status' => !empty($result) ? 'success' : 'something went wrong',
         ], 200);
 
@@ -163,7 +163,7 @@ class ProductController extends DefaultController
     {
         $result = $this->ProductCommand->deleteByID($id);
 
-        ApiResponse::json([
+        Response::json([
             'status' => !empty($result) ? 'success' : 'something went wrong',
         ], 200);
 

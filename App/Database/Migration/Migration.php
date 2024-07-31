@@ -2,7 +2,7 @@
 
 namespace App\Database\Migration;
 
-use Lib\Http\ApiResponse;
+use Lib\Http\Response;
 use Lib\Http\DefaultController;
 
 class Migration extends DefaultController
@@ -96,12 +96,12 @@ class Migration extends DefaultController
         } catch (\Exception $e) {
             $this->DataBaseAccess->rollBack();
 
-            ApiResponse::json([
+            Response::json([
                 'data' => 'Migration Failed!'
             ], 500);
         }
 
-        ApiResponse::json([
+        Response::json([
             'data' => 'Migration Complete!'
         ]);
 
