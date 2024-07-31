@@ -5,10 +5,10 @@ use Lib\Database\DataBaseAccess;
 
 class StockDAO
 {
-    public DataBaseAccess $DBA;
+    public DataBaseAccess $DataBaseAccess;
     public function __construct(DataBaseAccess $DataBaseAccess)
     {
-        $this->DBA = $DataBaseAccess;
+        $this->DataBaseAccess = $DataBaseAccess;
     }
 
     public function create(
@@ -20,7 +20,7 @@ class StockDAO
         ?string $expiration_date = null,
     ): bool|string|null
     {
-        return $this->DBA->singleInsertCommand("INSERT INTO product_entries(
+        return $this->DataBaseAccess->singleInsertCommand("INSERT INTO product_entries(
                 product_id,
                 quantity,
                 provider_id,
@@ -46,12 +46,12 @@ class StockDAO
 
     public function deleteEntryById(int $id): bool
     {
-        return $this->DBA->executeCommand("DELETE FROM product_entries WHERE id = :id", [$id]);
+        return $this->DataBaseAccess->executeCommand("DELETE FROM product_entries WHERE id = :id", [$id]);
     }
 
     public function getByProductID(int $id): ?array
     {
-        return $this->DBA->fetchQuery("SELECT 
+        return $this->DataBaseAccess->fetchQuery("SELECT 
                 products.id as product_id,
                 product_stocks.id as stock_id,
                 product_entries.id as entry_id,
@@ -74,7 +74,7 @@ class StockDAO
 
     public function getProductDataByID(int $id): ?object
     {
-        return $this->DBA->fetchFirst("SELECT 
+        return $this->DataBaseAccess->fetchFirst("SELECT 
                 products.id, 
                 products.code,
                 products.title,
@@ -91,14 +91,14 @@ class StockDAO
 
     public function productIdExists(int $id): ?bool
     {
-        return $this->DBA->fetchScalar("SELECT exists(
+        return $this->DataBaseAccess->fetchScalar("SELECT exists(
             SELECT id from products where id = :id
         )", [$id]);
     }
 
     public function list(): ?array
     {
-        return $this->DBA->fetchQuery("SELECT 
+        return $this->DataBaseAccess->fetchQuery("SELECT 
                 products.id, 
                 products.code,
                 products.title,
@@ -126,7 +126,7 @@ class StockDAO
         }
         $FieldsString = implode(', ', $FieldsCompacted);
 
-        return $this->DBA->executeCommand("UPDATE product_entries SET $FieldsString WHERE id = :id", [
+        return $this->DataBaseAccess->executeCommand("UPDATE product_entries SET $FieldsString WHERE id = :id", [
             'id' => $id,
             ...$fields,
         ]);

@@ -1,0 +1,460 @@
+openapi: 3.0.3
+info:
+  title: Lorem Ipsum Dolor - OpenAPI 3.0
+  description: |-
+    Lorem ipsum dolor sit amet
+  version: 1.0.0
+servers:
+  - url: http://api.localhost/api/v1
+tags:
+  - name: product
+    description: Operations about products
+  - name: stock
+    description: Operations about product stock
+  - name: provider
+    description: Operations about providers
+paths:
+  /product:
+    get:
+      tags:
+        - product
+      summary: List all available products
+      responses:
+        '200':
+          description: Status Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    format: int64
+                    example: 1
+                  list:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+    post:
+      tags:
+        - product
+      summary: Create product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProduct'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceCreated'
+        '400':
+          description: Invalid data  
+  /product/{id}:
+    get:
+      tags:
+        - product
+      summary: Get product by id
+      parameters:
+        - name: id
+          in: path
+          description: The resource id that needs to be fetched
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Status Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Resource not found
+    patch:
+      tags:
+        - product
+      summary: Update product info by id
+      parameters:
+        - name: id
+          in: path
+          description: The product id that needs to be updated
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProduct'
+      responses:
+        '200':
+          description: Status Ok
+        '400':
+          description: Invalid data
+        '404':
+          description: Resource not found
+    delete:
+      tags:
+        - product
+      summary: Delete product by id
+      description: Delete product by id
+      parameters:
+        - name: id
+          in: path
+          description: The resource id that needs to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Status Ok
+        '404':
+          description: Resource not found
+  
+  /provider:
+    get:
+      tags:
+        - provider
+      summary: List all providers
+      responses:
+        '200':
+          description: Status Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    format: int64
+                    example: 1
+                  list:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Provider'
+    post:
+      tags:
+        - provider
+      summary: Create provider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProvider'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceCreated'
+        '400':
+          description: Invalid data  
+  /provider/{id}:
+    get:
+      tags:
+        - provider
+      summary: Get provider by id
+      parameters:
+        - name: id
+          in: path
+          description: The resource id that needs to be fetched
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Status Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Provider'
+        '400':
+          description: Invalid data
+        '404':
+          description: Resource not found
+    patch:
+      tags:
+        - provider
+      summary: Update provider info by id
+      parameters:
+        - name: id
+          in: path
+          description: The resource id that needs to be updated
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProvider'
+      responses:
+        '200':
+          description: Status Ok
+        '404':
+          description: Resource not found
+    delete:
+      tags:
+        - provider
+      summary: Delete product by id
+      parameters:
+        - name: id
+          in: path
+          description: The product id that needs to be deleted
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Status Ok
+        '404':
+          description: Resource not found
+
+  /stock:
+    get:
+      tags:
+        - stock
+      summary: List product stock items
+      responses:
+        '200':
+          description: Status Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    format: int64
+                    example: 1
+                  list:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProductBasic'
+    post:
+      tags:
+        - stock
+      summary: Create product stock entry
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stock:
+                  type: array
+                  items: 
+                    $ref: '#/components/schemas/NewProductEntry'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceCreated'
+        '400':
+          description: Invalid data  
+  /stock/{id}:
+    get:
+      tags:
+        - stock
+      summary: Get product stock data
+      parameters:
+        - name: id
+          in: path
+          description: The resource id that needs to be fetched
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Status Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: '#/components/schemas/ProductBasic'
+                  entries:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProductEntry'
+        '404':
+          description: Resource not found
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        code:
+          type: string
+          example: 700000003
+        title:
+          type: string
+          example: Mouse Logitech G505 Hero
+        description:
+          type: string
+          nullable: true
+          example: null
+        price:
+          type: number
+          format: float
+          nullable: true
+          example: 1000
+        stock:
+          type: integer
+          example: 15
+        options:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1
+              stock:
+                type: integer
+                example: 1
+              price:
+                type: number
+                format: float
+                nullable: true
+                example: 1000
+    ProductBasic:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        code:
+          type: string
+          example: 700000003
+        title:
+          type: string
+          example: Mouse Logitech G505 Hero
+        stock:
+          type: integer
+          example: 15
+    NewProduct:
+      type: object
+      properties:
+        code:
+          type: string
+          example: 700000003
+        title:
+          type: string
+          example: Mouse Logitech G505 Hero
+        description:
+          type: string
+          nullable: true
+          example: Lorem ipsum dolor sit amet
+        price:
+          type: number
+          format: float
+          nullable: true
+          example: 1000
+    ProductEntry:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          example: 1
+        stock_id:
+          type: integer
+          example: 1
+        entry_id:
+          type: integer
+          nullable: true
+          example: 1
+        lot:
+          type: string
+          nullable: true
+          example: lot-123
+        quantity:
+          type: integer
+          example: 5
+        stock:
+          type: integer
+          example: 5
+        base_price:
+          type: number
+          example: 1199.99
+        price_alt:
+          type: number
+          nullable: true
+          example: 1199.99
+        provider_id:
+          type: integer
+          example: 1
+        provider_title:
+          type: string
+          nullable: true
+          example: null
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-07-01 12:00:00
+    NewProductEntry:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          example: 1
+        quantity:
+          type: integer
+          example: 5
+        provider_id:
+          type: integer
+          example: 1
+        cost:
+          type: number
+          example: 890.99
+        lot:
+          type: string
+          example: lot-123
+    Provider:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Provider 1
+        description:
+          type: string
+          nullable: true
+          example: null
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-07-01 12:00:00
+    NewProvider:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Provider 1
+        description:
+          type: string
+          nullable: true
+          example: null
+    ResourceCreated:
+      type: object
+      description: Resource created successfully
+      properties:
+        id:
+          type: integer
+          example: 123
+
+    
+  # requestBodies:

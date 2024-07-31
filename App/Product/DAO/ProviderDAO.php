@@ -6,10 +6,10 @@ use Lib\Database\DataBaseAccess;
 class ProviderDAO
 {
 
-    public DataBaseAccess $DBA;
+    public DataBaseAccess $DataBaseAccess;
     public function __construct(DataBaseAccess $DataBaseAccess)
     {
-        $this->DBA = $DataBaseAccess;
+        $this->DataBaseAccess = $DataBaseAccess;
     }
 
     /**
@@ -25,7 +25,7 @@ class ProviderDAO
         string $description = '',
     ): bool|string|null
     {
-        return $this->DBA->singleInsertCommand("INSERT INTO providers(
+        return $this->DataBaseAccess->singleInsertCommand("INSERT INTO providers(
                 title,
                 description
             ) VALUES(
@@ -39,12 +39,12 @@ class ProviderDAO
 
     public function deleteByID(int $id): bool
     {
-        return $this->DBA->executeCommand("DELETE FROM providers WHERE id = :id", [$id]);
+        return $this->DataBaseAccess->executeCommand("DELETE FROM providers WHERE id = :id", [$id]);
     }
 
     public function getByID(int $id): ?object
     {
-        return $this->DBA->fetchFirst("SELECT 
+        return $this->DataBaseAccess->fetchFirst("SELECT 
                 id, 
                 title,
                 description,
@@ -56,14 +56,14 @@ class ProviderDAO
 
     public function titleExists(string $title): ?bool
     {
-        return $this->DBA->fetchScalar("SELECT exists(
+        return $this->DataBaseAccess->fetchScalar("SELECT exists(
             SELECT title from providers where title ilike :title
         )", [$title]);
     }
 
     public function list(): ?array
     {
-        return $this->DBA->fetchQuery("SELECT 
+        return $this->DataBaseAccess->fetchQuery("SELECT 
                 id, 
                 title,
                 description,
@@ -86,7 +86,7 @@ class ProviderDAO
         }
         $FieldsString = implode(', ', $FieldsCompacted);
 
-        return $this->DBA->executeCommand("UPDATE providers SET $FieldsString WHERE id = :id", [
+        return $this->DataBaseAccess->executeCommand("UPDATE providers SET $FieldsString WHERE id = :id", [
             'id' => $id,
             ...$fields,
         ]);

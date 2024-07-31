@@ -5,17 +5,17 @@ use Lib\Database\DataBaseAccess;
 
 class ProductDAO
 {
-    public DataBaseAccess $DBA;
+    public DataBaseAccess $DataBaseAccess;
     public function __construct(DataBaseAccess $DataBaseAccess)
     {
-        $this->DBA = $DataBaseAccess;
+        $this->DataBaseAccess = $DataBaseAccess;
     }
 
     /**
      * Save new product data
      * @param string $code
      * @param string $title
-     * @param string $description
+     * @param string $descriptionf
      * @param float $price
      * @return bool|int|null
      */
@@ -26,7 +26,7 @@ class ProductDAO
         float $price = 0,
     ): bool|string|null
     {
-        return $this->DBA->singleInsertCommand("INSERT INTO products(
+        return $this->DataBaseAccess->singleInsertCommand("INSERT INTO products(
                 code,
                 title,
                 description,
@@ -46,7 +46,7 @@ class ProductDAO
 
     public function deleteByID(int $id): bool
     {
-        return $this->DBA->executeCommand("DELETE FROM products WHERE id = :id", [$id]);
+        return $this->DataBaseAccess->executeCommand("DELETE FROM products WHERE id = :id", [$id]);
     }
 
     public function update(int $id, array $fields): ?bool
@@ -61,7 +61,7 @@ class ProductDAO
         }
         $FieldsString = implode(', ', $FieldsCompacted);
 
-        return $this->DBA->executeCommand("UPDATE products SET $FieldsString WHERE id = :id", [
+        return $this->DataBaseAccess->executeCommand("UPDATE products SET $FieldsString WHERE id = :id", [
             'id' => $id,
             ...$fields,
         ]);
@@ -69,7 +69,7 @@ class ProductDAO
 
     public function getByID(int $id): ?array
     {
-        return $this->DBA->fetchQuery("SELECT 
+        return $this->DataBaseAccess->fetchQuery("SELECT 
                 products.id, 
                 products.code,
                 products.title,
@@ -87,14 +87,14 @@ class ProductDAO
 
     public function codeExists(string $code): ?bool
     {
-        return $this->DBA->fetchScalar("SELECT exists(
+        return $this->DataBaseAccess->fetchScalar("SELECT exists(
             SELECT products.code from products where products.code = :code
         )", [$code]);
     }
 
     public function list(): ?array
     {
-        return $this->DBA->fetchQuery("SELECT 
+        return $this->DataBaseAccess->fetchQuery("SELECT 
                 products.id, 
                 products.code,
                 products.title,

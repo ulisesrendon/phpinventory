@@ -1,0 +1,7 @@
+#1 | Redragon Kumara | 1000 | Provider #1 | 10 | 10 | 2024-07-01
+#1 | Redragon Kumara | 900 | Provider #2 | 5 | 2 | 2024-07-01
+#2 | LG Monitor 4k | 4000 | Provider #3 | 5 | 5 | 2024-06-01
+
+
+#1 | Redragon Kumara | 1200 | 12
+#2 | LG Monitor 4k | 5500 | 5
