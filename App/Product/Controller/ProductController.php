@@ -4,21 +4,24 @@ namespace App\Product\Controller;
 
 use Lib\Http\ApiResponse;
 use Lib\Http\RequestData;
-use App\Product\DAO\ProductDAO;
 use Lib\Http\DefaultController;
+use App\Product\DAO\ProductQuery;
+use App\Product\DAO\ProductCommand;
 use App\Product\Presentor\ProductOptionGrouping;
 
 class ProductController extends DefaultController
 {
-    private readonly ProductDAO $ProductDAO;
+    private readonly ProductQuery $ProductQuery;
+    private readonly ProductCommand $ProductCommand;
     public function __construct(public RequestData $Request)
     {
         parent::__construct($Request);
-        $this->ProductDAO = new ProductDAO($this->DataBaseAccess);
+        $this->ProductQuery = new ProductQuery($this->DataBaseAccess);
+        $this->ProductCommand = new ProductCommand($this->DataBaseAccess);
     }
     public function getById(int $id)
     {
-        $ProductOptions = (new ProductOptionGrouping($this->ProductDAO->getByID($id)))->get();
+        $ProductOptions = (new ProductOptionGrouping($this->ProductQuery->getByID($id)))->get();
         $Product = empty($ProductOptions) ? null : $ProductOptions[0];
 
         if(is_null($Product)){
@@ -38,7 +41,7 @@ class ProductController extends DefaultController
 
     public function list()
     {
-        $ProductList = (new ProductOptionGrouping($this->ProductDAO->list()))->get();
+        $ProductList = (new ProductOptionGrouping($this->ProductQuery->list()))->get();
 
         ApiResponse::json([
             'count' => count($ProductList),
@@ -61,7 +64,7 @@ class ProductController extends DefaultController
             ], 400);
         }
 
-        if ($this->ProductDAO->codeExists($code)) {
+        if ($this->ProductQuery->codeExists($code)) {
             ApiResponse::json([
                 'error' => 'Product code already exists',
             ], 400);
@@ -73,7 +76,7 @@ class ProductController extends DefaultController
             ], 400);
         }
 
-        $result = $this->ProductDAO->create(
+        $result = $this->ProductCommand->create(
             code: $code,
             title: $title,
             description: $description,
@@ -96,7 +99,7 @@ class ProductController extends DefaultController
         $description = $this->Request->body['description'] ?? null;
         $price = $this->Request->body['price'] ?? null;
 
-        $OlderProductOptions = (new ProductOptionGrouping($this->ProductDAO->getByID($id)))->get();
+        $OlderProductOptions = (new ProductOptionGrouping($this->ProductQuery->getByID($id)))->get();
         $OlderProductData = empty($OlderProductOptions) ? null : $OlderProductOptions[0];
 
         if (empty($OlderProductData)) {
@@ -114,7 +117,7 @@ class ProductController extends DefaultController
         if (
             !empty($code)
             && $code != $OlderProductData->code 
-            && $this->ProductDAO->codeExists($code)
+            && $this->ProductQuery->codeExists($code)
         ) {
             ApiResponse::json([
                 'error' => 'Product code already exists',
@@ -144,7 +147,7 @@ class ProductController extends DefaultController
             $fields['price'] = (float) $price;
         }
 
-        $result = $this->ProductDAO->update(
+        $result = $this->ProductCommand->update(
             id: $id,
             fields: $fields
         );
@@ -158,7 +161,7 @@ class ProductController extends DefaultController
 
     public function deleteById(int $id)
     {
-        $result = $this->ProductDAO->deleteByID($id);
+        $result = $this->ProductCommand->deleteByID($id);
 
         ApiResponse::json([
             'status' => !empty($result) ? 'success' : 'something went wrong',

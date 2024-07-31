@@ -4,21 +4,24 @@ namespace App\Product\Controller;
 
 use Lib\Http\ApiResponse;
 use Lib\Http\RequestData;
-use App\Product\DAO\StockDAO;
+use App\Product\DAO\StockQuery;
 use Lib\Http\DefaultController;
+use App\Product\DAO\StockCommand;
 
 class StockController extends DefaultController
 {
-    private readonly StockDAO $StockDAO;
+    private readonly StockQuery $StockQuery;
+    private readonly StockCommand $StockCommand;
     public function __construct(public RequestData $Request)
     {
         parent::__construct($Request);
-        $this->StockDAO = new StockDAO($this->DataBaseAccess);
+        $this->StockQuery = new StockQuery($this->DataBaseAccess);
+        $this->StockCommand = new StockCommand($this->DataBaseAccess);
     }
 
     public function list()
     {
-        $List = $this->StockDAO->list();
+        $List = $this->StockQuery->list();
 
         ApiResponse::json([
             'count' => count($List),
@@ -31,8 +34,8 @@ class StockController extends DefaultController
     public function getByProductId(int $id)
     {
 
-        $ProductData = $this->StockDAO->getProductDataByID($id);
-        $Entries = $this->StockDAO->getByProductID($id);
+        $ProductData = $this->StockQuery->getProductDataByID($id);
+        $Entries = $this->StockQuery->getByProductID($id);
 
         if (is_null($ProductData)) {
             ApiResponse::json([
@@ -64,7 +67,7 @@ class StockController extends DefaultController
             if(
                 !isset($ProductStock['product_id']) 
                 || !is_numeric($ProductStock['product_id'])
-                || !$this->StockDAO->productIdExists($ProductStock['product_id'])
+                || !$this->StockQuery->productIdExists($ProductStock['product_id'])
             ){
                 continue;
             }
@@ -99,7 +102,7 @@ class StockController extends DefaultController
                 continue;
             }
 
-            $this->StockDAO->create(
+            $this->StockCommand->create(
                 product_id: $ProductStock['product_id'],
                 quantity: $ProductStock['quantity'],
                 provider_id: $ProductStock['provider_id'] ?? null,
@@ -144,7 +147,7 @@ class StockController extends DefaultController
         }
 
         foreach($entries as $id){
-            $result = $this->StockDAO->deleteEntryById($id);
+            $result = $this->StockCommand->deleteEntryById($id);
         }
 
         ApiResponse::json([

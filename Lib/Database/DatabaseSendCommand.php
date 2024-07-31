@@ -5,5 +5,4 @@ interface DatabaseSendCommand
 {
     public function sendCommand(string $command, array $params = []);
 
-    public function rowCount(): int;
 }

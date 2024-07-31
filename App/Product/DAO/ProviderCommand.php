@@ -3,7 +3,7 @@ namespace App\Product\DAO;
 
 use Lib\Database\DataBaseAccess;
 
-class ProviderDAO
+class ProviderCommand
 {
 
     public DataBaseAccess $DataBaseAccess;
@@ -12,14 +12,6 @@ class ProviderDAO
         $this->DataBaseAccess = $DataBaseAccess;
     }
 
-    /**
-     * Save new product data
-     * @param string $code
-     * @param string $title
-     * @param string $description
-     * @param float $price
-     * @return bool|int|null
-     */
     public function create(
         string $title,
         string $description = '',
@@ -40,38 +32,6 @@ class ProviderDAO
     public function deleteByID(int $id): bool
     {
         return $this->DataBaseAccess->executeCommand("DELETE FROM providers WHERE id = :id", [$id]);
-    }
-
-    public function getByID(int $id): ?object
-    {
-        return $this->DataBaseAccess->fetchFirst("SELECT 
-                id, 
-                title,
-                description,
-                updated_at
-            from providers
-            where deleted_at is null and id = :id
-        ", [$id]);
-    }
-
-    public function titleExists(string $title): ?bool
-    {
-        return $this->DataBaseAccess->fetchScalar("SELECT exists(
-            SELECT title from providers where title ilike :title
-        )", [$title]);
-    }
-
-    public function list(): ?array
-    {
-        return $this->DataBaseAccess->fetchQuery("SELECT 
-                id, 
-                title,
-                description,
-                updated_at
-            from providers
-            where deleted_at is null
-            order by title
-        ");
     }
 
     public function update(int $id, array $fields): ?bool

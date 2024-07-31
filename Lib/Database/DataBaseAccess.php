@@ -7,7 +7,7 @@ use PDOStatement;
 /**
  * DataBaseAccess - Database Access Layer
  */
-class DataBaseAccess implements DatabaseTransaction, DatabaseFetchQuery
+class DataBaseAccess implements DatabaseTransaction, DatabaseFetchQuery, DatabaseSendCommand
 {
 
     /**
