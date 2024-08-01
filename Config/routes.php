@@ -1,11 +1,11 @@
 <?php
 
-use Lib\Http\Router;
-use Lib\Http\DefaultController;
 use App\Database\Migration\Migration;
-use App\Product\Controller\StockController;
 use App\Product\Controller\ProductController;
 use App\Product\Controller\ProviderController;
+use App\Product\Controller\StockController;
+use Lib\Http\DefaultController;
+use Lib\Http\Router;
 
 Router::any('/api/v1', [DefaultController::class, 'home']);
 Router::post('/api/v1/migrate', [Migration::class, 'start']);

@@ -1,12 +1,13 @@
 <?php
+
 namespace Lib\Database;
 
 use PDO;
-use Lib\Database\DatabaseObjectContainer;
 
 class PDOContainer implements DatabaseObjectContainer
 {
     protected readonly PDO $PDO;
+
     public function __construct(
         string $drive,
         int $port,
@@ -14,8 +15,7 @@ class PDOContainer implements DatabaseObjectContainer
         string $user,
         string $host = 'localhost',
         string $password = '',
-    )
-    {
+    ) {
         $this->PDO = new PDO(
             "$drive:host=$host;port=$port;dbname=$name",
             $user,

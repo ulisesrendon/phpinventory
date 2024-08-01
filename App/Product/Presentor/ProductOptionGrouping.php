@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Product\Presentor;
 
 class ProductOptionGrouping
@@ -17,6 +18,7 @@ class ProductOptionGrouping
         foreach ($ProductBaseList as $Product) {
             $ProductGroup[$Product->id][] = $Product;
         }
+
         return $ProductGroup;
     }
 
@@ -38,7 +40,7 @@ class ProductOptionGrouping
                 $Product['options'][] = (object) [
                     'id' => $Item->entry_id,
                     'stock' => $Item->stock,
-                    'price' => $Item->price_alt ?? $Product['price']
+                    'price' => $Item->price_alt ?? $Product['price'],
                 ];
             }
             $ProductList[] = (object) $Product;

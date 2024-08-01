@@ -1,4 +1,5 @@
 <?php
+
 namespace Lib\Database;
 
 interface DatabaseFetchQuery

@@ -2,29 +2,32 @@
 
 namespace App\Product\Controller;
 
-use Lib\Http\Response;
-use Lib\Http\RequestData;
-use Lib\Http\DefaultController;
-use App\Product\DAO\ProductQuery;
 use App\Product\DAO\ProductCommand;
+use App\Product\DAO\ProductQuery;
 use App\Product\Presentor\ProductOptionGrouping;
+use Lib\Http\DefaultController;
+use Lib\Http\RequestData;
+use Lib\Http\Response;
 
 class ProductController extends DefaultController
 {
     private readonly ProductQuery $ProductQuery;
+
     private readonly ProductCommand $ProductCommand;
+
     public function __construct(public RequestData $Request)
     {
         parent::__construct($Request);
         $this->ProductQuery = new ProductQuery($this->DataBaseAccess);
         $this->ProductCommand = new ProductCommand($this->DataBaseAccess);
     }
+
     public function getById(int $id)
     {
         $ProductOptions = (new ProductOptionGrouping($this->ProductQuery->getByID($id)))->get();
         $Product = empty($ProductOptions) ? null : $ProductOptions[0];
 
-        if(is_null($Product)){
+        if (is_null($Product)) {
             Response::json([
                 'id' => $id,
                 'product' => [],
@@ -58,7 +61,7 @@ class ProductController extends DefaultController
         $description = $this->Request->body['description'] ?? '';
         $price = $this->Request->body['price'] ?? 0;
 
-        if(empty($code)){
+        if (empty($code)) {
             Response::json([
                 'error' => 'Product code is required',
             ], 400);
@@ -70,7 +73,7 @@ class ProductController extends DefaultController
             ], 400);
         }
 
-        if(empty($title)){
+        if (empty($title)) {
             Response::json([
                 'error' => 'Product title is required',
             ], 400);
@@ -85,7 +88,7 @@ class ProductController extends DefaultController
 
         Response::json([
             'status' => 'success',
-            'id' => !empty($result) ? (int) $result : null,
+            'id' => ! empty($result) ? (int) $result : null,
         ], 201);
 
         return true;
@@ -108,15 +111,15 @@ class ProductController extends DefaultController
             ], 404);
         }
 
-        if (!is_null($code) && empty($code)) {
+        if (! is_null($code) && empty($code)) {
             Response::json([
                 'error' => 'Product code is required',
             ], 400);
         }
 
         if (
-            !empty($code)
-            && $code != $OlderProductData->code 
+            ! empty($code)
+            && $code != $OlderProductData->code
             && $this->ProductQuery->codeExists($code)
         ) {
             Response::json([
@@ -124,26 +127,26 @@ class ProductController extends DefaultController
             ], 400);
         }
 
-        if (!is_null($code) && empty($title)) {
+        if (! is_null($code) && empty($title)) {
             Response::json([
                 'error' => 'Product title is required',
             ], 400);
         }
 
         $fields = [
-            'updated_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+            'updated_at' => (new \DateTime)->format('Y-m-d H:i:s'),
         ];
 
-        if(!is_null($code)){
+        if (! is_null($code)) {
             $fields['code'] = (string) $code;
         }
-        if(!is_null($title)){
+        if (! is_null($title)) {
             $fields['title'] = (string) $title;
         }
-        if(!is_null($description)){
+        if (! is_null($description)) {
             $fields['description'] = (string) $description;
         }
-        if (!is_null($price)) {
+        if (! is_null($price)) {
             $fields['price'] = (float) $price;
         }
 
@@ -153,7 +156,7 @@ class ProductController extends DefaultController
         );
 
         Response::json([
-            'status' => !empty($result) ? 'success' : 'something went wrong',
+            'status' => ! empty($result) ? 'success' : 'something went wrong',
         ], 200);
 
         return true;
@@ -164,7 +167,7 @@ class ProductController extends DefaultController
         $result = $this->ProductCommand->deleteByID($id);
 
         Response::json([
-            'status' => !empty($result) ? 'success' : 'something went wrong',
+            'status' => ! empty($result) ? 'success' : 'something went wrong',
         ], 200);
 
         return true;

@@ -2,16 +2,18 @@
 
 namespace App\Product\Controller;
 
-use Lib\Http\Response;
-use Lib\Http\RequestData;
+use App\Product\DAO\StockCommand;
 use App\Product\DAO\StockQuery;
 use Lib\Http\DefaultController;
-use App\Product\DAO\StockCommand;
+use Lib\Http\RequestData;
+use Lib\Http\Response;
 
 class StockController extends DefaultController
 {
     private readonly StockQuery $StockQuery;
+
     private readonly StockCommand $StockCommand;
+
     public function __construct(public RequestData $Request)
     {
         parent::__construct($Request);
@@ -55,50 +57,50 @@ class StockController extends DefaultController
     {
         $stock = $this->Request->body['stock'] ?? null;
 
-        if(empty($stock) || gettype($stock) != 'array'){
+        if (empty($stock) || gettype($stock) != 'array') {
             Response::json([
                 'error' => 'No product stock received',
             ], 400);
         }
 
         $TotalAdded = 0;
-        foreach($stock as $ProductStock){
+        foreach ($stock as $ProductStock) {
 
-            if(
-                !isset($ProductStock['product_id']) 
-                || !is_numeric($ProductStock['product_id'])
-                || !$this->StockQuery->productIdExists($ProductStock['product_id'])
-            ){
+            if (
+                ! isset($ProductStock['product_id'])
+                || ! is_numeric($ProductStock['product_id'])
+                || ! $this->StockQuery->productIdExists($ProductStock['product_id'])
+            ) {
                 continue;
             }
 
-            if(
-                !isset($ProductStock['quantity']) || !is_numeric($ProductStock['quantity'])
-            ){
+            if (
+                ! isset($ProductStock['quantity']) || ! is_numeric($ProductStock['quantity'])
+            ) {
                 continue;
             }
 
-            if(
-                isset($ProductStock['provider_id']) && !is_numeric($ProductStock['provider_id'])
-            ){
+            if (
+                isset($ProductStock['provider_id']) && ! is_numeric($ProductStock['provider_id'])
+            ) {
                 continue;
             }
 
-            if(
-                isset($ProductStock['cost']) && !is_numeric($ProductStock['cost'])
-            ){
+            if (
+                isset($ProductStock['cost']) && ! is_numeric($ProductStock['cost'])
+            ) {
                 continue;
             }
 
-            if(
+            if (
                 isset($ProductStock['lot']) && empty($ProductStock['lot'])
-            ){
+            ) {
                 continue;
             }
 
-            if(
+            if (
                 isset($ProductStock['expiration_date']) && strtotime($ProductStock['expiration_date'])
-            ){
+            ) {
                 continue;
             }
 
@@ -113,7 +115,7 @@ class StockController extends DefaultController
             $TotalAdded++;
         }
 
-        if($TotalAdded != count($stock)){
+        if ($TotalAdded != count($stock)) {
             Response::json([
                 'status' => 'success',
                 'message' => 'Some data could not be saved due to data formatting issues',
@@ -132,26 +134,26 @@ class StockController extends DefaultController
     {
         $entries = $this->Request->body['entries'] ?? null;
 
-        if (!is_array($entries) || empty($entries)) {
+        if (! is_array($entries) || empty($entries)) {
             Response::json([
-                'error' => 'Invalid product data'
+                'error' => 'Invalid product data',
             ], 400);
         }
 
-        foreach($entries as $id){
-            if (!is_numeric($id) || empty($id)) {
+        foreach ($entries as $id) {
+            if (! is_numeric($id) || empty($id)) {
                 Response::json([
-                    'error' => 'Invalid product data'
+                    'error' => 'Invalid product data',
                 ], 400);
             }
         }
 
-        foreach($entries as $id){
+        foreach ($entries as $id) {
             $result = $this->StockCommand->deleteEntryById($id);
         }
 
         Response::json([
-            'status' => !empty($result) ? 'success' : 'something went wrong',
+            'status' => ! empty($result) ? 'success' : 'something went wrong',
         ], 200);
 
         return true;

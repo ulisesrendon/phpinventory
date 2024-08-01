@@ -2,14 +2,13 @@
 
 namespace Lib\Http;
 
-use Lib\Http\Response;
-use Lib\Http\RequestData;
 use Lib\Database\DataBaseAccess;
 use Lib\Database\PDOContainer;
 
 class DefaultController
 {
     protected readonly DataBaseAccess $DataBaseAccess;
+
     public function __construct(public RequestData $Request)
     {
         $DataBaseObjectContainer = new PDOContainer(
@@ -22,11 +21,11 @@ class DefaultController
         );
         $this->DataBaseAccess = new DataBaseAccess($DataBaseObjectContainer->get());
     }
+
     public function home(array $args = []): bool
     {
         Response::json('Hello, world!');
 
         return true;
     }
-
 }

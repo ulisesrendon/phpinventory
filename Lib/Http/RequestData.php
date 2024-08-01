@@ -1,4 +1,5 @@
 <?php
+
 namespace Lib\Http;
 
 class RequestData
@@ -9,8 +10,7 @@ class RequestData
         public array $params = [],
         public string $method = 'get',
         public string $uri = '/',
-    )
-    {
+    ) {
         $this->method = strtolower($this->method);
     }
 }

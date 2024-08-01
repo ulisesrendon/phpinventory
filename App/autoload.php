@@ -7,6 +7,7 @@ spl_autoload_register(function ($class_name) {
 
     if (file_exists($file_path)) {
         require_once $file_path;
+
         return true;
     }
 

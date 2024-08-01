@@ -1,12 +1,14 @@
 <?php
+
 namespace Lib\Http;
 
 class RequestParamHelper
 {
     public ?array $Params = [];
 
-    public function __construct(public readonly string $QueryString){
-        if(!empty($QueryString)){
+    public function __construct(public readonly string $QueryString)
+    {
+        if (! empty($QueryString)) {
             foreach (explode('&', $QueryString) as $chunk) {
                 $param = explode('=', $chunk);
                 if ($param) {

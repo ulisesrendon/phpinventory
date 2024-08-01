@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Product\DAO;
 
 use Lib\Database\DataBaseAccess;
@@ -6,6 +7,7 @@ use Lib\Database\DataBaseAccess;
 class StockQuery
 {
     public DataBaseAccess $DataBaseAccess;
+
     public function __construct(DataBaseAccess $DataBaseAccess)
     {
         $this->DataBaseAccess = $DataBaseAccess;
@@ -13,7 +15,7 @@ class StockQuery
 
     public function getByProductID(int $id): ?array
     {
-        return $this->DataBaseAccess->fetchQuery("SELECT 
+        return $this->DataBaseAccess->fetchQuery('SELECT 
                 products.id as product_id,
                 product_stocks.id as stock_id,
                 product_entries.id as entry_id,
@@ -31,12 +33,12 @@ class StockQuery
             left join providers on providers.id = product_entries.provider_id
             where product_stocks.product_id = :id
             order by product_entries.created_at desc
-        ", [$id]);
+        ', [$id]);
     }
 
     public function getProductDataByID(int $id): ?object
     {
-        return $this->DataBaseAccess->fetchFirst("SELECT 
+        return $this->DataBaseAccess->fetchFirst('SELECT 
                 products.id, 
                 products.code,
                 products.title,
@@ -48,19 +50,19 @@ class StockQuery
                 products.id, 
                 products.code,
                 products.title
-        ", [$id]);
+        ', [$id]);
     }
 
     public function productIdExists(int $id): ?bool
     {
-        return $this->DataBaseAccess->fetchScalar("SELECT exists(
+        return $this->DataBaseAccess->fetchScalar('SELECT exists(
             SELECT id from products where id = :id
-        )", [$id]);
+        )', [$id]);
     }
 
     public function list(): ?array
     {
-        return $this->DataBaseAccess->fetchQuery("SELECT 
+        return $this->DataBaseAccess->fetchQuery('SELECT 
                 products.id, 
                 products.code,
                 products.title,
@@ -73,6 +75,6 @@ class StockQuery
                 products.code,
                 products.title
             order by products.title
-        ");
+        ');
     }
 }

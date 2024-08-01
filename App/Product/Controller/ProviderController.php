@@ -2,16 +2,16 @@
 
 namespace App\Product\Controller;
 
-use Lib\Http\Response;
-use Lib\Http\RequestData;
-use Lib\Http\DefaultController;
-use App\Product\DAO\ProviderQuery;
 use App\Product\DAO\ProviderCommand;
+use App\Product\DAO\ProviderQuery;
+use Lib\Http\DefaultController;
+use Lib\Http\RequestData;
+use Lib\Http\Response;
 
 class ProviderController extends DefaultController
 {
-
     private readonly ProviderQuery $ProviderQuery;
+
     private readonly ProviderCommand $ProviderCommand;
 
     public function __construct(public RequestData $Request)
@@ -72,16 +72,15 @@ class ProviderController extends DefaultController
 
         Response::json([
             'status' => 'success',
-            'id' => !empty($result) ? (int) $result : null,
+            'id' => ! empty($result) ? (int) $result : null,
         ], 201);
-
 
         return true;
     }
 
     public function update(int $id)
     {
-        
+
         $title = $this->Request->body['title'] ?? null;
         $description = $this->Request->body['description'] ?? null;
 
@@ -93,15 +92,15 @@ class ProviderController extends DefaultController
             ], 404);
         }
 
-        if (!is_null($title) && empty($title)) {
+        if (! is_null($title) && empty($title)) {
             Response::json([
                 'error' => 'Provider title is required',
             ], 400);
         }
 
         if (
-            !empty($title)
-            && strtolower($title) != strtolower($OlderData->title) 
+            ! empty($title)
+            && strtolower($title) != strtolower($OlderData->title)
             && $this->ProviderQuery->titleExists($title)
         ) {
             Response::json([
@@ -110,12 +109,12 @@ class ProviderController extends DefaultController
         }
 
         $fields = [
-            'updated_at' => (new \DateTime())->format('Y-m-d H:i:s'),
+            'updated_at' => (new \DateTime)->format('Y-m-d H:i:s'),
         ];
-        if (!is_null($title)) {
+        if (! is_null($title)) {
             $fields['title'] = (string) $title;
         }
-        if (!is_null($description)) {
+        if (! is_null($description)) {
             $fields['description'] = (string) $description;
         }
 
@@ -125,7 +124,7 @@ class ProviderController extends DefaultController
         );
 
         Response::json([
-            'status' => !empty($result) ? 'success' : 'something went wrong',
+            'status' => ! empty($result) ? 'success' : 'something went wrong',
         ], 200);
 
         return true;
@@ -136,7 +135,7 @@ class ProviderController extends DefaultController
         $result = $this->ProviderCommand->deleteByID($id);
 
         Response::json([
-            'status' => !empty($result) ? 'success' : 'something went wrong',
+            'status' => ! empty($result) ? 'success' : 'something went wrong',
         ], 200);
 
         return true;

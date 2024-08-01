@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Product\DAO;
 
 use Lib\Database\DataBaseAccess;
@@ -6,6 +7,7 @@ use Lib\Database\DataBaseAccess;
 class ProductCommand
 {
     public DataBaseAccess $DataBaseAccess;
+
     public function __construct(DataBaseAccess $DataBaseAccess)
     {
         $this->DataBaseAccess = $DataBaseAccess;
@@ -13,20 +15,17 @@ class ProductCommand
 
     /**
      * Save new product data
-     * @param string $code
-     * @param string $title
-     * @param string $descriptionf
-     * @param float $price
+     *
+     * @param  string  $descriptionf
      * @return bool|int|null
      */
     public function create(
-        string $code, 
+        string $code,
         string $title,
         string $description = '',
         float $price = 0,
-    ): bool|string|null
-    {
-        return $this->DataBaseAccess->singleInsertCommand("INSERT INTO products(
+    ): bool|string|null {
+        return $this->DataBaseAccess->singleInsertCommand('INSERT INTO products(
                 code,
                 title,
                 description,
@@ -36,17 +35,17 @@ class ProductCommand
                 :title,
                 :description,
                 :price
-            )", [
-                'code' => $code,
-                'title' => $title,
-                'description' => $description,
-                'price' => $price,
-            ]);
+            )', [
+            'code' => $code,
+            'title' => $title,
+            'description' => $description,
+            'price' => $price,
+        ]);
     }
 
     public function deleteByID(int $id): bool
     {
-        return $this->DataBaseAccess->executeCommand("DELETE FROM products WHERE id = :id", [$id]);
+        return $this->DataBaseAccess->executeCommand('DELETE FROM products WHERE id = :id', [$id]);
     }
 
     public function update(int $id, array $fields): ?bool

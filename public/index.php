@@ -1,23 +1,23 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../Config/routes.php';
+require __DIR__.'/../vendor/autoload.php';
+require __DIR__.'/../Config/routes.php';
 
 use Dotenv\Dotenv;
-use Lib\Http\Router;
 use Lib\Http\RequestData;
 use Lib\Http\RequestParamHelper;
+use Lib\Http\Router;
 
 $dotenv = Dotenv::createImmutable(__DIR__.'/..');
 $dotenv->safeLoad();
 $dotenv->ifPresent('APP_DEBUG')->isBoolean();
-define('DB_CONFIG', require __DIR__ . '/../Config/database.php');
+define('DB_CONFIG', require __DIR__.'/../Config/database.php');
 
-if (isset($_ENV['APP_DEBUG']) && 1 == $_ENV['APP_DEBUG']) {
+if (isset($_ENV['APP_DEBUG']) && $_ENV['APP_DEBUG'] == 1) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL & ~E_NOTICE);
-}else{
+} else {
     ini_set('display_errors', 0);
     ini_set('display_startup_errors', 0);
     error_reporting(0);
@@ -32,7 +32,7 @@ $RequestData = new RequestData(
 );
 
 // Route the request or return a 404 error if the route is not found
-if (!Router::route($RequestData)) {
+if (! Router::route($RequestData)) {
     header('HTTP/1.0 404 Not Found');
-    require __DIR__ . '/404.html';
+    require __DIR__.'/404.html';
 }
