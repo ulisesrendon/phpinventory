@@ -2,6 +2,8 @@
 
 namespace Lib\Http;
 
+use Lib\Http\DefaultController;
+
 class Route
 {
     public string $regexp;

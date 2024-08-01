@@ -4,7 +4,6 @@ namespace Lib\Http;
 
 class Router
 {
-    // [TODO] Improve controller collection
     public static array $routes = [];
 
     public static array $methods = [
@@ -17,13 +16,17 @@ class Router
         'head',
     ];
 
-    public static function addRoute(string $method, string $path, object|array $callable): void
+    public static ?RequestData $RequestData = null;
+
+    public static function addRoute(string $method, string $path, object|array $callable): Route
     {
-        self::$routes[] = new Route(
+        $Route = new Route(
             method: $method,
             path: $path,
             controller: $callable,
         );
+        self::$routes[] = $Route;
+        return $Route;
     }
 
     // [TODO] Improve method calling
@@ -69,6 +72,8 @@ class Router
 
     public static function route(RequestData $RequestData): bool
     {
+        self::$RequestData = $RequestData;
+        
         $methodNotAllowed = false;
 
         foreach (self::$routes as $Route) {
