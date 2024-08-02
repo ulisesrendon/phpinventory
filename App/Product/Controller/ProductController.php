@@ -15,9 +15,9 @@ class ProductController extends DefaultController
 
     private readonly ProductCommand $ProductCommand;
 
-    public function __construct(public RequestData $Request)
+    public function __construct()
     {
-        parent::__construct($Request);
+        parent::__construct();
         $this->ProductQuery = new ProductQuery($this->DataBaseAccess);
         $this->ProductCommand = new ProductCommand($this->DataBaseAccess);
     }

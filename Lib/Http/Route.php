@@ -2,8 +2,6 @@
 
 namespace Lib\Http;
 
-use Lib\Http\DefaultController;
-
 class Route
 {
     public string $regexp;
@@ -23,7 +21,7 @@ class Route
     {
         // [TODO] Improve controller validation
         if (is_array($this->controller)) {
-            $this->controller = [new $this->controller[0]($RequestData), $this->controller[1]];
+            $this->controller = [new $this->controller[0](), $this->controller[1]];
         }
 
         return call_user_func_array($this->controller, $Params);

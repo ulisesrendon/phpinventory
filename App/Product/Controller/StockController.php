@@ -14,9 +14,9 @@ class StockController extends DefaultController
 
     private readonly StockCommand $StockCommand;
 
-    public function __construct(public RequestData $Request)
+    public function __construct()
     {
-        parent::__construct($Request);
+        parent::__construct();
         $this->StockQuery = new StockQuery($this->DataBaseAccess);
         $this->StockCommand = new StockCommand($this->DataBaseAccess);
     }

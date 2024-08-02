@@ -14,9 +14,9 @@ class ProviderController extends DefaultController
 
     private readonly ProviderCommand $ProviderCommand;
 
-    public function __construct(public RequestData $Request)
+    public function __construct()
     {
-        parent::__construct($Request);
+        parent::__construct();
         $this->ProviderQuery = new ProviderQuery($this->DataBaseAccess);
         $this->ProviderCommand = new ProviderCommand($this->DataBaseAccess);
     }

@@ -1,11 +1,15 @@
 openapi: 3.0.3
 info:
-  title: Lorem Ipsum Dolor - OpenAPI 3.0
+  title: PHPInventory - OpenAPI 3.0
   description: |-
-    Lorem ipsum dolor sit amet
+    This PHP Proyect is a software for product stock management
   version: 1.0.0
-servers:
-  - url: http://api.localhost/api/v1
+  license:
+    name: CC BY-SA 4.0
+    url: https://creativecommons.org/licenses/by-sa/4.0/
+externalDocs:
+    description: Github Repository
+    url: https://github.com/ulisesrendon/phpinventory
 tags:
   - name: product
     description: Operations about products
