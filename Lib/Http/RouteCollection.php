@@ -1,4 +1,5 @@
 <?php
+
 namespace Lib\Http;
 
 class RouteCollection
@@ -62,7 +63,6 @@ class RouteCollection
     {
         self::addRoute('head', $path, $callable);
     }
-
 
     /*
     * To avoid defining each of the http add methods, this code would make the job

@@ -5,7 +5,6 @@ namespace App\Product\Controller;
 use App\Product\DAO\ProviderCommand;
 use App\Product\DAO\ProviderQuery;
 use Lib\Http\DefaultController;
-use Lib\Http\RequestData;
 use Lib\Http\Response;
 
 class ProviderController extends DefaultController

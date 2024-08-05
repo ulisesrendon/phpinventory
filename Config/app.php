@@ -2,7 +2,7 @@
 
 use Dotenv\Dotenv;
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv = Dotenv::createImmutable(__DIR__.'/..');
 $dotenv->safeLoad();
 $dotenv->ifPresent('APP_DEBUG')->isBoolean();
 
@@ -16,4 +16,4 @@ if (isset($_ENV['APP_DEBUG']) && $_ENV['APP_DEBUG'] == 1) {
     error_reporting(0);
 }
 
-define('DB_CONFIG', require __DIR__ . '/../Config/database.php');
+define('DB_CONFIG', require __DIR__.'/../Config/database.php');

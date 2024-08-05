@@ -10,10 +10,8 @@ use PDOStatement;
  */
 class DataBaseAccess implements DatabaseFetchQuery, DatabaseSendCommand, DatabaseTransaction
 {
-
     /**
      * Summary of __construct
-     * @param \PDO $PDO
      */
     public function __construct(private readonly PDO $PDO) {}
 

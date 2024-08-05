@@ -5,7 +5,9 @@ namespace Lib\Http;
 class Route
 {
     public readonly string $path;
+
     public readonly string $regexp;
+
     public array $methods = [];
 
     public function __construct(
@@ -40,6 +42,7 @@ class Route
         array_shift($paramNames);
         preg_match($this->regexp, $url, $uriParams);
         array_shift($uriParams);
+
         return array_combine($paramNames, $uriParams);
     }
 
@@ -47,5 +50,4 @@ class Route
     {
         return $this->methods[$method] ?? $this->methods['any'] ?? null;
     }
-
 }

@@ -6,7 +6,6 @@ use App\Product\DAO\ProductCommand;
 use App\Product\DAO\ProductQuery;
 use App\Product\Presentor\ProductOptionGrouping;
 use Lib\Http\DefaultController;
-use Lib\Http\RequestData;
 use Lib\Http\Response;
 
 class ProductController extends DefaultController

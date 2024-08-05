@@ -5,7 +5,6 @@ namespace App\Product\Controller;
 use App\Product\DAO\StockCommand;
 use App\Product\DAO\StockQuery;
 use Lib\Http\DefaultController;
-use Lib\Http\RequestData;
 use Lib\Http\Response;
 
 class StockController extends DefaultController

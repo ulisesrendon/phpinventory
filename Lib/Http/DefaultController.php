@@ -2,12 +2,13 @@
 
 namespace Lib\Http;
 
-use PDO;
 use Lib\Database\DataBaseAccess;
+use PDO;
 
 class DefaultController
 {
     protected readonly RequestData $Request;
+
     protected readonly DataBaseAccess $DataBaseAccess;
 
     public function __construct()
