@@ -8,6 +8,8 @@ use Lib\Http\Response;
 use Lib\Http\RouteCollection;
 use Lib\Http\Router;
 
+$_ENV['APP_DEBUG'] ??= 0;
+
 try {
     $Router = new Router(RequestData::createFromGlobals(), RouteCollection::$routes);
     $Controller = $Router->getMatchingController();
@@ -16,13 +18,15 @@ try {
     if (isset($Controller)) {
         $Response = $Router->execute($Controller);
     } else {
-        $Response = Response::template(__DIR__.'/404.html', 404);
+        $Response = Response::template(__DIR__.'/../public/404.html', 404);
     }
 } catch (\Exception $Exception) {
     if ($Exception instanceof MethodNotAllowedException) {
-        $Response = Response::template(__DIR__.'/405.html', 405);
-    } else {
-        $Response = Response::template(__DIR__.'/500.html', 500);
+        $Response = Response::template(__DIR__.'/../public/405.html', 405);
+    } else if($_ENV['APP_DEBUG'] == 0) {
+        $Response = Response::template(__DIR__.'/../public/500.html', 500);
+    }else{
+        $Response = Response::html($Exception, 500);
     }
 }
 

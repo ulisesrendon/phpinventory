@@ -1,16 +1,17 @@
 <?php
 
+use Lib\Http\Router;
+use Lib\Http\DefaultController;
 use App\Database\Migration\Migration;
+use Lib\Http\RouteCollection as Routes;
+use App\Product\Controller\StockController;
 use App\Product\Controller\ProductController;
 use App\Product\Controller\ProviderController;
-use App\Product\Controller\StockController;
-use Lib\Http\DefaultController;
-use Lib\Http\RouteCollection as Routes;
 
-Routes::any('/api/v1/algo', function () {
-    echo 'test';
-});
 Routes::any('/api/v1', [DefaultController::class, 'home']);
+Routes::any('/api/v1/ping', function () {
+    echo 'pong';
+});
 Routes::post('/api/v1/migrate', [Migration::class, 'start']);
 
 Routes::post('/api/v1/product', [ProductController::class, 'create']);
@@ -30,3 +31,8 @@ Routes::get('/api/v1/stock/:id', [StockController::class, 'getByProductId']);
 Routes::post('/api/v1/stock', [StockController::class, 'create']);
 Routes::post('/api/v1/stock/:id/sync', [StockController::class, 'productStockSync']);
 Routes::delete('/api/v1/stock', [StockController::class, 'delete']);
+
+
+Routes::get('/api/v1/:page', function($page){
+    dd($page, Router::$RequestData);
+});

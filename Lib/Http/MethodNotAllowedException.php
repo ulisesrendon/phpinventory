@@ -2,4 +2,8 @@
 
 namespace Lib\Http;
 
-class MethodNotAllowedException extends \Exception {}
+use Exception;
+
+class MethodNotAllowedException extends Exception
+{}
+

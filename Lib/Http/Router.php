@@ -2,6 +2,9 @@
 
 namespace Lib\Http;
 
+use Closure;
+use Lib\Http\InvalidControllerException;
+
 class Router
 {
     public static RequestData $RequestData;
@@ -42,12 +45,23 @@ class Router
     public function execute(RouteController $RouteController)
     {
         $Controller = $RouteController->Controller;
+
+        if (
+            (
+                is_array($Controller)
+                && (!class_exists($Controller[0]) || !method_exists($Controller[0], $Controller[1]))
+            )
+            || is_object($Controller) && !is_callable($Controller)
+        ) {
+            throw new InvalidControllerException('Route controller is not a valid callable or it can not be called from the actual scope');
+        }
+
         if (is_array($Controller)) {
             [$class, $method] = $Controller;
             $Controller = [new $class, $method];
         }
 
-        if ($Controller instanceof \Closure) {
+        if ($Controller instanceof Closure) {
             ob_start();
             call_user_func_array($Controller, $RouteController->Params);
             $content = ob_get_clean();
