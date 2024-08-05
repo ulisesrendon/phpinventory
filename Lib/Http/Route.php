@@ -6,7 +6,7 @@ class Route
 {
     public readonly string $path;
 
-    public readonly string $regexp;
+    public string $regexp;
 
     public array $methods = [];
 
@@ -49,5 +49,12 @@ class Route
     public function getController(string $method): null|array|object
     {
         return $this->methods[$method] ?? $this->methods['any'] ?? null;
+    }
+
+    public function ignoreParamSlash()
+    {
+        $regexp = preg_replace('/:(.*)/', '(.*)', $this->path);
+        $this->regexp = '/^' . str_replace('/', '\/', $regexp) . '$/';
+        return $this;
     }
 }
