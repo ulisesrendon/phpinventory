@@ -5,7 +5,9 @@ namespace Lib\Http;
 class Response
 {
     public int $status;
+
     public string $content;
+
     public array $headers;
 
     public function __construct(
@@ -21,9 +23,10 @@ class Response
     public function render(): string
     {
         http_response_code($this->status);
-        foreach($this->headers as $header){
+        foreach ($this->headers as $header) {
             header($header);
         }
+
         return (string) new TextRender($this->content);
     }
 
@@ -62,6 +65,7 @@ class Response
         int $status = 200,
     ) {
         $content = (string) new TextRenderFromFile($content);
+
         return new self($content, $status);
     }
 }

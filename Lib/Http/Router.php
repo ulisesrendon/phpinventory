@@ -47,12 +47,12 @@ class Router
             $Controller = [new $class, $method];
         }
 
-        if($Controller instanceof \Closure ){
+        if ($Controller instanceof \Closure) {
             ob_start();
             call_user_func_array($Controller, $RouteController->Params);
             $content = ob_get_clean();
             $controllerResponse = new TextRender($content);
-        }else{
+        } else {
             $controllerResponse = call_user_func_array($Controller, $RouteController->Params);
         }
 

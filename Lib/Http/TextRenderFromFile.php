@@ -18,7 +18,7 @@ class TextRenderFromFile extends TextRender
         ob_start();
         extract($this->context);
         require $this->filepath;
+
         return ob_get_clean();
     }
-
 }

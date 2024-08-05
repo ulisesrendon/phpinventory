@@ -1,12 +1,12 @@
 <?php
 
-require __DIR__ . '/../Config/routes.php';
+require __DIR__.'/../Config/routes.php';
 
-use Lib\Http\Router;
-use Lib\Http\Response;
-use Lib\Http\RequestData;
-use Lib\Http\RouteCollection;
 use Lib\Http\MethodNotAllowedException;
+use Lib\Http\RequestData;
+use Lib\Http\Response;
+use Lib\Http\RouteCollection;
+use Lib\Http\Router;
 
 try {
     $Router = new Router(RequestData::createFromGlobals(), RouteCollection::$routes);
@@ -16,13 +16,13 @@ try {
     if (isset($Controller)) {
         $Response = $Router->execute($Controller);
     } else {
-        $Response = Response::template(__DIR__ . '/404.html', 404);
+        $Response = Response::template(__DIR__.'/404.html', 404);
     }
 } catch (\Exception $Exception) {
     if ($Exception instanceof MethodNotAllowedException) {
-        $Response = Response::template(__DIR__ . '/405.html', 405);
+        $Response = Response::template(__DIR__.'/405.html', 405);
     } else {
-        $Response = Response::template(__DIR__ . '/500.html', 500);
+        $Response = Response::template(__DIR__.'/500.html', 500);
     }
 }
 
