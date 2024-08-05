@@ -2,24 +2,23 @@
 
 namespace Lib\Http;
 
-class TextRender
+class TextRenderFromFile extends TextRender
 {
     public function __construct(
-        public string $content,
+        public string $filepath,
         public array $context = []
     ) {
+        if (! file_exists($this->filepath)) {
+            throw new \Exception('File not found: '.$this->filepath);
+        }
     }
 
     public function render()
     {
         ob_start();
         extract($this->context);
-        echo $this->content;
+        require $this->filepath;
         return ob_get_clean();
     }
 
-    public function __toString()
-    {
-        return $this->render();
-    }
 }

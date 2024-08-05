@@ -7,7 +7,7 @@ use Lib\Http\Response;
 
 class Migration extends DefaultController
 {
-    public function start(array $args = []): bool
+    public function start(array $args = [])
     {
         try {
             $this->DataBaseAccess->beginTransaction();
@@ -95,15 +95,14 @@ class Migration extends DefaultController
         } catch (\Exception $e) {
             $this->DataBaseAccess->rollBack();
 
-            Response::json([
+            return Response::json([
                 'data' => 'Migration Failed!',
             ], 500);
         }
 
-        Response::json([
+        return Response::json([
             'data' => 'Migration Complete!',
         ]);
 
-        return true;
     }
 }

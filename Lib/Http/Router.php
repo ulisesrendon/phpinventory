@@ -47,6 +47,15 @@ class Router
             $Controller = [new $class, $method];
         }
 
-        call_user_func_array($Controller, $RouteController->Params);
+        if($Controller instanceof \Closure ){
+            ob_start();
+            call_user_func_array($Controller, $RouteController->Params);
+            $content = ob_get_clean();
+            $controllerResponse = new TextRender($content);
+        }else{
+            $controllerResponse = call_user_func_array($Controller, $RouteController->Params);
+        }
+
+        return $controllerResponse;
     }
 }

@@ -4,49 +4,64 @@ namespace Lib\Http;
 
 class Response
 {
-    public function __construct() {}
+    public int $status;
+    public string $content;
+    public array $headers;
+
+    public function __construct(
+        string $content = '',
+        int $status = 200,
+        array $headers = [],
+    ) {
+        $this->content = $content;
+        $this->status = $status;
+        $this->headers = $headers;
+    }
+
+    public function render(): string
+    {
+        http_response_code($this->status);
+        foreach($this->headers as $header){
+            header($header);
+        }
+        return (string) new TextRender($this->content);
+    }
 
     public static function json(
-        mixed $data = null,
-        ?int $status = null,
+        mixed $content = null,
+        int $status = 200,
     ) {
-        header('Content-Type: application/json');
-        http_response_code($status ?? 200);
-        ob_clean();
-        echo json_encode($data);
-        exit();
+        return new self(
+            json_encode($content), $status, ['Content-Type: application/json']
+        );
     }
 
     public static function xml(
-        string $data = '',
-        ?int $status = null,
+        string $content = '',
+        int $status = 200,
     ) {
-        header('Content-Type: text/xml; charset=utf-8');
-        http_response_code($status ?? 200);
-        ob_clean();
-        echo $data;
-        exit();
+        return new self($content, $status, ['Content-Type: text/xml; charset=utf-8']);
     }
 
     public static function html(
-        string $data = '',
-        ?int $status = null,
+        string $content = '',
+        int $status = 200,
     ) {
-        header('Content-Type: text/html; charset=utf-8');
-        http_response_code($status ?? 200);
-        ob_clean();
-        echo $data;
-        exit();
+        return new self($content, $status, ['Content-Type: text/html; charset=utf-8']);
     }
 
     public static function csv(
-        string $data = '',
-        ?int $status = null,
+        string $content = '',
+        int $status = 200,
     ) {
-        header('Content-Type: text/csv; charset=utf-8');
-        http_response_code($status ?? 200);
-        ob_clean();
-        echo $data;
-        exit();
+        return new self($content, $status, ['Content-Type: text/csv; charset=utf-8']);
+    }
+
+    public static function template(
+        string $content = '',
+        int $status = 200,
+    ) {
+        $content = (string) new TextRenderFromFile($content);
+        return new self($content, $status);
     }
 }

@@ -27,30 +27,28 @@ class ProductController extends DefaultController
         $Product = empty($ProductOptions) ? null : $ProductOptions[0];
 
         if (is_null($Product)) {
-            Response::json([
+            return Response::json([
                 'id' => $id,
                 'product' => [],
             ], 404);
         }
 
-        Response::json([
+        return Response::json([
             'id' => $id,
             'product' => $Product,
         ]);
 
-        return true;
     }
 
     public function list()
     {
         $ProductList = (new ProductOptionGrouping($this->ProductQuery->list()))->get();
 
-        Response::json([
+        return Response::json([
             'count' => count($ProductList),
             'list' => $ProductList,
         ]);
 
-        return true;
     }
 
     public function create()
@@ -61,19 +59,19 @@ class ProductController extends DefaultController
         $price = $this->Request->body['price'] ?? 0;
 
         if (empty($code)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Product code is required',
             ], 400);
         }
 
         if ($this->ProductQuery->codeExists($code)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Product code already exists',
             ], 400);
         }
 
         if (empty($title)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Product title is required',
             ], 400);
         }
@@ -85,12 +83,11 @@ class ProductController extends DefaultController
             price: $price,
         );
 
-        Response::json([
+        return Response::json([
             'status' => 'success',
             'id' => ! empty($result) ? (int) $result : null,
         ], 201);
 
-        return true;
     }
 
     public function update(int $id)
@@ -105,13 +102,13 @@ class ProductController extends DefaultController
         $OlderProductData = empty($OlderProductOptions) ? null : $OlderProductOptions[0];
 
         if (empty($OlderProductData)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Product not found',
             ], 404);
         }
 
         if (! is_null($code) && empty($code)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Product code is required',
             ], 400);
         }
@@ -121,13 +118,13 @@ class ProductController extends DefaultController
             && $code != $OlderProductData->code
             && $this->ProductQuery->codeExists($code)
         ) {
-            Response::json([
+            return Response::json([
                 'error' => 'Product code already exists',
             ], 400);
         }
 
         if (! is_null($code) && empty($title)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Product title is required',
             ], 400);
         }
@@ -154,21 +151,18 @@ class ProductController extends DefaultController
             fields: $fields
         );
 
-        Response::json([
+        return Response::json([
             'status' => ! empty($result) ? 'success' : 'something went wrong',
         ], 200);
 
-        return true;
     }
 
     public function deleteById(int $id)
     {
         $result = $this->ProductCommand->deleteByID($id);
 
-        Response::json([
+        return Response::json([
             'status' => ! empty($result) ? 'success' : 'something went wrong',
         ], 200);
-
-        return true;
     }
 }

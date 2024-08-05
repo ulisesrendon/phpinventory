@@ -30,10 +30,8 @@ class DefaultController
         $this->DataBaseAccess = new DataBaseAccess($PDO);
     }
 
-    public function home(array $args = []): bool
+    public function home(array $args = [])
     {
-        Response::json('Hello, world!');
-
-        return true;
+        return Response::json('Hello, world!');
     }
 }

@@ -24,12 +24,11 @@ class StockController extends DefaultController
     {
         $List = $this->StockQuery->list();
 
-        Response::json([
+        return Response::json([
             'count' => count($List),
             'list' => $List,
         ]);
 
-        return true;
     }
 
     public function getByProductId(int $id)
@@ -39,17 +38,16 @@ class StockController extends DefaultController
         $Entries = $this->StockQuery->getByProductID($id);
 
         if (is_null($ProductData)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Product not found',
             ], 404);
         }
 
-        Response::json([
+        return Response::json([
             'product' => $ProductData,
             'entries' => $Entries,
         ]);
 
-        return true;
     }
 
     public function create()
@@ -57,7 +55,7 @@ class StockController extends DefaultController
         $stock = $this->Request->body['stock'] ?? null;
 
         if (empty($stock) || gettype($stock) != 'array') {
-            Response::json([
+            return Response::json([
                 'error' => 'No product stock received',
             ], 400);
         }
@@ -115,18 +113,17 @@ class StockController extends DefaultController
         }
 
         if ($TotalAdded != count($stock)) {
-            Response::json([
+            return Response::json([
                 'status' => 'success',
                 'message' => 'Some data could not be saved due to data formatting issues',
             ], 201);
         }
 
-        Response::json([
+        return Response::json([
             'status' => 'success',
             'message' => 'All data have been saved',
         ], 201);
 
-        return true;
     }
 
     public function delete()
@@ -134,14 +131,14 @@ class StockController extends DefaultController
         $entries = $this->Request->body['entries'] ?? null;
 
         if (! is_array($entries) || empty($entries)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Invalid product data',
             ], 400);
         }
 
         foreach ($entries as $id) {
             if (! is_numeric($id) || empty($id)) {
-                Response::json([
+                return Response::json([
                     'error' => 'Invalid product data',
                 ], 400);
             }
@@ -151,17 +148,13 @@ class StockController extends DefaultController
             $result = $this->StockCommand->deleteEntryById($id);
         }
 
-        Response::json([
+        return Response::json([
             'status' => ! empty($result) ? 'success' : 'something went wrong',
         ], 200);
-
-        return true;
     }
 
     public function productStockSync()
     {
-        Response::json('Hello!');
-
-        return true;
+        return Response::json('Hello!');
     }
 }

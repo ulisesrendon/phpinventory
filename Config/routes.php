@@ -7,7 +7,7 @@ use App\Product\Controller\StockController;
 use Lib\Http\DefaultController;
 use Lib\Http\RouteCollection as Routes;
 
-Routes::any('/api/v1/algo', fn () => 'test');
+Routes::any('/api/v1/algo', function(){echo 'test';});
 Routes::any('/api/v1', [DefaultController::class, 'home']);
 Routes::post('/api/v1/migrate', [Migration::class, 'start']);
 

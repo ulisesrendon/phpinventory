@@ -25,26 +25,22 @@ class ProviderController extends DefaultController
         $Provider = $this->ProviderQuery->getByID($id);
 
         if (empty($Provider)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Provider not found',
             ], 404);
         }
 
-        Response::json($Provider);
-
-        return true;
+        return Response::json($Provider);
     }
 
     public function list()
     {
         $List = $this->ProviderQuery->list();
 
-        Response::json([
+        return Response::json([
             'count' => count($List),
             'list' => $List,
         ]);
-
-        return true;
     }
 
     public function create()
@@ -53,13 +49,13 @@ class ProviderController extends DefaultController
         $description = $this->Request->body['description'] ?? '';
 
         if (empty($title)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Provider title is required',
             ], 400);
         }
 
         if ($this->ProviderQuery->titleExists($title)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Provider already exists',
             ], 400);
         }
@@ -69,12 +65,11 @@ class ProviderController extends DefaultController
             description: $description,
         );
 
-        Response::json([
+        return Response::json([
             'status' => 'success',
             'id' => ! empty($result) ? (int) $result : null,
         ], 201);
 
-        return true;
     }
 
     public function update(int $id)
@@ -86,13 +81,13 @@ class ProviderController extends DefaultController
         $OlderData = $this->ProviderQuery->getByID($id);
 
         if (empty($OlderData)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Provider not found',
             ], 404);
         }
 
         if (! is_null($title) && empty($title)) {
-            Response::json([
+            return Response::json([
                 'error' => 'Provider title is required',
             ], 400);
         }
@@ -102,7 +97,7 @@ class ProviderController extends DefaultController
             && strtolower($title) != strtolower($OlderData->title)
             && $this->ProviderQuery->titleExists($title)
         ) {
-            Response::json([
+            return Response::json([
                 'error' => 'Provider already exists',
             ], 400);
         }
@@ -122,21 +117,18 @@ class ProviderController extends DefaultController
             fields: $fields
         );
 
-        Response::json([
+        return Response::json([
             'status' => ! empty($result) ? 'success' : 'something went wrong',
         ], 200);
-
-        return true;
     }
 
     public function delete(int $id)
     {
         $result = $this->ProviderCommand->deleteByID($id);
 
-        Response::json([
+        return Response::json([
             'status' => ! empty($result) ? 'success' : 'something went wrong',
         ], 200);
 
-        return true;
     }
 }
