@@ -32,6 +32,9 @@ $PDOStatement = $PDO->prepare($query);
 $PDOStatement->execute($params);
 $PDOStatement->fetch(PDO::FETCH_OBJ);
 $PDO->lastInsertId();
+$PDO->beginTransaction();
+$PDO->commit();
+$PDO->rollBack();
 
 // Database conexion
 $PDO = new PDO("$drive:host=$host;port=$port;dbname=$name", $user, $password);
