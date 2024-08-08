@@ -10,16 +10,13 @@ CREATE products IF NOT EXISTS(
 INSERT INTO products (code, title, price) VALUES 
     ('700000001', 'Teclado Kumara Dragon Switches Blue', 1200),
     ('700000002', 'Teclado Kumara Dragon Switches Red', 1170),
-    ('700000003', 'Mouse Logitech G505 Hero', 1000)
-ON CONFLICT (code) DO NOTHING
+    ('700000003', 'Mouse Logitech G505 Hero', 1000);
 
 
 INSERT INTO products(code, title, price, active) VALUES($code, $title, $price, $active) RETURNING id;
 
 
-SELECT id, code, title, price, updated_at
-FROM products
-WHERE deleted_at is null and active is true and id = $id;
+SELECT id, code, title, price, stock, active FROM products
 
 
 SELECT exists(SELECT code FROM products WHERE code = $code);
