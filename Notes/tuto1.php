@@ -182,8 +182,83 @@ Si se requiere eliminar multiples registros se puede enviar el comando repetidam
 
 /*
 Actualización de datos
+
+Para enviar el comando de actualización de datos es tan simple como definir la sentencia sql y executarla con PDO exec.
 */
 $command = "UPDATE products set stock = $stock WHERE id = $id";
+$PDO->exec($command);
+/*
+Siempŕe será necesario revisar la condicion de la sentencia SQL para evitar modificar registros que no se tenga pensado modificar.
+*/
+
+/*
+Como se puede mejorar la opoeración de actualización?
+
+Con PHP podemos crear todo tipo de algoritmos que nos permitan realizar las operaciones con la base de datos de forma mas comoda y autonmatica.
+
+Que haríamos si por ejemplo necesitamos editar mas de un campo a la vez? que tal si se tratara de cinco, diez o treinta campos?
+Pues para eso nos conviene mejor crear una funcion que nos ayude a hacer las actualizaciones a la base de de una forma un poco mas comoda:
+*/
+function dataBaseUpdate(\PDO $PDO, string $table, array $fields)
+{
+    $id = $fields['id'];
+    unset($fields['id']);
+
+    $updateList = [];
+    foreach ($fields as $field => $value) {
+        $updateList[] = "$field = $value";
+    }
+    $fieldsToUpdate = implode(', ', $updateList);
+
+    $command = "UPDATE $table SET $fieldsToUpdate WHERE id = $id";
+    return $PDO->exec($command);
+}
+
+/*
+Esta funcion nos ayuda a construir la sentencia SQL para actualizar datos (los que sean y en cualquier tabla), solo necesitamos darle como argumentos de entrada el objeto PDO de nuestra conexión a la base de datos, el nombre de la tabla que contiene los datos y los datos de los campos a editar, pero entre los campos debemos proporcionar el id de la fila a editar, de lo contrario el algoritmo se rompera.
+
+Con esto podemos llevar a cabo el siguiente código para actualizar registros:
+*/
+dataBaseUpdate($PDO, 'products', [
+    'id' => 4,
+    'stock' => 3,
+]);
+dataBaseUpdate($PDO, 'products', [
+    'id' => 5,
+    'title' => "'Producto actualizado'",
+    'price' => 300,
+    'stock' => 14,
+    'active' => true,
+]);
+
+/*
+La primera instrucción actualizara la fila 4 de nuestra tabla de productos, cambiando el valor del stock por un 3.
+La siguiente instrucción actualizara la fila 5, cambiando multiples campos de la fila al mismo tiempo (titulo, precio, stock, estado).
+
+Hay que prestar atención que la cadena de texto que representa el titulo esta entre comillado, esto es porque las primeras comillas son para decirle a PHP donde acaba y termina el código y empieza el texto, y una vez que el texto sea contactenado a la sentencia SQL, se perderan estas comillas, pero en la sentencia de nuevo debemos indicar que es ćodigo SQL y que es texto humano, por lo que es necesario usar doble entre comillado para estos casos, y no podemos usar cualquier tipo de comillas, Postgres SQL por ejemplo, solo admite comillas simples para delimitar texto humano.
+
+Y si en vez de realizar un numero finito de actualizaciones tuviesemos que actualizar un gran listado de filas?
+Para ello podemos de neuvo recurrir a las estructuras repetitivas, por ejmeplo:
+*/
+$products = [
+    [
+        'id' => 3,
+        'stock' => 7,
+    ],
+    [
+        'id' => 4,
+        'stock' => 3,
+    ],
+    [
+        'id' => 5,
+        'stock' => 14,
+    ],
+    // ... 
+];
+foreach($products as $product){
+    dataBaseUpdate($PDO, 'products', $product);
+}
+
 
 $PDOStatement = $PDO->prepare($query);
 $PDOStatement->execute($params);
