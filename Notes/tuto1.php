@@ -97,21 +97,97 @@ Ell tercer argumento es la contraseña de ese usuario.
 Una vez instanciado nuestro objeto PDO, ya podemos empezar a realizar operaciones con la base de datos.
 */
 
-$query = 'SELECT id, code, title, price, stock, active FROM products';
-foreach ($PDO->query($query) as $row) {
-    echo $row['name'] . "\t";
-    echo $row['color'] . "\t";
-    echo $row['calories'] . "\n";
+$query = 'SELECT id, code, title, price, stock FROM products';
+$result = $PDO->query($query);
+foreach ($result as $row) {
+    echo "{$row['id']} - {$row['code']} - {$row['title']} - {$row['price']} - {$row['stock']}<br>";
+}
+/*
+En teste bloque de código tenemos en la primera linea una cadena de texto que es el código SQL de la consulta que haremos a la base de datos.
+En la segunda línea mandamos la consulta con PDO usando el metodo "query", el cual nos retornara un objecto que podemos recorrer con la estructura foreach en el que cada ciclo nos permitira acceder a una fila de los datos que nos retorne la consulta y esta fila es un arreglo asociativo, en el que cada elemento tiene el valor de una celda en nuestra tabla, y su clave es el nombre de la tabla.
+Sabiendo esto es muy fácil directamente imprimir los datos o hacer otras operaciones con ellos.
+*/
+
+/*
+Enviar nuevos registros a la base de datos
+
+Ahora usaremos el metodo exec de PDO para poder enviar comandos, empezando con el comando de insertar un nuevo registro.
+*/
+$code = 70001;
+$title = 'Producto demo #1';
+$price = 200;
+$stock = 15;
+
+$command = "INSERT INTO products(code, title, price, stock) VALUES($code, '$title', $price, $stock)";
+$PDO->exec($command); 
+
+echo $PDO->lastInsertId();
+
+/*
+En este código definimos primero los datos del nuevo elemento a registrar en la base de datos, luego unimos esos datos en una sola cadena en la variable $command que representa el comando que finalmente enviaremos a la base de datos.
+
+Por ultimo para saber si nuestro comando funciono y nuestro nuevo registro se guardo correctamente en la base de datos podemos usar el metodo lastInsertId, el cual nos retornara el Id de la fila que acabamos de registrar.
+
+*/
+
+/*
+Insertando muchos datos al mismo tiempo
+
+Si lo que queremos es insertar multiples nuevos registros de golpe, esto se puede lograr de la siguiente forma:
+
+Este es el arreglo con los datos de lo selementos a insertar
+*/
+$products = [
+    [
+        'id' => null,
+        'code' => 70001,
+        'title' => 'Producto demo #1',
+        'price' => 200,
+        'stock' => 15,
+    ],
+    [
+        'id' => null,
+        'code' => 70001,
+        'title' => 'Producto demo #2',
+        'price' => 300,
+        'stock' => 20,
+    ],
+    [
+        'id' => null,
+        'code' => 70001,
+        'title' => 'Producto demo #3',
+        'price' => 400,
+        'stock' => 5,
+    ],
+];
+
+foreach($products as $productKey => $productData){
+    $command = "INSERT INTO products(code, title, price, stock) VALUES(
+        {$productData['code']}, '{$productData['title']}', {$productData['price']}, {$productData['stock']}
+    )";
+    $PDO->exec($command);
+    $products[$productKey]['id'] = $PDO->lastInsertId();
 }
 
-$PDO->query($query); 
+/*
+La forma de eliminar registros es la siguiente:
+*/
+$command = "DELETE FROM products WHERE id = $id";
+$PDO->exec($command);
 
-$PDO->exec($query); 
+/*
+Solo se necesita enviar el comando de eliminacion definiendo las condiciones adecuadas para así borrar registros de forma permanente.
+Si se requiere eliminar multiples registros se puede enviar el comando repetidamente usando estructuras repetitivas o se pueden definir condiciones que abarquen multiples filas.
+*/
+
+/*
+Actualización de datos
+*/
+$command = "UPDATE products set stock = $stock WHERE id = $id";
 
 $PDOStatement = $PDO->prepare($query);
 $PDOStatement->execute($params);
 
-$PDO->lastInsertId();
 
 $PDOStatement->fetch(PDO::FETCH_OBJ);
 
@@ -147,16 +223,6 @@ $PDO->prepare($query)->execute($params);
 
 
 
-// Create database schema
-$query = "CREATE products IF NOT EXISTS(
-    id bigserial not null primary key,
-    code varchar(255) null unique,
-    title varchar(255) null,
-    price numeric(10, 2) not null default 0,
-    stock integer not null default 0,
-    active boolean not null default false,
-    deleted_at timestamp(0) null
-)";
 $PDO->prepare($query)->execute();
 
 $query = "INSERT INTO products(code, title, price, active) VALUES($code, $title, $price, $active)";
