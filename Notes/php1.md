@@ -47,7 +47,10 @@ Conociendo y utilizando correctamente los diferentes tipos de datos, podrás des
 
 ### Variables y constantes
 Las variables y las constantes son las herramientas que nos proveen los lenguajes de programación para poder gestionar los datos que nuestro software usará a lo largo de su ejecución.
+
 Se suele decir que son los contenedores de los datos y aunque esto tecnicamente no es así, es una buena abstracción para referirnos a estas herramientas.
+
+PHP es un lenguaje debilmente tipado, por lo que las variables en PHP son dinámicas, lo que significa que no es necesario declarar explícitamente su tipo de dato, PHP asiganara el tipo según el valor que usemos.
 
 ### Las Variables
 
@@ -70,7 +73,7 @@ En este ejemplo:
 - `$age` es una variable que almacena un número entero (integer).
 - `$isStudent` es una variable que almacena un valor booleano (boolean).
 
-### Constantes en PHP
+### Las constantes en PHP
 
 Las constantes son similares a las variables, pero su valor no puede cambiar una vez que se han definido. Se utilizan para almacenar valores que se deben mantener constantes a lo largo de la ejecución del script.
 
@@ -91,84 +94,46 @@ En este ejemplo:
 
 ### Ejemplo Completo
 
-Un pequeño script que usa variables, constantes y diferentes tipos de datos:
+Vamos a crear un pequeño programa que haga uso de constantes y diferentes tipos de datos y que haga algunas operaciones simples con ellos.
 
 ```php
 <?php
-// Definimos una constante
 define("TAX_FEE", 0.16);
 
-// Definimos variables
 $product = "Laptop";
-$price = 12190.99;
+$price = 12090.99;
 $quantity = 2;
-$totalWithoutTaxes = $price * $quantity;
-$totalWithTaxes = $totalWithoutTaxes * (1 + TAX_FEE);
 
-// Mostramos los valores
+$total = $price * $quantity;
+
 echo "Producto: $product\n";
 echo "Precio unitario: $$price\n";
 echo "Cantidad: $quantity\n";
-echo "Total sin impuesto: $$totalWithoutTaxes\n";
-echo "Total con impuesto (18%): $$totalWithTaxes\n";
+echo "Total sin impuesto: $$total\n";
+
+$total = $total * (1 + TAX_FEE);
+echo "Total con impuesto (16%): $$total\n";
 ```
 
-En este ejemplo:
+En este ejemplo utilizamos varios tipos de datos: cadenas de texto (strings), números decimales (floats) y enteros (integers).
+`TAX_FEE` es una constante que reprensenta el porcentaje de impuestos a aplicar y no necesita cambiar a lo largo del programa.
+`$product`, `$price`, `$quantity`, `$total` son variables.
+- Con los valores númericos $price y $quantity hacemos una multiplicación con el operador * para obtener el total a pagar antes de impuestos y luego hacemos otra multiplicación que incluye el valor TAX_FEE para poder aumentar el precio añadiendo el valor de los impuestos a pagar.
 
-- `TAX_FEE` es una constante.
-- `$product`, `$price`, `$quantity`, `$totalWithoutTaxes` y `$totalWithTaxes` son variables.
-- Utilizamos varios tipos de datos: cadenas de texto (strings), números decimales (floats) y enteros (integers).
-
-
-PHP es un lenguaje debilmente tipado, por lo que las variables en PHP son dinámicas, lo que significa que no es necesario declarar explícitamente su tipo de dato, PHP asiganara el tipo según el valor que usemos.
+A parte de la suma y la multiplicación, tenemos en PHP muchos otros operadores para realizar tanto operaciones artitmeticas basicas como otro tipo de operaciones con otros valores.
 
 ## Operadores Aritméticos
 
-Los operadores aritméticos en PHP permiten realizar operaciones matemáticas básicas sobre variables y valores. Los operadores más comunes son:
+Los operadores aritméticos en PHP permiten realizar operaciones matemáticas básicas sobre valores númericos y son los siguientes:
 
-- **Adición (+)**: Suma dos valores. Ejemplo: `$a + $b`.
-- **Sustracción (-)**: Resta un valor de otro. Ejemplo: `$a - $b`.
+- **Suma (+)**: Suma dos valores. Ejemplo: `$a + $b`.
+- **Resta (-)**: Resta un valor de otro. Ejemplo: `$a - $b`.
 - **Multiplicación (*)**: Multiplica dos valores. Ejemplo: `$a * $b`.
-- **Potenciación (\**)**: Eleva a un valor a la potencia de otro. Ejemplo: `$a**$b`.
 - **División (/)**: Divide un valor por otro. Ejemplo: `$a / $b`.
+- **Potenciación (\**)**: Eleva a un valor a la potencia de otro. Ejemplo: `$a**$b`.
 - **Módulo (%)**: Devuelve el residuo de una división. Ejemplo: `$a % $b`.
 
-Estos operadores son fundamentales para realizar cálculos y operaciones matemáticas con valores númericos en PHP.
-
-## Operadores de Asignación
-
-Los operadores de asignación se utilizan para asignar valores a las variables. El operador de asignación más básico es el signo igual (=), pero PHP también ofrece otros operadores combinados que realizan una operación aritmética y luego asignan el resultado. Algunos ejemplos son:
-
-- **Asignación simple (=)**: Asigna un valor a una variable. Ejemplo: `$a = 10`.
-- **Adición y asignación (+=)**: Suma y asigna el resultado. Ejemplo: `$a += 5` es equivalente a `$a = $a + 5`.
-- **Sustracción y asignación (-=)**: Resta y asigna el resultado. Ejemplo: `$a -= 3` es equivalente a `$a = $a - 3`.
-- **Multiplicación y asignación (*=)**: Multiplica y asigna el resultado. Ejemplo: `$a *= 2` es equivalente a `$a = $a * 2`.
-- **División y asignación (/=)**: Divide y asigna el resultado. Ejemplo: `$a /= 4` es equivalente a `$a = $a / 4`.
-
-Estos operadores de asignación hacen que el código sea más conciso y fácil de leer.
-
-## Conclusión
-
-PHP es un lenguaje poderoso y versátil que ofrece una variedad de herramientas para trabajar con datos, variables, tipos de datos y operadores. Comprender estos conceptos básicos es crucial para cualquier desarrollador que quiera utilizar PHP de manera efectiva. Con una buena base en estos fundamentos, estarás bien equipado para comenzar a desarrollar aplicaciones dinámicas y robustas.
-
-
-
-
-## Operadores en PHP
-
-Los operadores en PHP se utilizan para realizar operaciones sobre variables y valores. A continuación, se explican algunos de los operadores más comunes y su uso.
-
-### Operadores Aritméticos
-
-Se utilizan para realizar operaciones matemáticas comunes.
-
-- **Suma ( + )**: Suma dos valores.
-- **Resta ( - ):**Resta dos valores.
-- **Multiplicación ( * ):``** Multiplica dos valores.
-- **División (`/`)**: Divide dos valores.
-- **Módulo (`%`)**: Devuelve el resto de la división de dos valores.
-
-Ejemplo:
+Ejemplo de uso de los operadores aritmeticos:
 
 ```php
 $a = 10;
@@ -178,20 +143,24 @@ echo $a + $b;  // 13
 echo $a - $b;  // 7
 echo $a * $b;  // 30
 echo $a / $b;  // 3.3333
+echo $a ** $b;  // 1000
 echo $a % $b;  // 1
 
 ```
 
-### Operadores de Asignación
+## Operadores de Asignación
 
-Se utilizan para asignar valores a variables.
+Los operadores de asignación se utilizan para asignar valores a las variables y ya vimos el operador de asignación más básico, el signo igual (=), pero en PHP este operador se puede combinar con los operadores aritmeticos y realizar alguna operación matematica deseada y en automatico asignar el resultado a una variable.
 
-- **Asignación (`=`)**: Asigna un valor a una variable.
-- **Asignación con suma (`+=`)**: Suma y asigna el resultado.
-- **Asignación con resta (`=`)**: Resta y asigna el resultado.
-- **Asignación con multiplicación (`=`)**: Multiplica y asigna el resultado.
-- **Asignación con división (`/=`)**: Divide y asigna el resultado.
-- **Asignación con módulo (`%=`)**: Calcula el módulo y asigna el resultado.
+- **Asignación simple (=)**: Asigna un valor a una variable. Ejemplo: `$a = 10`.
+- **Adición y asignación (+=)**: Suma y asigna el resultado. Ejemplo: `$a += 5` es equivalente a `$a = $a + 5`.
+- **Sustracción y asignación (-=)**: Resta y asigna el resultado. Ejemplo: `$a -= 3` es equivalente a `$a = $a - 3`.
+- **Multiplicación y asignación (*=)**: Multiplica y asigna el resultado. Ejemplo: `$a *= 2` es equivalente a `$a = $a * 2`.
+- **División y asignación (/=)**: Divide y asigna el resultado. Ejemplo: `$a /= 4` es equivalente a `$a = $a / 4`.
+- **Potenciación y asignación (*=)**: Eleva y asigna el resultado. Ejemplo: `$a **= 3` es equivalente a `$a = $a ** 3`.
+- **Modulo y asignación (%=)**: Divide y asigna el resuduo resultante. Ejemplo: `$a %= 3` es equivalente a `$a = $a % 3`.
+
+Estos operadores de asignación hacen que el código sea más conciso y fácil de leer.
 
 Ejemplo:
 
