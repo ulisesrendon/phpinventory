@@ -75,7 +75,7 @@ En este ejemplo:
 
 ### Las constantes en PHP
 
-Las constantes son similares a las variables, pero su valor no puede cambiar una vez que se han definido. Se utilizan para almacenar valores que se deben mantener constantes a lo largo de la ejecución del script.
+Las constantes son similares a las variables, pero su valor no puede cambiar una vez que se han definido. Se utilizan para almacenar valores que deben mantener es mismo valor a lo largo de la ejecución del script.
 
 - **Definición**: Se definen usando la función `define()`.
 - **Nombre de constantes**: Por convención, se escriben en mayúsculas.
@@ -173,7 +173,18 @@ $a /= 6;  // $a es ahora 4
 $a %= 3;  // $a es ahora 1
 
 ```
+Tambien tenemos los operadores abreviados para incremento y decremento, estos operadores premiten de una forma resumida sumar o restar una unidad a un valor y al mismo tiempo asignarlo a la variable.
+Los operadores serián los siguientes:
 
+- **$a++**: Suma uno a una variable. Equivallente a: `$a += 1`.
+- **$a--**: Resta uno a una variable. Equivallente a: `$a -= 1`.
+
+```php
+$a = 5;
+
+$a++;  // $a es ahora 6
+$a--;  // $a vuelve a valer 5
+```
 ### Operadores de Comparación
 
 Se utilizan para comparar dos valores.
