@@ -139,25 +139,25 @@ Ejemplo de uso de los operadores aritmeticos:
 $a = 10;
 $b = 3;
 
-echo $a + $b;  // 13
-echo $a - $b;  // 7
-echo $a * $b;  // 30
-echo $a / $b;  // 3.3333
-echo $a ** $b;  // 1000
-echo $a % $b;  // 1
+echo $a + $b;  // 10 + 3 = 13
+echo $a - $b;  // 10 - 3 = 7
+echo $a * $b;  // 10 * 3 = 30
+echo $a / $b;  // 10 / 3 = 3.3333
+echo $a ** $b;  // 10**3 = 1000
+echo $a % $b;  // 10 % 3 = 1 (Diez dividido entre tres es igual a 3 y resta 1)
 
 ```
 
 ## Operadores de Asignación
 
-Los operadores de asignación se utilizan para asignar valores a las variables y ya vimos el operador de asignación más básico, el signo igual (=), pero en PHP este operador se puede combinar con los operadores aritmeticos y realizar alguna operación matematica deseada y en automatico asignar el resultado a una variable.
+Los operadores de asignación se utilizan para asignar valores a las variables y ya vimos el operador de asignación más básico, el signo "igual que" (=), pero en PHP este operador se puede combinar con los operadores aritmeticos para realizar alguna operación matematica y en automatico asignar el resultado a una variable.
 
 - **Asignación simple (=)**: Asigna un valor a una variable. Ejemplo: `$a = 10`.
 - **Adición y asignación (+=)**: Suma y asigna el resultado. Ejemplo: `$a += 5` es equivalente a `$a = $a + 5`.
 - **Sustracción y asignación (-=)**: Resta y asigna el resultado. Ejemplo: `$a -= 3` es equivalente a `$a = $a - 3`.
 - **Multiplicación y asignación (*=)**: Multiplica y asigna el resultado. Ejemplo: `$a *= 2` es equivalente a `$a = $a * 2`.
 - **División y asignación (/=)**: Divide y asigna el resultado. Ejemplo: `$a /= 4` es equivalente a `$a = $a / 4`.
-- **Potenciación y asignación (*=)**: Eleva y asigna el resultado. Ejemplo: `$a **= 3` es equivalente a `$a = $a ** 3`.
+- **Potenciación y asignación (\**=)**: Eleva y asigna el resultado. Ejemplo: `$a **= 3` es equivalente a `$a = $a ** 3`.
 - **Modulo y asignación (%=)**: Divide y asigna el resuduo resultante. Ejemplo: `$a %= 3` es equivalente a `$a = $a % 3`.
 
 Estos operadores de asignación hacen que el código sea más conciso y fácil de leer.
@@ -176,8 +176,8 @@ $a %= 3;  // $a es ahora 1
 Tambien tenemos los operadores abreviados para incremento y decremento, estos operadores premiten de una forma resumida sumar o restar una unidad a un valor y al mismo tiempo asignarlo a la variable.
 Los operadores serián los siguientes:
 
-- **$a++**: Suma uno a una variable. Equivallente a: `$a += 1`.
-- **$a--**: Resta uno a una variable. Equivallente a: `$a -= 1`.
+- **$a++**: Suma uno a una variable. Equivallente a: `$a = $a + 1`.
+- **$a--**: Resta uno a una variable. Equivallente a: `$a = $a -1`.
 
 ```php
 $a = 5;
@@ -185,9 +185,38 @@ $a = 5;
 $a++;  // $a es ahora 6
 $a--;  // $a vuelve a valer 5
 ```
+
+### Operadores para cadenas de texto
+PHP tiene solo dos operadores para texto, uno para unir cadenas (concatenación) y otro para de forma abreviada unir una cadena a una variable previa y asignar el resultado final.
+
+- **Concatenación (`.`)**: Une dos cadenas de texto.
+- **Concatenación y asignación (`.=`)**: Une una cadena a otra cadena previamente definida y asigna el resultado.
+
+Ejemplo:
+
+
+```php
+$message = 'Hola';
+$user = 'Luis';
+
+echo $message . ' ' . $user; // Hola Luis
+
+$message .= ' ' . $user;
+echo $message; // Hola Luis
+```
+Hay que notar que por cada cadena de texto que se quiere concatenar también se concatena un espacio para que las palabras no queden juntas.
+
+Hay otra forma de concatenar cadenas y otros valores sin el operador punto:
+
+```php
+echo "{$message} {$user}"; // Hola Luis
+```
+
+Para usar este metodo es necesario usar comillas simples, y luego entre llaves se indica el valor a concatenar, puede ser cualquier valor escalar aunque no sea una cadena de texto, pero hay que tener en cuenta que ese valor sera convertido a texto de forma dinamica.
+
 ### Operadores de Comparación
 
-Se utilizan para comparar dos valores.
+Estos operadores se utilizan para comparar dos valores y nos da como resultado un valor que puede ser verdadero ó falso, los operadores son los siguientes:
 
 - **Igual (`==`)**: Verifica si dos valores son iguales.
 - **Idéntico (`===`)**: Verifica si dos valores son iguales y del mismo tipo.
@@ -204,14 +233,14 @@ Ejemplo:
 $a = 5;
 $b = 10;
 
-var_dump($a == $b);  // bool(false)
-var_dump($a === $b); // bool(false)
-var_dump($a != $b);  // bool(true)
-var_dump($a !== $b); // bool(true)
-var_dump($a > $b);   // bool(false)
-var_dump($a < $b);   // bool(true)
-var_dump($a >= $b);  // bool(false)
-var_dump($a <= $b);  // bool(true)
+var_dump( $a == $b );  // Cinco es igual a diez? Falso
+var_dump( $a === $b ); // Cinco es igual a diez y del mismo tipo? Falso
+var_dump( $a != $b );  // Cinco es diferente de 10? Verdadero
+var_dump( $a !== $b ); // Cinco es diferente de 10 ó de diferente tipo? Verdadero
+var_dump( $a > $b );   // Cinco es mayor que diez? Falso
+var_dump( $a < $b );   // Cinco es menor que diez? Verdadero
+var_dump( $a >= $b );  // Cinco es mayor o igual que diez? Falso
+var_dump( $a <= $b );  // Cinco es menor o igual que diez? verdadero
 
 ```
 
@@ -221,7 +250,8 @@ Se utilizan para combinar declaraciones condicionales.
 
 - **AND (`&&` o `and`)**: Verdadero si ambas declaraciones son verdaderas.
 - **OR (`||` o `or`)**: Verdadero si al menos una de las declaraciones es verdadera.
-- **NOT (`!`)**: Invierte el valor de una declaración.
+- **NOT (`!`)**: Invierte el valor de una declaración, por lo que la declaración será verdadera solo si el valor previo era falso.
+- XOR : Verdadero si solo una de las declaraciones es verdadera.
 
 Ejemplo:
 
@@ -232,5 +262,5 @@ $b = false;
 var_dump($a && $b);  // bool(false)
 var_dump($a || $b);  // bool(true)
 var_dump(!$a);       // bool(false)
-
+var_dump($a XOR $b);  // bool(true)
 ```
