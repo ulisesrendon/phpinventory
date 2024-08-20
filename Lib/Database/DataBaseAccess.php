@@ -80,6 +80,24 @@ class DataBaseAccess implements DatabaseFetchQuery, DatabaseSendCommand, Databas
         ]);
     }
 
+    public function sendInsert(string $table, array $fields): ?bool
+    {
+        if (empty($fields) || !isset($fields['id'])) {
+            return null;
+        }
+
+        $FieldNames = [];
+        foreach ($fields as $field => $value) {
+            $FieldNames[] = "$field = :$field";
+        }
+
+        $FieldsString = implode(', ', $FieldNames);
+        
+        $ColumnNames = implode(', ', array_keys($fields));
+
+        return $this->executeCommand("INSERT INTO $table($ColumnNames) values($FieldsString)", $fields);
+    }
+
     /**
      * Fetch all the results from a query
      */

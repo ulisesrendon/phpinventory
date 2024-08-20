@@ -222,3 +222,18 @@ Este operador también cuenta con su forma abreviada de asignación, por lo que 
 $message ??= 'Buenos días';
 echo $message; // Buenos días
 ```
+Este operador se puede usar mas de una vez en la misma sentencia, permitiendo evaluar multiples datos, hasta encontrar alguno que no sea nulo para retornarlo, o de lo contrario retornara el ultimo valor dado, ejemplo:
+
+```php
+$messageDefault = 'Buenos días';
+echo $message1 ?? $message2 ?? $message3 ?? $messageDefault; // Buenos días
+```
+### Operador ternario
+
+Este operador es similar al anterior, pero solo funciona con variables definidas, acepta hasta 3 datos, uno para evaluar y dos para ser retornados.
+El operador ternario evalua si el primer valor dado es verdadero o falso, si es verdadero el operador retorna el primer valor disponible para retorno, si no lo es retorna el ultimo valor, ejemplo:
+
+```php
+$age = 12;
+$message = $age < 18 ? 'Eres menor de edad' : 'Eres mayor de edad';
+```
