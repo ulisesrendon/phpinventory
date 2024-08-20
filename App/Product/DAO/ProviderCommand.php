@@ -40,13 +40,7 @@ class ProviderCommand
             return null;
         }
 
-        $FieldsCompacted = [];
-        foreach ($fields as $field => $value) {
-            $FieldsCompacted[] = "$field = :$field";
-        }
-        $FieldsString = implode(', ', $FieldsCompacted);
-
-        return $this->DataBaseAccess->executeCommand("UPDATE providers SET $FieldsString WHERE id = :id", [
+        return $this->DataBaseAccess->sendUpdate('providers', [
             'id' => $id,
             ...$fields,
         ]);

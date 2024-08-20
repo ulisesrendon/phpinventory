@@ -53,14 +53,7 @@ class ProductCommand
         if (empty($fields)) {
             return null;
         }
-
-        $FieldsCompacted = [];
-        foreach ($fields as $field => $value) {
-            $FieldsCompacted[] = "$field = :$field";
-        }
-        $FieldsString = implode(', ', $FieldsCompacted);
-
-        return $this->DataBaseAccess->executeCommand("UPDATE products SET $FieldsString WHERE id = :id", [
+        return $this->DataBaseAccess->sendUpdate('products', [
             'id' => $id,
             ...$fields,
         ]);

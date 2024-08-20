@@ -34,7 +34,6 @@ class DataBaseAccess implements DatabaseFetchQuery, DatabaseSendCommand, Databas
     public function executeCommand(string $query, array $params = []): bool
     {
         $PDOStatement = $this->PDO->prepare($query);
-
         return $PDOStatement->execute($params);
     }
 
@@ -57,6 +56,28 @@ class DataBaseAccess implements DatabaseFetchQuery, DatabaseSendCommand, Databas
         $PDOStatement->execute($params);
 
         return $PDOStatement;
+    }
+
+    public function sendUpdate(string $table, array $fields): ?bool
+    {
+        if (empty($fields) || !isset($fields['id'])) {
+            return null;
+        }
+
+        $id = $fields['id'];
+        unset($fields['id']);
+
+        $FieldNames = [];
+        foreach ($fields as $field => $value) {
+            $FieldNames[] = "$field = :$field";
+        }
+        
+        $FieldsString = implode(', ', $FieldNames);
+
+        return $this->executeCommand("UPDATE $table SET $FieldsString WHERE id = :id", [
+            'id' => $id,
+            ...$fields,
+        ]);
     }
 
     /**

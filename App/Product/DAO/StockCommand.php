@@ -56,13 +56,7 @@ class StockCommand
             return null;
         }
 
-        $FieldsCompacted = [];
-        foreach ($fields as $field => $value) {
-            $FieldsCompacted[] = "$field = :$field";
-        }
-        $FieldsString = implode(', ', $FieldsCompacted);
-
-        return $this->DataBaseAccess->executeCommand("UPDATE product_entries SET $FieldsString WHERE id = :id", [
+        return $this->DataBaseAccess->sendUpdate('product_entries', [
             'id' => $id,
             ...$fields,
         ]);
