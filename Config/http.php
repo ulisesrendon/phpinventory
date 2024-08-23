@@ -2,11 +2,11 @@
 
 require __DIR__.'/../Config/routes.php';
 
-use Lib\Http\MethodNotAllowedException;
-use Lib\Http\RequestData;
+use Lib\Http\Router;
 use Lib\Http\Response;
 use Lib\Http\RouteCollection;
-use Lib\Http\Router;
+use Lib\Http\Helper\RequestData;
+use Lib\Http\Exception\MethodNotAllowedException;
 
 $_ENV['APP_DEBUG'] ??= 0;
 
@@ -30,4 +30,4 @@ try {
     }
 }
 
-return $Response;
+return $Response->render();

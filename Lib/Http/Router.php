@@ -3,7 +3,9 @@
 namespace Lib\Http;
 
 use Closure;
-use Lib\Http\InvalidControllerException;
+use Lib\Http\Helper\RequestData;
+use Lib\Http\Exception\MethodNotAllowedException;
+use Lib\Http\Exception\InvalidControllerException;
 
 class Router
 {
@@ -47,10 +49,7 @@ class Router
         $Controller = $RouteController->Controller;
 
         if (
-            (
-                is_array($Controller)
-                && (!class_exists($Controller[0]) || !method_exists($Controller[0], $Controller[1]))
-            )
+            is_array($Controller) && (!class_exists($Controller[0]) || !method_exists($Controller[0], $Controller[1]))
             || is_object($Controller) && !is_callable($Controller)
         ) {
             throw new InvalidControllerException('Route controller is not a valid callable or it can not be called from the actual scope');

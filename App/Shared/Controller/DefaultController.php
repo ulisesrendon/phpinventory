@@ -1,9 +1,12 @@
 <?php
 
-namespace Lib\Http;
+namespace App\Shared\Controller;
 
-use Lib\Database\DataBaseAccess;
 use PDO;
+use Lib\Http\Router;
+use Lib\Http\Response;
+use Lib\Database\DataBaseAccess;
+use Lib\Http\Helper\RequestData;
 
 class DefaultController
 {

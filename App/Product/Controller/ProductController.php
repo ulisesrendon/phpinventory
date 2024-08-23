@@ -2,11 +2,11 @@
 
 namespace App\Product\Controller;
 
-use App\Product\DAO\ProductCommand;
-use App\Product\DAO\ProductQuery;
-use App\Product\Presentor\ProductOptionGrouping;
-use Lib\Http\DefaultController;
 use Lib\Http\Response;
+use App\Product\DAO\ProductQuery;
+use App\Product\DAO\ProductCommand;
+use App\Shared\Controller\DefaultController;
+use App\Product\Presentor\ProductOptionGrouping;
 
 class ProductController extends DefaultController
 {

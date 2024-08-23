@@ -1,6 +1,8 @@
 <?php
 
-namespace Lib\Http;
+namespace Lib\Http\Helper;
+
+use Lib\Http\Helper\RequestParamHelper;
 
 class RequestData
 {

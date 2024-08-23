@@ -1,9 +1,9 @@
 <?php
 
-use Lib\Http\DefaultController;
 use App\Database\Migration\Migration;
 use Lib\Http\RouteCollection as Routes;
 use App\Product\Controller\StockController;
+use App\Shared\Controller\DefaultController;
 use App\Product\Controller\ProductController;
 use App\Product\Controller\ProviderController;
 

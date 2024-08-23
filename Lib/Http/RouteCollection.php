@@ -63,28 +63,4 @@ class RouteCollection
     {
         return self::addRoute('head', $path, $callable);
     }
-
-    /*
-    * To avoid defining each of the http add methods, this code would make the job
-    */
-    // public static array $methods = [
-    //     'any',
-    //     'get',
-    //     'post',
-    //     'put',
-    //     'patch',
-    //     'delete',
-    //     'options',
-    //     'head',
-    // ];
-    // public static function __callStatic(string $method, array $arguments): mixed
-    // {
-    //     $method = strtolower($method);
-
-    //     $methodExists = array_search($method, self::$methods);
-    //     if (!is_numeric($methodExists)) {
-    //         throw new \Exception('The method: \'' . $method . '\' is not supported.');
-    //     }
-    //     return self::addRoute($method, ...$arguments);
-    // }
 }

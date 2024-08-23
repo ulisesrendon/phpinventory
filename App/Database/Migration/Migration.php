@@ -2,8 +2,8 @@
 
 namespace App\Database\Migration;
 
-use Lib\Http\DefaultController;
 use Lib\Http\Response;
+use App\Shared\Controller\DefaultController;
 
 class Migration extends DefaultController
 {

@@ -2,10 +2,10 @@
 
 namespace App\Product\Controller;
 
-use App\Product\DAO\ProviderCommand;
-use App\Product\DAO\ProviderQuery;
-use Lib\Http\DefaultController;
 use Lib\Http\Response;
+use App\Product\DAO\ProviderQuery;
+use App\Product\DAO\ProviderCommand;
+use App\Shared\Controller\DefaultController;
 
 class ProviderController extends DefaultController
 {
