@@ -8,10 +8,6 @@ use App\Product\Controller\ProductController;
 use App\Product\Controller\ProviderController;
 
 Routes::any('/api/v1', [DefaultController::class, 'home']);
-Routes::any('/api/v1/ping', function () {
-    echo 'pong';
-});
-Routes::post('/api/v1/migrate', [Migration::class, 'start']);
 
 Routes::post('/api/v1/product', [ProductController::class, 'create']);
 Routes::get('/api/v1/product', [ProductController::class, 'list']);
@@ -31,6 +27,9 @@ Routes::post('/api/v1/stock', [StockController::class, 'create']);
 Routes::post('/api/v1/stock/:id/sync', [StockController::class, 'productStockSync']);
 Routes::delete('/api/v1/stock', [StockController::class, 'delete']);
 
+
+Routes::any('/api/v1/ping', fn () => print 'pong');
+Routes::post('/api/v1/migrate', [Migration::class, 'start']);
 Routes::get('/api/v1/search/:search', function($search){
     $search = explode('/', htmlspecialchars($search));
     $search = implode(' ', $search);

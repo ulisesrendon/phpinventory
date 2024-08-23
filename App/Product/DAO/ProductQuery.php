@@ -28,14 +28,14 @@ class ProductQuery
             from products
             left join product_stocks on product_stocks.product_id = products.id
             where deleted_at is null and products.id = :id
-        ', [$id]);
+        ', ['id' => $id]);
     }
 
     public function codeExists(string $code): ?bool
     {
         return $this->DataBaseAccess->fetchScalar('SELECT exists(
             SELECT products.code from products where products.code = :code
-        )', [$code]);
+        )', ['code' => $code]);
     }
 
     public function list(): ?array

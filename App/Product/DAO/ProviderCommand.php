@@ -3,9 +3,15 @@
 namespace App\Product\DAO;
 
 use Lib\Database\DataBaseAccess;
+use Lib\Database\DataBaseSendInsertTrait;
+use Lib\Database\DataBaseSendUpdateTrait;
 
 class ProviderCommand
 {
+
+    use DataBaseSendInsertTrait;
+    use DataBaseSendUpdateTrait;
+
     public DataBaseAccess $DataBaseAccess;
 
     public function __construct(DataBaseAccess $DataBaseAccess)
@@ -17,13 +23,7 @@ class ProviderCommand
         string $title,
         string $description = '',
     ): bool|string|null {
-        return $this->DataBaseAccess->singleInsertCommand('INSERT INTO providers(
-                title,
-                description
-            ) VALUES(
-                :title,
-                :description
-            )', [
+        return $this->sendInsert($this->DataBaseAccess, 'providers', [
             'title' => $title,
             'description' => $description,
         ]);
@@ -40,9 +40,8 @@ class ProviderCommand
             return null;
         }
 
-        return $this->DataBaseAccess->sendUpdate('providers', [
-            'id' => $id,
-            ...$fields,
-        ]);
+        $fields['id'] = $id;
+
+        $this->sendUpdate($this->DataBaseAccess, 'providers', $fields);
     }
 }

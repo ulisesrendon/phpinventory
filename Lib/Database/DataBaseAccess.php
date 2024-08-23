@@ -40,7 +40,7 @@ class DataBaseAccess implements DatabaseFetchQuery, DatabaseSendCommand, Databas
     /**
      * Execute a database insert command and return last inserted id
      */
-    public function singleInsertCommand(string $query, array $params = []): bool|string|null
+    public function singleInsertCommand(string $query, array $params = []): null|bool|int|string
     {
         $result = $this->executeCommand($query, $params);
 
@@ -56,46 +56,6 @@ class DataBaseAccess implements DatabaseFetchQuery, DatabaseSendCommand, Databas
         $PDOStatement->execute($params);
 
         return $PDOStatement;
-    }
-
-    public function sendUpdate(string $table, array $fields): ?bool
-    {
-        if (empty($fields) || !isset($fields['id'])) {
-            return null;
-        }
-
-        $id = $fields['id'];
-        unset($fields['id']);
-
-        $FieldNames = [];
-        foreach ($fields as $field => $value) {
-            $FieldNames[] = "$field = :$field";
-        }
-        
-        $FieldsString = implode(', ', $FieldNames);
-
-        return $this->executeCommand("UPDATE $table SET $FieldsString WHERE id = :id", [
-            'id' => $id,
-            ...$fields,
-        ]);
-    }
-
-    public function sendInsert(string $table, array $fields): ?bool
-    {
-        if (empty($fields) || !isset($fields['id'])) {
-            return null;
-        }
-
-        $FieldNames = [];
-        foreach ($fields as $field => $value) {
-            $FieldNames[] = "$field = :$field";
-        }
-
-        $FieldsString = implode(', ', $FieldNames);
-        
-        $ColumnNames = implode(', ', array_keys($fields));
-
-        return $this->executeCommand("INSERT INTO $table($ColumnNames) values($FieldsString)", $fields);
     }
 
     /**

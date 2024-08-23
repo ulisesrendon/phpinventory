@@ -10,14 +10,12 @@ class Migration extends DefaultController
     public function start(array $args = [])
     {
         try {
-            $this->DataBaseAccess->beginTransaction();
-
             $this->DataBaseAccess->executeCommand('CREATE table if not exists products(
-                id serial4 not null primary key,
+                id integer not null auto_increment primary key,
                 code varchar(255) null unique,
                 title varchar(255) null,
                 description varchar(255) null,
-                price numeric(10, 2) not null default 0,
+                price decimal(10, 2) not null default 0,
                 active boolean not null default false,
                 deleted_at timestamp(0) null,
                 created_at timestamp(0) null default now(),
@@ -30,15 +28,14 @@ class Migration extends DefaultController
                     ('700000001', 'Teclado Kumara Dragon Switches Blue', 1200),
                     ('700000002', 'Teclado Kumara Dragon Switches Red', 1170),
                     ('700000003', 'Mouse Logitech G505 Hero', 1000)
-                ON CONFLICT (code) DO NOTHING
             ");
 
             $this->DataBaseAccess->executeCommand('CREATE table if not exists product_entries(
-                id serial4 not null primary key,
+                id integer not null auto_increment primary key,
                 product_id bigint not null,
                 quantity integer not null,
                 provider_id integer not null,
-                cost numeric(10, 2) not null default 0,
+                cost decimal(10, 2) not null default 0,
                 lot varchar(255) null,
                 expiration_date timestamp(0) null,
                 deleted_at timestamp(0) null,
@@ -56,11 +53,11 @@ class Migration extends DefaultController
             ');
 
             $this->DataBaseAccess->executeCommand('CREATE table if not exists product_stocks(
-                id serial4 not null primary key,
+                id integer not null auto_increment primary key,
                 product_id bigint not null,
                 product_entry_id bigint null unique,
                 stock integer not null default 0,
-                price numeric(10, 2) null,
+                price decimal(10, 2) null,
                 created_at timestamp(0) null default now(),
                 updated_at timestamp(0) null default now()
             )');
@@ -75,7 +72,7 @@ class Migration extends DefaultController
             ');
 
             $this->DataBaseAccess->executeCommand('CREATE table if not exists providers(
-                id serial4 not null primary key,
+                id integer not null auto_increment primary key,
                 title varchar(255) null,
                 description varchar(255) null,
                 deleted_at timestamp(0) null,
@@ -91,12 +88,9 @@ class Migration extends DefaultController
                     ('Provider #3 el otro')
             ");
 
-            $this->DataBaseAccess->commit();
         } catch (\Exception $e) {
-            $this->DataBaseAccess->rollBack();
-
             return Response::json([
-                'data' => 'Migration Failed!',
+                'data' => 'Migration Failed! - Data may be corrupt',
             ], 500);
         }
 

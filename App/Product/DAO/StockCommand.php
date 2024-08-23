@@ -3,9 +3,13 @@
 namespace App\Product\DAO;
 
 use Lib\Database\DataBaseAccess;
+use Lib\Database\DataBaseSendInsertTrait;
+use Lib\Database\DataBaseSendUpdateTrait;
 
 class StockCommand
 {
+    use DataBaseSendUpdateTrait;
+    use DataBaseSendInsertTrait;
     public DataBaseAccess $DataBaseAccess;
 
     public function __construct(DataBaseAccess $DataBaseAccess)
@@ -21,21 +25,8 @@ class StockCommand
         ?string $lot = null,
         ?string $expiration_date = null,
     ): bool|string|null {
-        return $this->DataBaseAccess->singleInsertCommand('INSERT INTO product_entries(
-                product_id,
-                quantity,
-                provider_id,
-                cost,
-                lot,
-                expiration_date
-            ) VALUES(
-                :product_id,
-                :quantity,
-                :provider_id,
-                :cost,
-                :lot,
-                :expiration_date
-            )', [
+
+        return $this->sendInsert($this->DataBaseAccess, 'product_entries', [
             'product_id' => $product_id,
             'quantity' => $quantity,
             'provider_id' => $provider_id,
@@ -56,9 +47,8 @@ class StockCommand
             return null;
         }
 
-        return $this->DataBaseAccess->sendUpdate('product_entries', [
-            'id' => $id,
-            ...$fields,
-        ]);
+        $fields['id'] = $id;
+
+        return $this->sendUpdate($this->DataBaseAccess, 'product_entries', $fields);
     }
 }

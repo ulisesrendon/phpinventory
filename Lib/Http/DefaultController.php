@@ -27,6 +27,7 @@ class DefaultController
             $user,
             $password
         );
+        $PDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->DataBaseAccess = new DataBaseAccess($PDO);
     }
 

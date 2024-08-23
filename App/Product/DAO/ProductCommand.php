@@ -3,9 +3,15 @@
 namespace App\Product\DAO;
 
 use Lib\Database\DataBaseAccess;
+use Lib\Database\DataBaseSendInsertTrait;
+use Lib\Database\DataBaseSendUpdateTrait;
 
 class ProductCommand
 {
+
+    use DataBaseSendInsertTrait;
+    use DataBaseSendUpdateTrait;
+
     public DataBaseAccess $DataBaseAccess;
 
     public function __construct(DataBaseAccess $DataBaseAccess)
@@ -24,18 +30,9 @@ class ProductCommand
         string $title,
         string $description = '',
         float $price = 0,
-    ): bool|string|null {
-        return $this->DataBaseAccess->singleInsertCommand('INSERT INTO products(
-                code,
-                title,
-                description,
-                price
-            ) VALUES(
-                :code,
-                :title,
-                :description,
-                :price
-            )', [
+    ): null|bool|int|string {
+        
+        return $this->sendInsert($this->DataBaseAccess, 'products', [
             'code' => $code,
             'title' => $title,
             'description' => $description,
@@ -53,9 +50,9 @@ class ProductCommand
         if (empty($fields)) {
             return null;
         }
-        return $this->DataBaseAccess->sendUpdate('products', [
-            'id' => $id,
-            ...$fields,
-        ]);
+
+        $fields['id'] = $id;
+
+        $this->sendUpdate($this->DataBaseAccess, 'products', $fields);
     }
 }
