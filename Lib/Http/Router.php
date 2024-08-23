@@ -3,6 +3,7 @@
 namespace Lib\Http;
 
 use Closure;
+use Stringable;
 use Lib\Http\Helper\RequestData;
 use Lib\Http\Exception\MethodNotAllowedException;
 use Lib\Http\Exception\InvalidControllerException;
@@ -44,7 +45,7 @@ class Router
         return null;
     }
 
-    public function execute(RouteController $RouteController)
+    public function execute(RouteController $RouteController): string
     {
         $Controller = $RouteController->Controller;
 
@@ -60,15 +61,12 @@ class Router
             $Controller = [new $class, $method];
         }
 
-        if ($Controller instanceof Closure) {
-            ob_start();
-            call_user_func_array($Controller, $RouteController->Params);
-            $content = ob_get_clean();
-            $controllerResponse = new TextRender($content);
-        } else {
-            $controllerResponse = call_user_func_array($Controller, $RouteController->Params);
+        ob_start();
+        $ControllerResult = call_user_func_array($Controller, $RouteController->Params);
+        if( is_scalar($ControllerResult) || ('object' === gettype($ControllerResult) && $ControllerResult instanceof Stringable ) ){
+            echo $ControllerResult;
         }
-
-        return $controllerResponse;
+        
+        return (string) ob_get_clean();
     }
 }

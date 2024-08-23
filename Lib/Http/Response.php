@@ -2,7 +2,9 @@
 
 namespace Lib\Http;
 
-class Response
+use Stringable;
+
+class Response implements Stringable
 {
     public int $status;
 
@@ -33,7 +35,8 @@ class Response
     public static function json(
         mixed $content = null,
         int $status = 200,
-    ) {
+    ): Stringable
+    {
         return new self(
             json_encode($content), $status, ['Content-Type: application/json']
         );
@@ -42,30 +45,39 @@ class Response
     public static function xml(
         string $content = '',
         int $status = 200,
-    ) {
+    ): Stringable 
+    {
         return new self($content, $status, ['Content-Type: text/xml; charset=utf-8']);
     }
 
     public static function html(
         string $content = '',
         int $status = 200,
-    ) {
+    ): Stringable 
+    {
         return new self($content, $status, ['Content-Type: text/html; charset=utf-8']);
     }
 
     public static function csv(
         string $content = '',
         int $status = 200,
-    ) {
+    ): Stringable 
+    {
         return new self($content, $status, ['Content-Type: text/csv; charset=utf-8']);
     }
 
     public static function template(
         string $content = '',
         int $status = 200,
-    ) {
+    ): Stringable
+    {
         $content = (string) new TextRenderFromFile($content);
 
         return new self($content, $status);
+    }
+
+    public function __tostring()
+    {
+        return $this->render();
     }
 }

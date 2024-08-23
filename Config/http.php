@@ -30,4 +30,4 @@ try {
     }
 }
 
-return $Response->render();
+return (string) $Response;

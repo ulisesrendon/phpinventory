@@ -48,7 +48,6 @@ class ProductController extends DefaultController
             'count' => count($ProductList),
             'list' => $ProductList,
         ]);
-
     }
 
     public function create()
