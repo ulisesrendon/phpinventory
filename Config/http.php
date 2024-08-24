@@ -15,19 +15,19 @@ try {
     $Controller = $Router->getMatchingController();
 
     // Execute the request controller or return a 404 error if the route doesn't exists
-    if (isset($Controller)) {
-        $Response = $Router->execute($Controller);
-    } else {
-        $Response = Response::template(__DIR__.'/../public/404.html', 404);
+    if (!isset($Controller)) {
+        $Controller = Response::template(__DIR__.'/../public/404.html', 404);
     }
 } catch (\Exception $Exception) {
     if ($Exception instanceof MethodNotAllowedException) {
-        $Response = Response::template(__DIR__.'/../public/405.html', 405);
+        $Controller = Response::template(__DIR__.'/../public/405.html', 405);
     } else if($_ENV['APP_DEBUG'] == 0) {
-        $Response = Response::template(__DIR__.'/../public/500.html', 500);
+        $Controller = Response::template(__DIR__.'/../public/500.html', 500);
     }else{
-        $Response = Response::html($Exception, 500);
+        $Controller = Response::html($Exception, 500);
     }
 }
 
-return (string) $Response;
+dd($Controller);
+
+return (string) $Controller;

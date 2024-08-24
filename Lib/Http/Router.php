@@ -22,7 +22,7 @@ class Router
         $this->Routes = $Routes;
     }
 
-    public function getMatchingController(): ?RouteController
+    public function getMatchingController(): ?Stringable
     {
 
         foreach ($this->Routes as $Route) {
@@ -35,19 +35,17 @@ class Router
             }
 
             if ($urlMatches && $methodMatches) {
-                $Controller = $Route->getController(self::$RequestData->method);
-                $Params = $Route->bindParams(self::$RequestData->uri);
-
-                return new RouteController($Controller, $Params);
+                return $this->execute($Route);
             }
         }
 
         return null;
     }
 
-    public function execute(RouteController $RouteController): string
+    public function execute($Route): Stringable
     {
-        $Controller = $RouteController->Controller;
+        $Controller = $Route->getController(self::$RequestData->method);
+        $Params = $Route->bindParams(self::$RequestData->uri);
 
         if (
             is_array($Controller) && (!class_exists($Controller[0]) || !method_exists($Controller[0], $Controller[1]))
@@ -57,16 +55,30 @@ class Router
         }
 
         if (is_array($Controller)) {
-            [$class, $method] = $Controller;
-            $Controller = [new $class, $method];
-        }
-
-        ob_start();
-        $ControllerResult = call_user_func_array($Controller, $RouteController->Params);
-        if( is_scalar($ControllerResult) || ('object' === gettype($ControllerResult) && $ControllerResult instanceof Stringable ) ){
-            echo $ControllerResult;
+            $Controller = [new $Controller[0], $Controller[1]];
         }
         
-        return (string) ob_get_clean();
+        return new class($Controller, $Params) implements Stringable{
+
+            public $Controller;
+            public $Params;
+
+            public function __construct($Controller, $Params)
+            {
+                $this->Controller = $Controller;
+                $this->Params = $Params;
+            }
+
+            public function __toString()
+            {
+                ob_start();
+                $ControllerResult = call_user_func_array($this->Controller, $this->Params);
+                if( is_scalar($ControllerResult) || ('object' === gettype($ControllerResult) && $ControllerResult instanceof Stringable ) ){
+                    echo $ControllerResult;
+                }
+                
+                return (string) ob_get_clean();
+            }
+        };
     }
 }

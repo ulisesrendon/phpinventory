@@ -12,18 +12,22 @@ class Route
 
     public function __construct(
         string $path,
-        string $method,
-        object|array $controller,
+        ?string $method = null,
+        null|object|array $controller = null,
     ) {
         $this->path = $path;
         $regexp = preg_replace('/:([a-zA-Z0-9]+)/', '([^/]+)', $path);
         $this->regexp = '/^'.str_replace('/', '\/', $regexp).'$/';
-        $this->addController($method, $controller);
+        
+        if(isset($method, $controller)){
+            $this->addController($method, $controller);
+        }
     }
 
     public function addController(string $method, object|array $controller)
     {
         $this->methods[strtolower($method)] = $controller;
+        return $this;
     }
 
     public function urlMatches(string $url): bool

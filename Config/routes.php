@@ -28,7 +28,7 @@ Routes::post('/api/v1/stock/:id/sync', [StockController::class, 'productStockSyn
 Routes::delete('/api/v1/stock', [StockController::class, 'delete']);
 
 
-Routes::any('/api/v1/ping', fn () => print 'pong');
+Routes::any('/api/v1/ping', fn () => 'pong');
 Routes::post('/api/v1/migrate', [Migration::class, 'start']);
 Routes::get('/api/v1/search/:search', function($search){
     $search = explode('/', htmlspecialchars($search));

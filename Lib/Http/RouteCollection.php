@@ -8,20 +8,9 @@ class RouteCollection
 
     public static function addRoute(string $method, string $path, object|array $callable): Route
     {
-        if (isset(self::$routes[$path])) {
-            $Route = self::$routes[$path];
-
-            $Route->addController($method, $callable);
-        } else {
-            $Route = new Route(
-                method: $method,
-                path: $path,
-                controller: $callable,
-            );
-            self::$routes[$path] = $Route;
-        }
-
-        return $Route;
+        self::$routes[$path] ??= new Route($path);
+        self::$routes[$path]->addController($method, $callable);
+        return self::$routes[$path];
     }
 
     public static function any(string $path, object|array $callable)
