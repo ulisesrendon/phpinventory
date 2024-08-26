@@ -2,6 +2,10 @@
 
 namespace Lib\Http;
 
+use DomainException;
+use ReflectionMethod;
+use ReflectionFunction;
+use Lib\Http\Helper\RequestData;
 use Lib\Http\Exception\InvalidControllerException;
 
 class Route
@@ -42,6 +46,13 @@ class Route
         return (isset($this->methods[$method]) || isset($this->methods['any'])) ? true : false;
     }
 
+    public function ignoreParamSlash()
+    {
+        $regexp = preg_replace('/:(.*)/', '(.*)', $this->path);
+        $this->regexp = '/^' . str_replace('/', '\/', $regexp) . '$/';
+        return $this;
+    }
+
     public function bindParams(string $url): array
     {
         preg_match_all('/:([a-zA-Z0-9]+)/', $this->path, $paramNames, PREG_SET_ORDER);
@@ -53,9 +64,37 @@ class Route
         return array_combine($paramNames, $uriParams);
     }
 
-    public function getController(string $method): null|array|object
+    public function resolveParams($Controller, RequestData $RequestData, $RouteParams): array
     {
-        $Controller = $this->methods[$method] ?? $this->methods['any'] ?? null;
+        if ('object' == gettype($Controller) && 'Closure' == get_class($Controller)) {
+            $reflection = new ReflectionFunction($Controller);
+        } else {
+            $reflection = new ReflectionMethod(...$Controller);
+        }
+
+        $params = [];
+        foreach ($reflection->getParameters() as $parameter) {
+            $paramName = $parameter->getName();
+            // Request data object injection
+            if ($parameter->getType()?->getName() === get_class($RequestData)) {
+                $params[$paramName] = $RequestData;
+                continue;
+            }
+
+            if (!isset($RouteParams[$paramName])) {
+                throw new DomainException("Cannot resolve the parameter: '{$paramName}'");
+            }
+
+            $params[$paramName] = $RouteParams[$paramName];
+        }
+
+        return $params;
+    }
+
+    public function getController(RequestData $RequestData): null|array|object
+    {
+
+        $Controller = $this->methods[$RequestData->method] ?? $this->methods['any'] ?? null;
 
         if (
             is_array($Controller) && (!class_exists($Controller[0]) || !method_exists($Controller[0], $Controller[1]))
@@ -68,13 +107,20 @@ class Route
             $Controller = [new $Controller[0], $Controller[1]];
         }
 
+        $RouteParams = $this->bindParams($RequestData->uri);
+        $Params = $this->resolveParams($Controller, $RequestData, $RouteParams);
+
         return $Controller;
     }
 
-    public function ignoreParamSlash()
+    public function render(object|array $Controller, array $Params): string
     {
-        $regexp = preg_replace('/:(.*)/', '(.*)', $this->path);
-        $this->regexp = '/^' . str_replace('/', '\/', $regexp) . '$/';
-        return $this;
+        ob_start();
+        $ControllerResult = call_user_func_array($Controller, $Params);
+        if (is_scalar($ControllerResult) || ('object' === gettype($ControllerResult) && $ControllerResult instanceof Stringable)) {
+            echo $ControllerResult;
+        }
+
+        return (string) ob_get_clean();
     }
 }

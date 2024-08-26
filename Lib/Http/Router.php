@@ -3,7 +3,6 @@
 namespace Lib\Http;
 
 use Stringable;
-use Lib\Http\PreparedRoute;
 use Lib\Http\Helper\RequestData;
 use Lib\Http\Exception\MethodNotAllowedException;
 
@@ -34,7 +33,7 @@ class Router
             }
 
             if ($urlMatches && $methodMatches) {
-                return new PreparedRoute($Route, self::$RequestData);
+                return $Route->getController(self::$RequestData);
             }
         }
 
