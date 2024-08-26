@@ -34,10 +34,7 @@ class Router
             }
 
             if ($urlMatches && $methodMatches) {
-                $Controller = $Route->getController(self::$RequestData->method);
-                $Params = $Route->bindParams(self::$RequestData->uri);
-
-                return new PreparedRoute($Controller, $Params);
+                return new PreparedRoute($Route, self::$RequestData);
             }
         }
 

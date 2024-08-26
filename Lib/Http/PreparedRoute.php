@@ -2,28 +2,26 @@
 namespace Lib\Http;
 
 use Stringable;
+use Lib\Http\Route;
+use DomainException;
+use ReflectionMethod;
+use ReflectionFunction;
+use Lib\Http\Helper\RequestData; 
 use Lib\Http\Exception\InvalidControllerException;
 
 class PreparedRoute implements Stringable
 {
     public null|array|object $Controller;
+    public RequestData $RequestData;
+    public array $RouteParams;
     public array $Params;
 
-    public function __construct(null|array|object $Controller, array $Params = [])
+    public function __construct(Route $Route, RequestData $RequestData)
     {
-        if (
-            is_array($Controller) && (!class_exists($Controller[0]) || !method_exists($Controller[0], $Controller[1]))
-            || is_object($Controller) && !is_callable($Controller)
-        ) {
-            throw new InvalidControllerException('Route controller is not a valid callable or it can not be called from the actual scope');
-        }
-
-        if (is_array($Controller)) {
-            $Controller = [new $Controller[0], $Controller[1]];
-        }
-
-        $this->Controller = $Controller;
-        $this->Params = $Params;
+        $this->RequestData = $RequestData;
+        $this->Controller = $Route->getController($this->RequestData->method);
+        $this->RouteParams = $Route->bindParams($RequestData->uri);
+        $this->Params = $this->resolveParams();
     }
 
     public function __toString(): string
@@ -33,12 +31,39 @@ class PreparedRoute implements Stringable
 
     public function execute(): string
     {
-        ob_start();
+        ob_start();        
         $ControllerResult = call_user_func_array($this->Controller, $this->Params);
         if( is_scalar($ControllerResult) || ('object' === gettype($ControllerResult) && $ControllerResult instanceof Stringable ) ){
             echo $ControllerResult;
         }
         
         return (string) ob_get_clean();
+    }
+
+    public function resolveParams(): array
+    {
+        if ('object' == gettype($this->Controller) && 'Closure' == get_class($this->Controller)) {
+            $reflection = new ReflectionFunction($this->Controller);
+        } else {
+            $reflection = new ReflectionMethod(...$this->Controller);
+        }
+
+        $params = [];
+        foreach ($reflection->getParameters() as $parameter) {
+            $paramName = $parameter->getName();
+            // Request data object injection
+            if ($parameter->getType()?->getName() === get_class($this->RequestData)) {
+                $params[$paramName] = $this->RequestData;
+                continue;
+            }
+
+            if (!isset($this->RouteParams[$paramName])) {
+                throw new DomainException("Cannot resolve the parameter: '{$paramName}'");
+            }
+
+            $params[$paramName] = $this->RouteParams[$paramName];
+        }
+
+        return $params;
     }
 }

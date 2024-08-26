@@ -24,10 +24,8 @@ try {
         $Controller = Response::template(__DIR__.'/../public/404.html', 404);
     } else if ($Exception instanceof MethodNotAllowedException) {
         $Controller = Response::template(__DIR__.'/../public/405.html', 405);
-    } else if($_ENV['APP_DEBUG'] == 0) {
-        $Controller = Response::template(__DIR__.'/../public/500.html', 500);
     } else{
-        $Controller = Response::html($Exception, 500);
+        $Controller = $_ENV['APP_DEBUG'] == 0 ? Response::html($Exception, 500) : Response::template(__DIR__.'/../public/500.html', 500);
     }
 }
 

@@ -21,7 +21,7 @@ class ProductController extends DefaultController
         $this->ProductCommand = new ProductCommand($this->DataBaseAccess);
     }
 
-    public function getById(int $id, string $test)
+    public function getById(int $id)
     {
         $ProductOptions = (new ProductOptionGrouping($this->ProductQuery->getByID($id)))->get();
         $Product = empty($ProductOptions) ? null : $ProductOptions[0];

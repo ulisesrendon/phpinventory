@@ -23,7 +23,7 @@ class RequestData
             body: json_decode(file_get_contents('php://input'), true),
             params: (new RequestParamHelper($_SERVER['QUERY_STRING'] ?? ''))->Params,
             method: $_SERVER['REQUEST_METHOD'],
-            uri: $_SERVER['REQUEST_URI'] ?? '/',
+            uri: strtok($_SERVER['REQUEST_URI'] ?? '/', '?'),
         );
     }
 }

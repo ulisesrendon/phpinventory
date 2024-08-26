@@ -1,5 +1,6 @@
 <?php
 
+use Lib\Http\Helper\RequestData;
 use App\Database\Migration\Migration;
 use Lib\Http\RouteCollection as Routes;
 use App\Product\Controller\StockController;

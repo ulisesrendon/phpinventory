@@ -6,18 +6,13 @@ use PDO;
 use Lib\Http\Router;
 use Lib\Http\Response;
 use Lib\Database\DataBaseAccess;
-use Lib\Http\Helper\RequestData;
 
 class DefaultController
 {
-    protected readonly RequestData $Request;
-
     protected readonly DataBaseAccess $DataBaseAccess;
 
     public function __construct()
     {
-        $this->Request = Router::$RequestData;
-
         $drive = DB_CONFIG['mainrdb']['drive'];
         $host = DB_CONFIG['mainrdb']['host'];
         $port = DB_CONFIG['mainrdb']['port'];
@@ -34,7 +29,7 @@ class DefaultController
         $this->DataBaseAccess = new DataBaseAccess($PDO);
     }
 
-    public function home(array $args = [])
+    public function home()
     {
         return Response::json('Hello, world!');
     }

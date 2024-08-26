@@ -2,6 +2,8 @@
 
 namespace Lib\Http;
 
+use Lib\Http\Exception\InvalidControllerException;
+
 class Route
 {
     public readonly string $path;
@@ -42,8 +44,9 @@ class Route
 
     public function bindParams(string $url): array
     {
-        preg_match('/:([a-zA-Z0-9]+)/', $this->path, $paramNames);
-        array_shift($paramNames);
+        preg_match_all('/:([a-zA-Z0-9]+)/', $this->path, $paramNames, PREG_SET_ORDER);
+        $paramNames = array_column($paramNames, 1);
+
         preg_match($this->regexp, $url, $uriParams);
         array_shift($uriParams);
 
@@ -52,7 +55,20 @@ class Route
 
     public function getController(string $method): null|array|object
     {
-        return $this->methods[$method] ?? $this->methods['any'] ?? null;
+        $Controller = $this->methods[$method] ?? $this->methods['any'] ?? null;
+
+        if (
+            is_array($Controller) && (!class_exists($Controller[0]) || !method_exists($Controller[0], $Controller[1]))
+            || is_object($Controller) && !is_callable($Controller)
+        ) {
+            throw new InvalidControllerException('Route controller is not a valid callable or it can not be called from the actual scope');
+        }
+
+        if (is_array($Controller)) {
+            $Controller = [new $Controller[0], $Controller[1]];
+        }
+
+        return $Controller;
     }
 
     public function ignoreParamSlash()
