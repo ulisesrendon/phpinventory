@@ -1,4 +1,5 @@
 <?php
+
 namespace Lib\Database;
 
 trait DataBaseSendInsertTrait
@@ -11,7 +12,7 @@ trait DataBaseSendInsertTrait
 
         $ColumnNames = implode(', ', array_keys($fields));
 
-        $FieldsString = implode(', ', array_map(fn($field) => ":$field", array_keys($fields)));
+        $FieldsString = implode(', ', array_map(fn ($field) => ":$field", array_keys($fields)));
 
         return $DataBaseAccess->singleInsertCommand("INSERT INTO $table($ColumnNames) values($FieldsString)", $fields);
     }

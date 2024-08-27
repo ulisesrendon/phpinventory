@@ -2,9 +2,9 @@
 
 namespace Lib\Http;
 
-use Stringable;
-use Lib\Http\Helper\RequestData;
 use Lib\Http\Exception\MethodNotAllowedException;
+use Lib\Http\Helper\RequestData;
+use Stringable;
 
 class Router
 {

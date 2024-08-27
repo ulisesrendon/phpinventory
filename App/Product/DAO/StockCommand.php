@@ -8,8 +8,9 @@ use Lib\Database\DataBaseSendUpdateTrait;
 
 class StockCommand
 {
-    use DataBaseSendUpdateTrait;
     use DataBaseSendInsertTrait;
+    use DataBaseSendUpdateTrait;
+
     public DataBaseAccess $DataBaseAccess;
 
     public function __construct(DataBaseAccess $DataBaseAccess)

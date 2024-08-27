@@ -34,6 +34,7 @@ class DataBaseAccess implements DatabaseFetchQuery, DatabaseSendCommand, Databas
     public function executeCommand(string $query, array $params = []): bool
     {
         $PDOStatement = $this->PDO->prepare($query);
+
         return $PDOStatement->execute($params);
     }
 

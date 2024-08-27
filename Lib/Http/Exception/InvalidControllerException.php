@@ -4,6 +4,4 @@ namespace Lib\Http\Exception;
 
 use Exception;
 
-class InvalidControllerException extends Exception
-{
-}
+class InvalidControllerException extends Exception {}

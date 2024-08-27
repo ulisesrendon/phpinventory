@@ -2,10 +2,10 @@
 
 namespace App\Product\Controller;
 
-use Lib\Http\Response;
-use App\Product\DAO\StockQuery;
 use App\Product\DAO\StockCommand;
+use App\Product\DAO\StockQuery;
 use App\Shared\Controller\DefaultController;
+use Lib\Http\Response;
 
 class StockController extends DefaultController
 {

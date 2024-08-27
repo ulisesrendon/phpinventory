@@ -3,10 +3,10 @@
 namespace Lib\Http;
 
 use DomainException;
-use ReflectionMethod;
-use ReflectionFunction;
-use Lib\Http\Helper\RequestData;
 use Lib\Http\Exception\InvalidControllerException;
+use Lib\Http\Helper\RequestData;
+use ReflectionFunction;
+use ReflectionMethod;
 
 class Route
 {
@@ -24,8 +24,8 @@ class Route
         $this->path = $path;
         $regexp = preg_replace('/:([a-zA-Z0-9]+)/', '([^/]+)', $path);
         $this->regexp = '/^'.str_replace('/', '\/', $regexp).'$/';
-        
-        if(isset($method, $controller)){
+
+        if (isset($method, $controller)) {
             $this->addController($method, $controller);
         }
     }
@@ -33,6 +33,7 @@ class Route
     public function addController(string $method, object|array $controller)
     {
         $this->methods[strtolower($method)] = $controller;
+
         return $this;
     }
 
@@ -49,7 +50,8 @@ class Route
     public function ignoreParamSlash()
     {
         $regexp = preg_replace('/:(.*)/', '(.*)', $this->path);
-        $this->regexp = '/^' . str_replace('/', '\/', $regexp) . '$/';
+        $this->regexp = '/^'.str_replace('/', '\/', $regexp).'$/';
+
         return $this;
     }
 
@@ -66,7 +68,7 @@ class Route
 
     public function resolveParams($Controller, RequestData $RequestData, $RouteParams): array
     {
-        if ('object' == gettype($Controller) && 'Closure' == get_class($Controller)) {
+        if (gettype($Controller) == 'object' && get_class($Controller) == 'Closure') {
             $reflection = new ReflectionFunction($Controller);
         } else {
             $reflection = new ReflectionMethod(...$Controller);
@@ -78,10 +80,11 @@ class Route
             // Request data object injection
             if ($parameter->getType()?->getName() === get_class($RequestData)) {
                 $params[$paramName] = $RequestData;
+
                 continue;
             }
 
-            if (!isset($RouteParams[$paramName])) {
+            if (! isset($RouteParams[$paramName])) {
                 throw new DomainException("Cannot resolve the parameter: '{$paramName}'");
             }
 
@@ -97,8 +100,8 @@ class Route
         $Controller = $this->methods[$RequestData->method] ?? $this->methods['any'] ?? null;
 
         if (
-            is_array($Controller) && (!class_exists($Controller[0]) || !method_exists($Controller[0], $Controller[1]))
-            || is_object($Controller) && !is_callable($Controller)
+            is_array($Controller) && (! class_exists($Controller[0]) || ! method_exists($Controller[0], $Controller[1]))
+            || is_object($Controller) && ! is_callable($Controller)
         ) {
             throw new InvalidControllerException('Route controller is not a valid callable or it can not be called from the actual scope');
         }
@@ -117,7 +120,7 @@ class Route
     {
         ob_start();
         $ControllerResult = call_user_func_array($Controller, $Params);
-        if (is_scalar($ControllerResult) || ('object' === gettype($ControllerResult) && $ControllerResult instanceof Stringable)) {
+        if (is_scalar($ControllerResult) || (gettype($ControllerResult) === 'object' && $ControllerResult instanceof Stringable)) {
             echo $ControllerResult;
         }
 

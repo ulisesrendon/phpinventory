@@ -8,7 +8,6 @@ use Lib\Database\DataBaseSendUpdateTrait;
 
 class ProductCommand
 {
-
     use DataBaseSendInsertTrait;
     use DataBaseSendUpdateTrait;
 
@@ -31,7 +30,7 @@ class ProductCommand
         string $description = '',
         float $price = 0,
     ): null|bool|int|string {
-        
+
         return $this->sendInsert($this->DataBaseAccess, 'products', [
             'code' => $code,
             'title' => $title,

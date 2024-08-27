@@ -2,8 +2,6 @@
 
 namespace Lib\Http\Helper;
 
-use Lib\Http\Helper\RequestParamHelper;
-
 class RequestData
 {
     public function __construct(

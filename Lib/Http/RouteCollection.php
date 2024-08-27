@@ -10,6 +10,7 @@ class RouteCollection
     {
         self::$routes[$path] ??= new Route($path);
         self::$routes[$path]->addController($method, $callable);
+
         return self::$routes[$path];
     }
 

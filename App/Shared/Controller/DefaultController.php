@@ -2,10 +2,9 @@
 
 namespace App\Shared\Controller;
 
-use PDO;
-use Lib\Http\Router;
-use Lib\Http\Response;
 use Lib\Database\DataBaseAccess;
+use Lib\Http\Response;
+use PDO;
 
 class DefaultController
 {

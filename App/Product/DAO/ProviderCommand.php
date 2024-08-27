@@ -8,7 +8,6 @@ use Lib\Database\DataBaseSendUpdateTrait;
 
 class ProviderCommand
 {
-
     use DataBaseSendInsertTrait;
     use DataBaseSendUpdateTrait;
 
