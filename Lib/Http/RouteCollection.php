@@ -1,12 +1,25 @@
 <?php
 
 namespace Lib\Http;
+use Lib\Http\Route;
+use Lib\Http\Contracts\RouteMaper;
+use Lib\Http\Contracts\ControllerMaper;
 
-class RouteCollection
+class RouteCollection implements RouteMaper
 {
+    
+    public function getRoutes(): array
+    {
+        return self::$routes;
+    }
+
+
+    /**
+     * @var ControllerMaper[] $routes
+     */
     public static array $routes = [];
 
-    public static function addRoute(string $method, string $path, object|array $callable): Route
+    public static function addRoute(string $method, string $path, object|array $callable): ControllerMaper
     {
         self::$routes[$path] ??= new Route($path);
         self::$routes[$path]->addController($method, $callable);

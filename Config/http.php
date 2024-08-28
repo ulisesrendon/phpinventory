@@ -12,8 +12,10 @@ use Lib\Http\Router;
 $_ENV['APP_DEBUG'] ??= 0;
 
 try {
-    $Router = new Router(RequestData::createFromGlobals(), RouteCollection::$routes);
-    $Controller = $Router->getMatchingController();
+    $Router = new Router();
+    $RouteCollection = new RouteCollection();
+    $RequestData = RequestData::createFromGlobals();
+    $Controller = $Router->getController($RouteCollection, $RequestData);
 
     // Throw 404 server error if route doesn't exists
     if (is_null($Controller)) {

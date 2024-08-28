@@ -9,7 +9,7 @@ interface RequestState
 
     public function getParams(): array;
 
-    public function getMethod(): array;
+    public function getMethod(): string;
 
-    public function getPath(): array;
+    public function getPath(): string;
 }

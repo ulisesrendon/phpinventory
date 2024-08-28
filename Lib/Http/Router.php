@@ -2,38 +2,32 @@
 
 namespace Lib\Http;
 
-use Lib\Http\Exception\MethodNotAllowedException;
-use Lib\Http\Helper\RequestData;
 use Stringable;
+use Lib\Http\Route;
+use Lib\Http\Helper\RequestData;
+use Lib\Http\Contracts\RouteMaper;
+use Lib\Http\Contracts\RequestState;
+use Lib\Http\Contracts\RouteMatcher;
+use Lib\Http\Contracts\ControllerWrapper;
+use Lib\Http\Exception\MethodNotAllowedException;
 
-class Router
+
+class Router implements RouteMatcher
 {
-    public static RequestData $RequestData;
 
-    public array $Routes;
-
-    public function __construct(
-        RequestData $RequestData,
-        array $Routes,
-    ) {
-        self::$RequestData = $RequestData;
-        $this->Routes = $Routes;
-    }
-
-    public function getMatchingController(): ?Stringable
+    public function getController(RouteMaper $RouteMaper, RequestState $RequestState): ?ControllerWrapper
     {
+        foreach ($RouteMaper->getRoutes() as $Route) {
+            /* @var Route $Rute */
+            $urlMatches = $Route->pathMatches($RequestState->getPath());
+            $methodMatches = $Route->methodMatches($RequestState->getMethod());
 
-        foreach ($this->Routes as $Route) {
-
-            $urlMatches = $Route->urlMatches(self::$RequestData->uri);
-            $methodMatches = $Route->methodMatches(self::$RequestData->method);
-
-            if ($urlMatches && ! $methodMatches) {
+            if ($urlMatches && !$methodMatches) {
                 throw new MethodNotAllowedException('Method not allowed');
             }
 
             if ($urlMatches && $methodMatches) {
-                return $Route->getController(self::$RequestData);
+                return $Route->getController($RequestState);
             }
         }
 
