@@ -3,9 +3,11 @@ namespace Lib\Http;
 
 use DomainException;
 use ReflectionMethod;
+use Lib\Http\Response;
 use ReflectionFunction;
 use Lib\Http\Helper\RequestData;
 use Lib\Http\Contracts\RequestState;
+use Lib\Http\Contracts\ResponseState;
 use Lib\Http\Contracts\ControllerWrapper;
 use Lib\Http\Exception\InvalidControllerException;
 
@@ -14,10 +16,22 @@ class ControllerWrapped implements ControllerWrapper
     protected null|array|object $Controller;
     protected array $Params;
 
+    protected int $status;
+
+    protected string $body;
+    
+    protected array $headers;
+
+    protected string $method;
+
+    protected string $path;
+
+    protected bool $called = false;
+
     public function __construct(
         null|array|object $Controller,
         RequestState $RequestState,
-        string $regexp,
+        array $RouteParams = [],
     )
     {
         if (
@@ -31,40 +45,103 @@ class ControllerWrapped implements ControllerWrapper
             $Controller = [new $Controller[0], $Controller[1]];
         }
 
-        $RouteParams = $this->bindParams($RequestState->getPath(), $regexp);
+        $this->method = $RequestState->getMethod();
+        $this->path = $RequestState->getPath();
         $this->Params = $this->resolveParams($Controller, $RequestState, $RouteParams);
 
         $this->Controller = $Controller;
     }
-
-    public function get()
+    public function response()
     {
+        $this->called = true;
 
-    }
-
-    public function execute(): string
-    {
         ob_start();
-        $ControllerResult = call_user_func_array($this->Controller, $this->Params);
-        if (is_scalar($ControllerResult) || (gettype($ControllerResult) === 'object' && $ControllerResult instanceof Stringable)) {
-            echo $ControllerResult;
+        $Result = call_user_func_array($this->Controller, $this->Params);
+        ob_clean();
+
+        $ResultType = gettype($Result);
+
+        if( 'object' === $ResultType && $Result instanceof ResponseState){
+            $this->status = $Result->getStatus();
+            $this->body = $Result->getBody();
+            $this->headers = $Result->getHeaders();
+        }else if (
+            is_scalar($Result) 
+            || ( 'object' === $ResultType && $Result instanceof Stringable)
+        ) {
+            $this->status = empty($Result) ? 204: 200;
+            $this->body = (string) $Result;
+            $this->headers = [];
         }
 
-        return (string) ob_get_clean();
+        return $this;
     }
 
-    public function bindParams(string $path, string $regexp): array
+    public function getStatus(): int
     {
-        preg_match_all('/:([a-zA-Z0-9]+)/', $path, $paramNames, PREG_SET_ORDER);
-        $paramNames = array_column($paramNames, 1);
+        if(false === $this->called){
+            $this->response();
+        }
 
-        preg_match($regexp, $path, $uriParams);
-        array_shift($uriParams);
-
-        return array_combine($paramNames, $uriParams);
+        return $this->status;
     }
 
-    public function resolveParams($Controller, RequestData $RequestData, $RouteParams): array
+    public function getBody(): string
+    {
+        if (false === $this->called) {
+            $this->response();
+        }
+
+        return $this->body;
+    }
+
+    public function getHeaders(): array
+    {
+        if (false === $this->called) {
+            $this->response();
+        }
+
+        return $this->headers;
+    }
+
+    public function getController(): null|array|object
+    {
+        return $this->Controller;
+    }
+
+    public function getParams(): array
+    {
+        return $this->Params;
+    }
+
+    public function isCalled(): bool
+    {
+        return $this->called;
+    }
+
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    public function setUpStatus()
+    {
+        http_response_code($this->status);
+    }
+
+    public function setUpHeaders()
+    {
+        foreach ($this->headers as $header) {
+            header($header);
+        }
+    }
+
+    protected function resolveParams($Controller, RequestData $RequestData, $RouteParams): array
     {
         if (gettype($Controller) == 'object' && get_class($Controller) == 'Closure') {
             $reflection = new ReflectionFunction($Controller);

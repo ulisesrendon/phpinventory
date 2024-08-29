@@ -9,29 +9,29 @@ use Lib\Http\Contracts\ControllerMaper;
 
 class Route implements ControllerMaper
 {
-    public readonly string $path;
+    protected string $basePath;
 
-    public readonly string $regexp;
+    protected string $patern;
 
-    public readonly array $methods = [];
+    protected array $methods = [];
 
     public function __construct(
-        string $path,
+        string $basePath,
         ?string $method = null,
         null|object|array $controller = null,
     ) {
-        $this->path = $path;
-        $regexp = preg_replace('/:([a-zA-Z0-9]+)/', '([^/]+)', $path);
-        $this->regexp = '/^'.str_replace('/', '\/', $regexp).'$/';
+        $this->basePath = $basePath;
+        $this->patern = preg_replace('/:([a-zA-Z0-9]+)/', '([^/]+)', $this->basePath);
+        $this->patern = '/^'.str_replace('/', '\/', $this->patern).'$/';
 
         if (isset($method, $controller)) {
             $this->addController($method, $controller);
         }
     }
 
-    public function getPath(): string
+    public function getBasePath(): string
     {
-        return $this->path;
+        return $this->basePath;
     }
 
     public function addController(string $method, object|array $controller)
@@ -43,7 +43,7 @@ class Route implements ControllerMaper
 
     public function pathMatches(string $path): bool
     {
-        return preg_match($this->regexp, $path);
+        return preg_match($this->patern, $path);
     }
 
     public function methodMatches(string $method): bool
@@ -53,18 +53,29 @@ class Route implements ControllerMaper
 
     public function ignoreParamSlash()
     {
-        $regexp = preg_replace('/:(.*)/', '(.*)', $this->path);
-        $this->regexp = '/^'.str_replace('/', '\/', $regexp).'$/';
+        $patern = preg_replace('/:(.*)/', '(.*)', $this->basePath);
+        $this->patern = '/^'.str_replace('/', '\/', $patern).'$/';
 
         return $this;
     }
-
 
     public function getController(RequestState $RequestData): ControllerWrapper
     {
 
         $Controller = $this->methods[$RequestData->getMethod()] ?? $this->methods['any'] ?? null;
+        $RouteParams = $this->bindParams($RequestData->getPath());
 
-        return new ControllerWrapped($Controller, $RequestData);
+        return new ControllerWrapped($Controller, $RequestData, $RouteParams);
+    }
+
+    public function bindParams(string $path): array
+    {
+        preg_match_all('/:([a-zA-Z0-9]+)/', $this->basePath, $paramNames, PREG_SET_ORDER);
+        $paramNames = array_column($paramNames, 1);
+
+        preg_match($this->patern, $path, $uriParams);
+        array_shift($uriParams);
+
+        return array_combine($paramNames, $uriParams);
     }
 }

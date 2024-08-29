@@ -3,17 +3,18 @@
 namespace Lib\Http;
 
 use Stringable;
+use Lib\Http\Contracts\ResponseState;
 
-class Response implements Stringable
+class Response implements Stringable, ResponseState
 {
-    public int $status;
+    protected int $status;
 
-    public string $content;
+    protected string $content;
 
-    public array $headers;
+    protected array $headers;
 
     public function __construct(
-        string $content = '',
+        string|Stringable $content = '',
         int $status = 200,
         array $headers = [],
     ) {
@@ -22,14 +23,38 @@ class Response implements Stringable
         $this->headers = $headers;
     }
 
+    public function getStatus(): int{
+        return $this->status;
+    }
+
+    public function getBody(): string
+    {
+        return (string) $this->content;
+    }
+
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
     public function render(): string
     {
+        $this->setUpStatus();
+        $this->setUpHeaders();
+
+        return (string) new TextRender($this->content);
+    }
+
+    public function setUpStatus()
+    {
         http_response_code($this->status);
+    }
+
+    public function setUpHeaders()
+    {
         foreach ($this->headers as $header) {
             header($header);
         }
-
-        return (string) new TextRender($this->content);
     }
 
     public static function json(

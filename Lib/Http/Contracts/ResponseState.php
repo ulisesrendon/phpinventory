@@ -10,9 +10,5 @@ interface ResponseState
     public function getBody(): string|Stringable;
 
     public function getStatus(): int;
-    
-    // public function getPath(): int;
-
-    // public function getMethod(): string;
 
 }

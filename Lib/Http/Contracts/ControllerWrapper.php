@@ -1,9 +1,10 @@
 <?php
 namespace Lib\Http\Contracts;
 
+use Lib\Http\Contracts\ResponseState;
+
 interface ControllerWrapper
 {
-    public function get();
+    public function response();
 
-    public function execute();
 }

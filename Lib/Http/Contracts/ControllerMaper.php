@@ -6,8 +6,6 @@ use Lib\Http\Contracts\ControllerWrapper;
 
 interface ControllerMaper
 {
-    public function getPath(): string;
-
     public function addController(string $method, ControllerWrapper $controller);
 
     public function getController(RequestState $RequestState): ?ControllerWrapper;

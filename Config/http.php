@@ -21,14 +21,17 @@ try {
     if (is_null($Controller)) {
         throw new NotFoundException;
     }
+    $RequestResult = $Controller->response();
+
+    dd($RequestResult);
 } catch (\Exception $Exception) {
     if ($Exception instanceof NotFoundException) {
-        $Controller = Response::template(__DIR__.'/../public/404.html', 404);
+        $RequestResult = Response::template(__DIR__.'/../public/404.html', 404);
     } elseif ($Exception instanceof MethodNotAllowedException) {
-        $Controller = Response::template(__DIR__.'/../public/405.html', 405);
+        $RequestResult = Response::template(__DIR__.'/../public/405.html', 405);
     } else {
-        $Controller = $_ENV['APP_DEBUG'] == 0 ? Response::html($Exception, 500) : Response::template(__DIR__.'/../public/500.html', 500);
+        $RequestResult = $_ENV['APP_DEBUG'] == 0 ? Response::html($Exception, 500) : Response::template(__DIR__.'/../public/500.html', 500);
     }
 }
 
-return (string) $Controller;
+return $RequestResult;
