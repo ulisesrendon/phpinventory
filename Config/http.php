@@ -2,36 +2,55 @@
 
 require __DIR__.'/../Config/routes.php';
 
-use Lib\Http\Exception\MethodNotAllowedException;
-use Lib\Http\Exception\NotFoundException;
-use Lib\Http\Helper\RequestData;
+use Lib\Http\Router;
 use Lib\Http\Response;
 use Lib\Http\RouteCollection;
-use Lib\Http\Router;
+use Lib\Http\ControllerWrapped;
+use Lib\Http\Helper\RequestData;
+use Lib\Http\Exception\NotFoundException;
+use Lib\Http\Exception\MethodNotAllowedException;
 
 $_ENV['APP_DEBUG'] ??= 0;
 
+$Router = new Router();
+$RouteCollection = new RouteCollection();
+$RequestState = RequestData::createFromGlobals();
+
 try {
-    $Router = new Router();
-    $RouteCollection = new RouteCollection();
-    $RequestData = RequestData::createFromGlobals();
-    $Controller = $Router->getController($RouteCollection, $RequestData);
 
-    // Throw 404 server error if route doesn't exists
+    $Controller = $Router->getController($RouteCollection, $RequestState);
+
     if (is_null($Controller)) {
-        throw new NotFoundException;
+        throw new NotFoundException; // Throws 404 error when route doesn't exists
     }
-    $RequestResult = $Controller->response();
 
-    dd($RequestResult);
 } catch (\Exception $Exception) {
+    
     if ($Exception instanceof NotFoundException) {
-        $RequestResult = Response::template(__DIR__.'/../public/404.html', 404);
+        $Controller = new ControllerWrapped(
+            fn() => Response::template(__DIR__.'/../public/404.html', 404),
+            $RequestState,
+        );
     } elseif ($Exception instanceof MethodNotAllowedException) {
-        $RequestResult = Response::template(__DIR__.'/../public/405.html', 405);
+        $Controller = new ControllerWrapped(
+            fn() => Response::template(__DIR__.'/../public/405.html', 405),
+            $RequestState,
+        );
     } else {
-        $RequestResult = $_ENV['APP_DEBUG'] == 0 ? Response::html($Exception, 500) : Response::template(__DIR__.'/../public/500.html', 500);
+        if($_ENV['APP_DEBUG'] == 0){
+            $Controller = new ControllerWrapped(
+                fn() => Response::html($Exception, 500),
+                $RequestState,
+            );
+        }else{
+            $Controller = new ControllerWrapped(
+                fn() => Response::template(__DIR__.'/../public/500.html', 500),
+                $RequestState,
+            );
+        }
     }
 }
 
-return $RequestResult;
+// dd($RequestState, $Controller, $Controller->getResponse());
+
+return $Controller;

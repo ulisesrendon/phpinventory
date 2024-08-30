@@ -6,7 +6,7 @@ use Lib\Http\Contracts\ControllerWrapper;
 
 interface ControllerMaper
 {
-    public function addController(string $method, ControllerWrapper $controller);
+    public function addController(string $method, array|object $controller);
 
     public function getController(RequestState $RequestState): ?ControllerWrapper;
 

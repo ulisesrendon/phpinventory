@@ -3,9 +3,8 @@ namespace Lib\Http;
 
 use DomainException;
 use ReflectionMethod;
-use Lib\Http\Response;
 use ReflectionFunction;
-use Lib\Http\Helper\RequestData;
+use Lib\Http\ResponseRender;
 use Lib\Http\Contracts\RequestState;
 use Lib\Http\Contracts\ResponseState;
 use Lib\Http\Contracts\ControllerWrapper;
@@ -14,19 +13,12 @@ use Lib\Http\Exception\InvalidControllerException;
 class ControllerWrapped implements ControllerWrapper
 {
     protected null|array|object $Controller;
-    protected array $Params;
-
-    protected int $status;
-
-    protected string $body;
-    
-    protected array $headers;
 
     protected string $method;
-
+    
     protected string $path;
-
-    protected bool $called = false;
+    
+    protected array $params;
 
     public function __construct(
         null|array|object $Controller,
@@ -47,101 +39,37 @@ class ControllerWrapped implements ControllerWrapper
 
         $this->method = $RequestState->getMethod();
         $this->path = $RequestState->getPath();
-        $this->Params = $this->resolveParams($Controller, $RequestState, $RouteParams);
-
+        $this->params = $this->resolveParams($Controller, $RequestState, $RouteParams);
         $this->Controller = $Controller;
     }
-    public function response()
-    {
-        $this->called = true;
 
+    public function getResponse(): ?ResponseState
+    {
         ob_start();
-        $Result = call_user_func_array($this->Controller, $this->Params);
+        $Result = call_user_func_array($this->Controller, $this->params);
         ob_clean();
 
         $ResultType = gettype($Result);
 
         if( 'object' === $ResultType && $Result instanceof ResponseState){
-            $this->status = $Result->getStatus();
-            $this->body = $Result->getBody();
-            $this->headers = $Result->getHeaders();
+            $Result->setParams($this->params);
+            $Result->setMethod($this->method);
+            $Result->setPath($this->path);
+            return $Result;
         }else if (
             is_scalar($Result) 
             || ( 'object' === $ResultType && $Result instanceof Stringable)
         ) {
-            $this->status = empty($Result) ? 204: 200;
-            $this->body = (string) $Result;
-            $this->headers = [];
+            $status = empty($Result) ? 204: 200;
+            $body = (string) $Result;
+
+            return new ResponseRender($body, $status);
         }
 
-        return $this;
+        return null;
     }
 
-    public function getStatus(): int
-    {
-        if(false === $this->called){
-            $this->response();
-        }
-
-        return $this->status;
-    }
-
-    public function getBody(): string
-    {
-        if (false === $this->called) {
-            $this->response();
-        }
-
-        return $this->body;
-    }
-
-    public function getHeaders(): array
-    {
-        if (false === $this->called) {
-            $this->response();
-        }
-
-        return $this->headers;
-    }
-
-    public function getController(): null|array|object
-    {
-        return $this->Controller;
-    }
-
-    public function getParams(): array
-    {
-        return $this->Params;
-    }
-
-    public function isCalled(): bool
-    {
-        return $this->called;
-    }
-
-    public function getMethod(): string
-    {
-        return $this->method;
-    }
-
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-    public function setUpStatus()
-    {
-        http_response_code($this->status);
-    }
-
-    public function setUpHeaders()
-    {
-        foreach ($this->headers as $header) {
-            header($header);
-        }
-    }
-
-    protected function resolveParams($Controller, RequestData $RequestData, $RouteParams): array
+    protected function resolveParams($Controller, RequestState $RequestState, $RouteParams): array
     {
         if (gettype($Controller) == 'object' && get_class($Controller) == 'Closure') {
             $reflection = new ReflectionFunction($Controller);
@@ -152,10 +80,10 @@ class ControllerWrapped implements ControllerWrapper
         $params = [];
         foreach ($reflection->getParameters() as $parameter) {
             $paramName = $parameter->getName();
-            // Request data object injection
-            if ($parameter->getType()?->getName() === get_class($RequestData)) {
-                $params[$paramName] = $RequestData;
 
+            // Request state  injection
+            if ($parameter->getType()?->getName() === get_class($RequestState)) {
+                $params[$paramName] = $RequestState;
                 continue;
             }
 

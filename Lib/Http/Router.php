@@ -2,9 +2,6 @@
 
 namespace Lib\Http;
 
-use Stringable;
-use Lib\Http\Route;
-use Lib\Http\Helper\RequestData;
 use Lib\Http\Contracts\RouteMaper;
 use Lib\Http\Contracts\RequestState;
 use Lib\Http\Contracts\RouteMatcher;
@@ -18,7 +15,6 @@ class Router implements RouteMatcher
     public function getController(RouteMaper $RouteMaper, RequestState $RequestState): ?ControllerWrapper
     {
         foreach ($RouteMaper->getRoutes() as $Route) {
-            /* @var Route $Rute */
             $urlMatches = $Route->pathMatches($RequestState->getPath());
             $methodMatches = $Route->methodMatches($RequestState->getMethod());
 

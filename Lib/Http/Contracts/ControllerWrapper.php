@@ -5,6 +5,5 @@ use Lib\Http\Contracts\ResponseState;
 
 interface ControllerWrapper
 {
-    public function response();
-
+    public function getResponse(): ?ResponseState;
 }

@@ -8,6 +8,4 @@ use Lib\Http\Contracts\ControllerWrapper;
 interface RouteMatcher
 {
     public function getController(RouteMaper $RouteMaper, RequestState $RequestState): ?ControllerWrapper;
-
-    // bindparams
 }
