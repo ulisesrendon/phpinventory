@@ -1,7 +1,6 @@
 <?php
-namespace Lib\Http\Contracts;
 
-use Lib\Http\Contracts\ControllerMaper;
+namespace Lib\Http\Interface;
 
 interface RouteMaper
 {

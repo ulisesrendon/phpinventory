@@ -2,8 +2,8 @@
 
 namespace Lib\Http;
 
-use Lib\Http\ResponseRender;
-use Lib\Http\Contracts\ResponseState;
+use Lib\Http\Helper\TemplateRender;
+use Lib\Http\Interface\ResponseState;
 
 class Response
 {
@@ -11,8 +11,7 @@ class Response
         mixed $content = null,
         int $status = 200,
         array $headers = [],
-    ): ResponseState 
-    {
+    ): ResponseState {
         return new ResponseRender(
             json_encode($content), $status, [...$headers, 'Content-Type: application/json']
         );
@@ -22,19 +21,17 @@ class Response
         string $content = '',
         int $status = 200,
         array $headers = [],
-    ): ResponseState 
-    {
+    ): ResponseState {
         return new ResponseRender(
             $content, $status, [...$headers, 'Content-Type: text/xml; charset=utf-8'],
         );
-    }    
+    }
 
     public static function csv(
         string $content = '',
         int $status = 200,
         array $headers = [],
-    ): ResponseState
-    {
+    ): ResponseState {
         return new ResponseRender(
             $content, $status, [...$headers, 'Content-Type: text/csv; charset=utf-8'],
         );
@@ -44,8 +41,7 @@ class Response
         string $content = '',
         int $status = 200,
         array $headers = [],
-    ): ResponseState 
-    {
+    ): ResponseState {
         return new ResponseRender(
             $content,
             $status,
@@ -57,9 +53,9 @@ class Response
         string $content = '',
         int $status = 200,
         array $headers = [],
-    ): ResponseState 
-    {
-        $content = (string) new TextRenderFromFile($content);
+    ): ResponseState {
+        $content = (string) new TemplateRender($content);
+
         return new ResponseRender($content, $status, $headers);
     }
 }

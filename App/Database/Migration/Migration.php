@@ -7,7 +7,7 @@ use Lib\Http\Response;
 
 class Migration extends DefaultController
 {
-    public function start(array $args = [])
+    public function start()
     {
         try {
             $this->DataBaseAccess->executeCommand('CREATE table if not exists products(

@@ -32,5 +32,6 @@ Routes::post('/api/v1/migrate', [Migration::class, 'start']);
 Routes::get('/api/v1/search/:search', function ($search) {
     $search = explode('/', htmlspecialchars($search));
     $search = implode(' ', $search);
-    echo "Searching: $search";
+
+    return "Searching: $search";
 })->ignoreParamSlash();

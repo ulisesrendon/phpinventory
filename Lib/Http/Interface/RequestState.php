@@ -1,5 +1,6 @@
 <?php
-namespace Lib\Http\Contracts;
+
+namespace Lib\Http\Interface;
 
 interface RequestState
 {
@@ -7,9 +8,11 @@ interface RequestState
 
     public function getBody(): object|array|null;
 
-    public function getParams(): array;
+    public function getQueryParams(): array;
 
     public function getMethod(): string;
 
     public function getPath(): string;
+
+    // public function getInput(string $name);
 }

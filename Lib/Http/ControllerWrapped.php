@@ -1,34 +1,35 @@
 <?php
+
 namespace Lib\Http;
 
 use DomainException;
-use ReflectionMethod;
-use ReflectionFunction;
-use Lib\Http\ResponseRender;
-use Lib\Http\Contracts\RequestState;
-use Lib\Http\Contracts\ResponseState;
-use Lib\Http\Contracts\ControllerWrapper;
 use Lib\Http\Exception\InvalidControllerException;
+use Lib\Http\Interface\ControllerWrapper;
+use Lib\Http\Interface\RequestState;
+use Lib\Http\Interface\ResponseState;
+use ReflectionFunction;
+use ReflectionMethod;
 
 class ControllerWrapped implements ControllerWrapper
 {
     protected null|array|object $Controller;
 
     protected string $method;
-    
+
     protected string $path;
-    
+
     protected array $params;
+
+    protected array $queryParams;
 
     public function __construct(
         null|array|object $Controller,
         RequestState $RequestState,
         array $RouteParams = [],
-    )
-    {
+    ) {
         if (
-            is_array($Controller) && (!class_exists($Controller[0]) || !method_exists($Controller[0], $Controller[1]))
-            || is_object($Controller) && !is_callable($Controller)
+            is_array($Controller) && (! class_exists($Controller[0]) || ! method_exists($Controller[0], $Controller[1]))
+            || is_object($Controller) && ! is_callable($Controller)
         ) {
             throw new InvalidControllerException('Route controller is not a valid callable or it can not be called from the actual scope');
         }
@@ -39,6 +40,7 @@ class ControllerWrapped implements ControllerWrapper
 
         $this->method = $RequestState->getMethod();
         $this->path = $RequestState->getPath();
+        $this->queryParams = $RequestState->getQueryParams();
         $this->params = $this->resolveParams($Controller, $RequestState, $RouteParams);
         $this->Controller = $Controller;
     }
@@ -51,16 +53,18 @@ class ControllerWrapped implements ControllerWrapper
 
         $ResultType = gettype($Result);
 
-        if( 'object' === $ResultType && $Result instanceof ResponseState){
+        if ($ResultType === 'object' && $Result instanceof ResponseState) {
+            $Result->setQueryParams($this->queryParams);
             $Result->setParams($this->params);
             $Result->setMethod($this->method);
             $Result->setPath($this->path);
+
             return $Result;
-        }else if (
-            is_scalar($Result) 
-            || ( 'object' === $ResultType && $Result instanceof Stringable)
+        } elseif (
+            is_scalar($Result)
+            || ($ResultType === 'object' && $Result instanceof Stringable)
         ) {
-            $status = empty($Result) ? 204: 200;
+            $status = empty($Result) ? 204 : 200;
             $body = (string) $Result;
 
             return new ResponseRender($body, $status);
@@ -84,10 +88,11 @@ class ControllerWrapped implements ControllerWrapper
             // Request state  injection
             if ($parameter->getType()?->getName() === get_class($RequestState)) {
                 $params[$paramName] = $RequestState;
+
                 continue;
             }
 
-            if (!isset($RouteParams[$paramName])) {
+            if (! isset($RouteParams[$paramName])) {
                 throw new DomainException("Cannot resolve the parameter: '{$paramName}'");
             }
 

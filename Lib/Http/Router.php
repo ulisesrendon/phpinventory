@@ -2,23 +2,21 @@
 
 namespace Lib\Http;
 
-use Lib\Http\Contracts\RouteMaper;
-use Lib\Http\Contracts\RequestState;
-use Lib\Http\Contracts\RouteMatcher;
-use Lib\Http\Contracts\ControllerWrapper;
 use Lib\Http\Exception\MethodNotAllowedException;
-
+use Lib\Http\Interface\ControllerWrapper;
+use Lib\Http\Interface\RequestState;
+use Lib\Http\Interface\RouteMaper;
+use Lib\Http\Interface\RouteMatcher;
 
 class Router implements RouteMatcher
 {
-
     public function getController(RouteMaper $RouteMaper, RequestState $RequestState): ?ControllerWrapper
     {
         foreach ($RouteMaper->getRoutes() as $Route) {
             $urlMatches = $Route->pathMatches($RequestState->getPath());
             $methodMatches = $Route->methodMatches($RequestState->getMethod());
 
-            if ($urlMatches && !$methodMatches) {
+            if ($urlMatches && ! $methodMatches) {
                 throw new MethodNotAllowedException('Method not allowed');
             }
 

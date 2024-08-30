@@ -1,8 +1,6 @@
 <?php
-namespace Lib\Http\Contracts;
 
-use Lib\Http\Contracts\RequestState;
-use Lib\Http\Contracts\ControllerWrapper;
+namespace Lib\Http\Interface;
 
 interface ControllerMaper
 {

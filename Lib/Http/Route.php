@@ -2,10 +2,9 @@
 
 namespace Lib\Http;
 
-use Lib\Http\ControllerWrapped;
-use Lib\Http\Contracts\RequestState;
-use Lib\Http\Contracts\ControllerMaper;
-use Lib\Http\Contracts\ControllerWrapper;
+use Lib\Http\Interface\ControllerMaper;
+use Lib\Http\Interface\ControllerWrapper;
+use Lib\Http\Interface\RequestState;
 
 class Route implements ControllerMaper
 {
@@ -34,7 +33,7 @@ class Route implements ControllerMaper
         return $this->basePath;
     }
 
-    public function addController(string $method, object|array $controller)
+    public function addController(string $method, object|array $controller): static
     {
         $this->methods[strtolower($method)] = $controller;
 
@@ -51,7 +50,7 @@ class Route implements ControllerMaper
         return (isset($this->methods[$method]) || isset($this->methods['any'])) ? true : false;
     }
 
-    public function ignoreParamSlash()
+    public function ignoreParamSlash(): static
     {
         $patern = preg_replace('/:(.*)/', '(.*)', $this->basePath);
         $this->patern = '/^'.str_replace('/', '\/', $patern).'$/';

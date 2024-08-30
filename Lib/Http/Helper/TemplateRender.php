@@ -1,15 +1,18 @@
 <?php
 
-namespace Lib\Http;
+namespace Lib\Http\Helper;
 
-class TextRenderFromFile extends TextRender
+use Exception;
+use Stringable;
+
+class TemplateRender implements Stringable
 {
     public function __construct(
         public string $filepath,
         public array $context = []
     ) {
         if (! file_exists($this->filepath)) {
-            throw new \Exception('File not found: '.$this->filepath);
+            throw new Exception("File not found: {$this->filepath}");
         }
     }
 
@@ -20,5 +23,10 @@ class TextRenderFromFile extends TextRender
         require $this->filepath;
 
         return ob_get_clean();
+    }
+
+    public function __toString()
+    {
+        return $this->render();
     }
 }

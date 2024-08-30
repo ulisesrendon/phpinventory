@@ -1,8 +1,10 @@
 <?php
 
-namespace Lib\Http;
+namespace Lib\Http\Helper;
 
-class TextRender
+use Stringable;
+
+class TextRender implements Stringable
 {
     public function __construct(
         public string $content,

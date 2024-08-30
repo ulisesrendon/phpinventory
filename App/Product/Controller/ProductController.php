@@ -6,6 +6,7 @@ use App\Product\DAO\ProductCommand;
 use App\Product\DAO\ProductQuery;
 use App\Product\Presentor\ProductOptionGrouping;
 use App\Shared\Controller\DefaultController;
+use Lib\Http\Helper\RequestData;
 use Lib\Http\Response;
 
 class ProductController extends DefaultController
@@ -50,12 +51,12 @@ class ProductController extends DefaultController
         ]);
     }
 
-    public function create()
+    public function create(RequestData $Request)
     {
-        $code = $this->Request->body['code'] ?? null;
-        $title = $this->Request->body['title'] ?? null;
-        $description = $this->Request->body['description'] ?? '';
-        $price = $this->Request->body['price'] ?? 0;
+        $code = $Request->getInput('code');
+        $title = $Request->getInput('title');
+        $description = $Request->getInput('description') ?? '';
+        $price = $Request->getInput('price') ?? 0;
 
         if (empty($code)) {
             return Response::json([
@@ -89,13 +90,13 @@ class ProductController extends DefaultController
 
     }
 
-    public function update(int $id)
+    public function update(int $id, RequestData $Request)
     {
 
-        $code = $this->Request->body['code'] ?? null;
-        $title = $this->Request->body['title'] ?? null;
-        $description = $this->Request->body['description'] ?? null;
-        $price = $this->Request->body['price'] ?? null;
+        $code = $Request->getInput('code') ?? null;
+        $title = $Request->getInput('title') ?? null;
+        $description = $Request->getInput('description') ?? null;
+        $price = $Request->getInput('price') ?? null;
 
         $OlderProductOptions = (new ProductOptionGrouping($this->ProductQuery->getByID($id)))->get();
         $OlderProductData = empty($OlderProductOptions) ? null : $OlderProductOptions[0];

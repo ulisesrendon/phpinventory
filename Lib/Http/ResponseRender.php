@@ -1,8 +1,9 @@
 <?php
+
 namespace Lib\Http;
 
+use Lib\Http\Interface\ResponseState;
 use Stringable;
-use Lib\Http\Contracts\ResponseState;
 
 class ResponseRender implements ResponseState, Stringable
 {
@@ -14,29 +15,38 @@ class ResponseRender implements ResponseState, Stringable
 
     protected array $params = [];
 
+    protected array $queryParams = [];
+
     protected string $method = 'get';
 
     protected string $path = '';
-
 
     public function __construct(
         string $body = '',
         int $status = 200,
         array $headers = [],
-    ) 
-    {
+    ) {
         $this->body = $body;
         $this->status = $status;
         $this->headers = $headers;
     }
-    
 
-    public function setparams(array $params)
+    public function setParams(array $params)
     {
         $this->params = $params;
     }
 
-    public function getparams(): array
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    public function setQueryParams(array $params)
+    {
+        $this->params = $params;
+    }
+
+    public function getQueryParams(): array
     {
         return $this->params;
     }
@@ -65,7 +75,7 @@ class ResponseRender implements ResponseState, Stringable
     {
         $this->headers = $headers;
     }
-    
+
     public function getHeaders(): array
     {
         return $this->headers;
@@ -75,7 +85,7 @@ class ResponseRender implements ResponseState, Stringable
     {
         $this->body = $body;
     }
-    
+
     public function getBody(): string
     {
         return $this->body;
@@ -89,7 +99,7 @@ class ResponseRender implements ResponseState, Stringable
     public function getStatus(): int
     {
         return $this->status;
-    }    
+    }
 
     public function setUpStatus()
     {
@@ -103,10 +113,11 @@ class ResponseRender implements ResponseState, Stringable
         }
     }
 
-    public function __tostring()
+    public function __toString()
     {
         $this->setUpStatus();
         $this->setUpHeaders();
+
         return (string) $this->getBody();
     }
 }
