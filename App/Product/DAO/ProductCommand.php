@@ -21,7 +21,7 @@ class ProductCommand
     /**
      * Save new product data
      *
-     * @param  string  $descriptionf
+     * @param  string  $description
      * @return bool|int|null
      */
     public function create(
