@@ -100,6 +100,7 @@ Por nombrar algunos de los apartados de funciones que tiene PHP:
 <ul>
     <li>Gestion de archivos</li>
     <li>Procesamiento de texto</li>
+    <li>Persistencia de datos</li>
     <li>Conexión con bases de datos</li>
     <li>Envio de correo electronico</li>
     <li>Envio de peticiones http a otros servidores</li>
@@ -107,6 +108,7 @@ Por nombrar algunos de los apartados de funciones que tiene PHP:
     <li>Operaciones con fechas</li>
     <li>Generación y procesado de imagenes</li>
     <li>Operaciones matematicas</li>
+    <li>Codificación y decodificación de datos en multiples formatos</li>
 </ul>
 */
 
