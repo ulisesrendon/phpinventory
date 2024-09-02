@@ -23,7 +23,7 @@ class RequestData implements RequestState
             body: json_decode(file_get_contents('php://input'), true),
             queryParams: (new RequestParamHelper($_SERVER['QUERY_STRING'] ?? ''))->Params,
             method: $_SERVER['REQUEST_METHOD'],
-            path: strtok($_SERVER['REQUEST_URI'] ?? '/', '?'),
+            path: strtok(trim($_SERVER['REQUEST_URI'], '/') ?? '/', '?'),
         );
     }
 

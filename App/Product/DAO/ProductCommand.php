@@ -41,7 +41,7 @@ class ProductCommand
 
     public function deleteByID(int $id): bool
     {
-        return $this->DataBaseAccess->executeCommand('DELETE FROM products WHERE id = :id', [$id]);
+        return $this->DataBaseAccess->executeCommand('DELETE FROM products WHERE id = :id', ['id' => $id]);
     }
 
     public function update(int $id, array $fields): ?bool
@@ -52,6 +52,6 @@ class ProductCommand
 
         $fields['id'] = $id;
 
-        $this->sendUpdate($this->DataBaseAccess, 'products', $fields);
+        return $this->sendUpdate($this->DataBaseAccess, 'products', $fields);
     }
 }

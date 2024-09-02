@@ -19,7 +19,7 @@ class RouteCollection implements RouteMaper
 
     public static function addRoute(string $method, string $path, object|array $callable): Route
     {
-        self::$routes[$path] ??= new Route($path);
+        self::$routes[$path] ??= new Route(trim($path, '/'));
         self::$routes[$path]->addController($method, $callable);
 
         return self::$routes[$path];

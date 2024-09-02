@@ -28,7 +28,7 @@ class ProviderQuery
     public function titleExists(string $title): ?bool
     {
         return $this->DataBaseAccess->fetchScalar('SELECT exists(
-            SELECT title from providers where title ilike :title
+            SELECT title from providers where title like :title
         )', ['title' => $title]);
     }
 
