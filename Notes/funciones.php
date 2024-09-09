@@ -4,17 +4,17 @@ Las funciones son estructuras que permiten encapsular código para permitir reut
 
 Al combinar correctamente funciones y bucles podremos crear código mas compacto, legible y modular.
 
-La modularidad en el software consiste en separar nuestro programa en multiples partes mas pequeñas, cada una independiente del resto y algunas piezas siendo intercambiables por otras y cuando estos modulos stan bien construidos pueden ser reutilizados para re-componer aún mas software.
+La modularidad en el software consiste en separar nuestro programa en multiples partes mas pequeñas, cada una independiente del resto y algunas piezas siendo intercambiables por otras y cuando estos módulos están bien construidos pueden ser reutilizados para re-componer aún mas software.
 
-Creando tus propias funciones puedes definir instrucciones que se podrán ejecutar solo cuando tu lo requieras, puedes definir desde funciones básicas que encapsulen solo un par de instrucciones básicas hasta funciones con grandes cantidades de código que invocarán incluso a muchas otras funciones con sus respetivas instrucciones internas.
+Creando tus propias funciones puedes definir instrucciones que se podrán ejecutar solo cuando tu lo requieras, puedes definir desde funciones básicas que encapsulen solo un par de instrucciones básicas hasta funciones con grandes cantidades de código que invocarán incluso a muchas otras funciones con sus respectivas instrucciones internas.
 
 <h2>Creando una función básica</h2>
 
-Veamos como empezar a crear y usar nuestras propias funciones, Pongamos de ejemplo la operacion de sumar los impuestos a un valor monetario dado.
+Veamos como empezar a crear y usar nuestras propias funciones, Pongamos de ejemplo la operación de sumar los impuestos a un valor monetario dado.
 
-Para crear una funcion que calcule impuestos usaremos la palabra reservada <strong>function</strong> para indicarle a php que estamos por definir una funcion, luego escribiremos un  nombre que hayamos inventado (debe seguir las mismas reglas de nombres que las variables y las constantes), a continuación del nombre pondremos unos parentesis y luego entre llaves escribiremos las instrucciones propias del algoritmo.
+Para crear una función que calcule impuestos usaremos la palabra reservada <strong>function</strong> para indicarle a php que estamos por definir una función, luego escribiremos un  nombre que hayamos inventado (debe seguir las mismas reglas de nombres que las variables y las constantes), a continuación del nombre pondremos unos paréntesis y luego entre llaves escribiremos las instrucciones propias del algoritmo.
 
-Debemos de tener mucho cuidado al nombrar nuestras funciones ya que si llegaran a colisionar con el nombre de alguna función existente (ya sea alguna función definida por nosotros o definida por modulos que empleemos o por una función propia de PHP) el código simplemente fallara en cuanto PHP detecte que se intenta duplicar el nombre de una función.
+Debemos de tener mucho cuidado al nombrar nuestras funciones ya que si llegaran a colisionar con el nombre de alguna función existente (ya sea alguna función definida por nosotros o definida por módulos que empleemos o por una función propia de PHP) el código simplemente fallara en cuanto PHP detecte que se intenta duplicar el nombre de una función.
 
 El código para la función quedara de la siguiente forma:
 */
@@ -29,7 +29,7 @@ function taxPrice()
 }
 
 /*
-Una vez definida ya podemos invocar a nuestra funcion las veces que sea necesario, y para ello solo debemos escribir el nombre de la funcion seguida de parentesis y terminando con punto y coma como cualquier otra instrucción, invoquemosla por ejemplo dos veces solo para ver su comportamiento:
+Una vez definida ya podemos invocar a nuestra función las veces que sea necesario, y para ello solo debemos escribir el nombre de la función seguida de parentesis y terminando con punto y coma como cualquier otra instrucción, invoquemosla por ejemplo dos veces solo para ver su comportamiento:
 
 */
 
@@ -45,7 +45,7 @@ Valor con impuesto (16%): $276.08<br>
 */
 
 /*
-Al llamar a la función dos veces, ejecutaremos las instrucciones que encapsula dos veces, si ejecutamos la función aún más veces será el mismo compartamiento, pero no tiene mucho sentido hacer esta operacion con el mismo valor una y otra vez, el poder de las funciones reside en poder ser reutilizadas y para hacer que esta instrucción sea reutilizable necesitamos poder injectarle un valor de entrada que sea diferente en cada ocasión.
+Al llamar a la función dos veces, ejecutaremos las instrucciones que encapsula dos veces, si ejecutamos la función aún más veces será el mismo comportamiento, pero no tiene mucho sentido hacer esta operación con el mismo valor una y otra vez, el poder de las funciones reside en poder ser reutilizadas y para hacer que esta instrucción sea reutilizable necesitamos poder inyectarle un valor de entrada que sea diferente en cada ocasión.
 */
 
 /*
@@ -54,9 +54,9 @@ Al llamar a la función dos veces, ejecutaremos las instrucciones que encapsula 
 
 <p>Las funciones pueden aceptar multiples valores de entrada para poder trabajar y como resultado estas pueden retornar un valor de salida.</p>
 
-<p>Los argumentos de una función son los valores que esta puede recibir, para nuestro ejemplo solo se necesita un unico valor, cambiaremos la función par aceptar como argumento el valor de la variable $value (que previamente definimos con el valor 238).
+<p>Los argumentos de una función son los valores que esta puede recibir, para nuestro ejemplo solo se necesita un único valor, cambiaremos la función par aceptar como argumento el valor de la variable $value (que previamente definimos con el valor 238).
 
-Para definir el argumento de una funcion debemos usar la misma sintaxis que para una variable y asignar un nombre de variable que contendra el valor y lo pasaremos a la función  usando los parentesis de esta, la función quedara de la siguiente manera:</p>
+Para definir el argumento de una función debemos usar la misma sintaxis que para una variable y asignar un nombre de variable que contendrá el valor y lo pasaremos a la función  usando los paréntesis de esta, la función quedara de la siguiente manera:</p>
 */
 
 function taxPrice($value)
@@ -87,7 +87,7 @@ Valor con impuesto (16%): $346.84<br>
 */
 
 /*
-Los terminos argumento y parametro se suelen usar indistintamente aunque tecnicamente son dos cosas diferentes aunque relacionadas, el argumento hace referencia al valor que se le pasa a la función y con el que esta opera, mientras que el termino parametro hace referencia a las variables que contienen esos valores.
+Los términos argumento y parametro se suelen usar indistintamente aunque tecnicamente son dos cosas diferentes aunque relacionadas, el argumento hace referencia al valor que se le pasa a la función y con el que esta opera, mientras que el termino parametro hace referencia a las variables que contienen esos valores.
 */
 
 /*
@@ -113,7 +113,7 @@ Por nombrar algunos de los apartados de funciones que tiene PHP:
 */
 
 /*
-Si en el ejmplo anterior quisieramos cambiar los textos o mostrar mas información o si se desea cambiar la operación tendremos problemas, ya que al cambiar la función se cambiara el resultado en todos los lugares del software donde esta se este invocando, 
+Si en el ejmplo anterior quisieramos cambiar los textos o mostrar mas información o si se desea cambiar la operación tendremos problemas, ya que al cambiar la función se cambiara el resultado en todos los lugares del software donde esta se este invocando.
 
 Para ganar mayor flexibilidad siempre es recomendable separar nuestro código en trozos lo mas pequeños posibles, y evitar repetir código siempre que sea posible.
 
