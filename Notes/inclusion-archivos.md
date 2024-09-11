@@ -1,4 +1,10 @@
+
 # <h1>Separar, organizar y usar código en multiples archivos</h1>
+
+https://dev.to/anwar_sadat/mastering-php-file-paths-simplifying-your-projects-structure-650
+
+
+https://www.nikolaposa.in.rs/blog/2017/01/16/on-structuring-php-projects/
 
 Como usar la inclusión de archivos para mantener el código organizado, modular y mantenible
 

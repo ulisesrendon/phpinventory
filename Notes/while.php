@@ -197,7 +197,7 @@ for($i = 7; $i>0; $i--){
 // Instrucciones ...
 }</code></pre>
 
-<p>El bucle while es más sencillo pero más flexible que los bucles anteriores, al igual que los bucles anteriores puede usarse para recorrer arreglos, aunque lo mas fácil sería recorrerlos con foreach o con for, pero veamos como sería para entender la sintaxis</p>
+<p>El bucle while es más sencillo pero más flexible que los bucles anteriores, al igual que los bucles anteriores puede usarse para recorrer arreglos, aunque lo mas fácil sería recorrerlos con foreach o con for, pero veamos como sería para entender la sintaxis de este bucle</p>
 */
 $colors = ['red', 'green', 'blue'];
 $i = 0;
@@ -207,5 +207,63 @@ while($i < 3){
 }
 
 /*
-<p>Al igual que con el bucle for, para recorrer arreglos tendríamos que definir una variable que lleve la cuenta, debemos definir la condición que se evaluara para saber si el ciclo debe continuar o no y debemos incrementar el valor de la variable que lleva la cuenta, pero de estas tres cosas ninguna forma parte del bucle propiamente.</p>
+<p>Al igual que con el bucle for, para recorrer arreglos tendríamos que definir una variable que lleve la cuenta, luego debemos definir la condición que se evaluara para saber si el ciclo debe continuar o no y por último debemos incrementar el valor de la variable que lleva la cuenta, pero de estas tres cosas ninguna forma parte del bucle propiamente</p>
+
+<p>Para que veas a a que me refiero veamos un bucle while sin una condición que evaluar:</p>
 */
+$colors = ['red', 'green', 'blue'];
+$i = 0;
+while (true) {
+    echo "{$colors[$i]}<br>";
+    $i++;
+    if($i >= 3){
+        break;
+    }
+}
+
+/*
+<p>El bucle while se puede simplemente establecer con el valor booleano true para que se ejecute indefinidamente y dentro del bucle</p>
+*/
+
+$startingHour = 8;
+$endingHour = 10;
+$duration = 40;
+
+$slotHour = $startingHour;
+$slotMinute = 0;
+
+$slots = [];
+
+while (true) {
+    $slots[] = [$slotHour, $slotMinute];
+
+    $slotMinute += $duration;
+    if ($slotMinute >= 60) {
+        $slotMinute -= 60;
+        $slotHour++;
+    }
+
+    if ($slotHour >= $endingHour) {
+        break;
+    }
+}
+
+
+
+$startingHour = 8;
+$endingHour = 10;
+$duration = 50;
+
+$slotHour = $startingHour;
+$slotMinute = 0;
+
+$slots = [];
+
+while ($slotHour < $endingHour) {
+    $slots[] = [$slotHour, $slotMinute];
+    $slotMinute += $duration;
+    if ($slotMinute >= 60) {
+        $slotMinute -= 60;
+        $slotHour++;
+    }
+}
