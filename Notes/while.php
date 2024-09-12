@@ -222,20 +222,30 @@ while (true) {
 }
 
 /*
-<p>El bucle while se puede simplemente establecer con el valor booleano true para que se ejecute indefinidamente y dentro del bucle</p>
+<p>El bucle while puede simplemente usarse pasándole el valor booleano true para que se ejecute indefinidamente, pero para que no de lugar a un bucle infinito dentro de las instrucciones del bucle podemos evaluar cuando debería detenerse y usar la instrucción <mark>break</mark> para finalizar el bucle.</p>
+
+<p>Para ejemplificar un bucle que se ejecuta indefinidamente veamos un algoritmo muy común</p>
+
+<p>Este algoritmo se usa para generar una lista de horarios de disponibilidad (pueden ser horarios de atención en un consultorio, horarios estimados de salida y llegada para una ruta de algún transporte, espacios de alquiler de un aula o un local, etc.)</p>
 */
 
+/*
+<p>El código sería el siguiente y en seguida lo desgranaremos:</p>
+*/
 $startingHour = 8;
 $endingHour = 10;
 $duration = 40;
 
+$slots = [];
+
 $slotHour = $startingHour;
 $slotMinute = 0;
 
-$slots = [];
-
 while (true) {
-    $slots[] = [$slotHour, $slotMinute];
+    $slots[] = [
+        'hour' => $slotHour, 
+        'minute' => $slotMinute
+    ];
 
     $slotMinute += $duration;
     if ($slotMinute >= 60) {
@@ -248,6 +258,50 @@ while (true) {
     }
 }
 
+echo "<h3>Horarios disponibles</h3>";
+echo "<ul>";
+foreach ($slots as $time) {
+    if (0 == $time['minute']) {
+        $time['minute'] = '00';
+    }
+    echo "<li>{$time['hour']}:{$time['minute']}</li>";
+}
+echo "</ul>";
+
+/*
+<div class="code-sample" data-url="bucles-ejemplo-5.php">>
+    <h3>Horarios disponibles</h3>
+    <ul>
+        <li>8:00</li>
+        <li>8:40</li>
+        <li>9:20</li>
+        <li>10:00</li>
+        <li>10:40</li>
+        <li>11:20</li>
+        <li>12:00</li>
+        <li>12:40</li>
+        <li>13:20</li>
+    </ul>
+</div>
+*/
+
+/*
+<p>Lo primero es empezar definiendo 3 valores iniciales necesarios para el funcionamiento, la hora de inicio, la hora de finalización y la duración (en minutos) o tiempo separación entre disponibilidades.</p>
+
+<p>Después tenemos el arreglo que almacenara la lista de horarios disponibles seguido de dos valores que llevan la cuenta de la hora y minuto que irán cambiando con cada ciclo.</p>
+
+<p>Luego tenemos nuestro bucle while que se ejecutara indefinidamente</p>
+
+<p>Dentro del bucle tenemos la instrucción de guardar el horario en cada iteración, el cual ira cambiando en intervalos definidos por la duración establecida.</p>
+
+<p>En seguida tenemos el calculo del tiempo, en el que se suma la variable con la duración a la variable que lleva la cuenta de los minutos y por cada 60 minutos que se completen, se debe volver a empezar en cero los minutos y se debe incrementar en uno la variable que lleva la cuenta de las horas.</p>
+
+<p>Por ultimo dentro del bucle tenemos la condición que detendrá la ejecución del bucle para evitar que siga calculando horarios infinitamente.</p>
+
+<p>En cuanto el valor que lleva la cuenta de las horas alcance al valor de la hora de finalización detenemos el ciclo.</p>
+
+<p>Ahora simplemente imprimimos en HTML una lista con los horarios que generamos usando un bucle foreach.</p>
+*/
 
 
 $startingHour = 8;
@@ -267,3 +321,56 @@ while ($slotHour < $endingHour) {
         $slotHour++;
     }
 }
+
+
+/*--------------------------------*/
+
+$startingHour = 22;
+$endingHour = 8;
+$duration = 60;
+
+$dayCicles = 1;
+
+$slots = [];
+
+$slotHour = $startingHour;
+$slotMinute = 0;
+
+while (true) {
+    $slots[] = [
+        'hour' => $slotHour,
+        'minute' => $slotMinute
+    ];
+
+    $slotMinute += $duration;
+    if ($slotMinute >= 60) {
+        do {
+            $slotMinute -= 60;
+            $slotHour++;
+        } while ($slotMinute >= 60);
+    }
+
+    if ($slotHour >= 24) {
+        do {
+            $slotHour -= 24;
+            $dayCicles--;
+        } while ($slotHour >= 24);
+    }
+
+    if ($slotHour >= $endingHour && $dayCicles == 0) {
+        break;
+    }
+}
+
+echo "<h3>Horarios disponibles</h3>";
+echo "<ul>";
+foreach ($slots as $time) {
+    if (0 == $time['minute']) {
+        $time['minute'] = '00';
+    }
+    $time['hour'] = str_pad($time['hour'], 2, "0", STR_PAD_LEFT);
+    $time['minute'] = str_pad($time['minute'], 2, "0", STR_PAD_LEFT);
+
+    echo "<li>{$time['hour']}:{$time['minute']}</li>";
+}
+echo "</ul>";
