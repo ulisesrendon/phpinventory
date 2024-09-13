@@ -111,6 +111,79 @@ echo "</table>";
     </table>
 </div>
 
+
+<p>Para saltar instrucciones dentro de un bucle, o para el caso del bucle foreach, saltar elementos de un arreglo tenemos la instrucción <mark>continue;</mark>, la cual le dice a PHP que salte al siguiente ciclo del bucle sin importar que otras instrucciones estuvieran después.</p>
+
+<p>Para ejemplificarlo vamos a recorrer el mismo arreglo de hace un momento, pero vamos a hacer que salte a los usuarios con los id 3201 y 3202:</p>
+
+*/
+
+echo "<table>";
+foreach($users as $user){
+    if($user['id'] == 3201 || $user['id'] == 3202){
+        continue;
+    }
+    echo "<tr>";
+    foreach($user as $property => $value){
+        echo "<td><strong>{$property}</strong>: {$value}</td>";
+    }
+    echo "</tr>";
+}
+echo "</table>";
+
+/*
+<div class="code-sample" data-url="bucles-ejemplo-2.php">
+    <table>
+        <tr>
+            <td><strong>id</strong>: 3200</td>
+            <td><strong>name</strong>: Juan Perez</td>
+            <td><strong>email</strong>: juan@app.test</td>
+            <td><strong>status</strong>: 1</td>
+        </tr>
+        <tr>
+            <td><strong>id</strong>: 3203</td>
+            <td><strong>name</strong>: Juana Alvarez</td>
+            <td><strong>email</strong>: juana@app.test</td>
+            <td><strong>status</strong>: 1</td>
+        </tr>
+    </table>
+</div>
+
+<p>Para poder detener por completo un bucle usamos la instrucción <mark>break;</mark>, para ver su funcionamiento hagamos que el bucle solo imprima hasta el usuario del id 3201:</p>
+
+*/
+
+echo "<table>";
+foreach($users as $user){
+    echo "<tr>";
+    foreach($user as $property => $value){
+        echo "<td><strong>{$property}</strong>: {$value}</td>";
+    }
+    echo "</tr>";
+    if ($user['id'] == 3201) {
+        break;
+    }
+}
+echo "</table>";
+
+/*
+<div class="code-sample" data-url="bucles-ejemplo-2.php">
+    <table>
+        <tr>
+            <td><strong>id</strong>: 3200</td>
+            <td><strong>name</strong>: Juan Perez</td>
+            <td><strong>email</strong>: juan@app.test</td>
+            <td><strong>status</strong>: 1</td>
+        </tr>
+        <tr>
+            <td><strong>id</strong>: 3201</td>
+            <td><strong>name</strong>: Cris Rodriguez</td>
+            <td><strong>email</strong>: cris@app.test</td>
+            <td><strong>status</strong>: 0</td>
+        </tr>
+    </table>
+</div>
+
 <h2>Bucle For</h2>
 
 <p>Este bucle repetirá las instrucciones indicadas hasta que se deje cumplir una condición dada.</p>
