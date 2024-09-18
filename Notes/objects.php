@@ -30,7 +30,7 @@ Los objetos son estructuras que permiten encapsular y agrupar datos y su comport
 
 <p>Aunque en concepto y en su forma de transferir datos son lo mismo, un arreglo asociativo se diferencia de un objeto literal de PHP en que este ultimo cuenta con muchas mas características y funcionalidades, y a continuación veremos varias de esas características y veremos que problemas resuelve cada una.</p>
 
-<h3>Encapsulamiento y Comportamiento de los datos</h3>
+<h3>Encapsulamiento</h3>
 
 <p>Un objeto literal de PHP no solo contiene datos, también puede definir comportamiento para esos datos.</p>
 
@@ -45,7 +45,7 @@ Los objetos son estructuras que permiten encapsular y agrupar datos y su comport
 <p>Los atributos y los métodos de un objeto se llaman en conjunto miembros.</p>
 
 
-<h3>Ocultamiento de los datos</h3>
+<h3>Ocultamiento</h3>
 
 <p>Los objetos permiten de forma fácil controlar que datos pueden ser accedidos y modificados desde el exterior del objeto y cuales no.</p>
 
@@ -82,7 +82,23 @@ Los objetos son estructuras que permiten encapsular y agrupar datos y su comport
 
 <p>Ya que si intentamos cambiar algo o añadir código nuevo y este no respeta las reglas que definimos para la interfaz, el código ni siquiera correrá y PHP nos avisara de que hay una violación que debe ser reparada, y por el contrario si respetamos las interfaces el código funcionara como se espera</p>
 
+<h3>Herencia</h3>
 
+<p>Otra característica importante de la programación orientada a objetos es la opción de poder tomar código de objetos para crear definiciones nuevas que reutilicen total o parcialmente el código existente y crear con esto nuevas variaciones variaciones de objetos que cuenten con nuevas funcionalidades ó que cambien el comportamiento previamente establecido y solo respeten las interfaces.</p>
+
+<p>A esta característica se le llama <strong>Herencia</strong> y aunque su comportamiento se puede emular en la programación sin tener que recurrir a objetos, con objetos lograr la herencia es extremadamente fácil.</p>
+
+<h3>Modularidad</h3>
+
+<p>La modularidad consiste en dividir tu programa en partes mas pequeñas con el fin de hacer mas claro y transparente su funcionamiento y con esto hacer más fácil el mantenimiento.</p>
+
+<p>En PHP y en otros sistemas un módulo puede ser solo un archivo con apenas algo de código, y ese código no tendría precisamente porque ser un objeto.</p>
+
+<p>Un modulo podría ser solo una función o un conjunto de variables o constantes, el punto es separar nuestro software en partes mas pequeñas.</p>
+
+<p>Por su naturaleza los objetos tienden a ser modulares, y un software compuesto de multiples objetos puede ser fácilmente dividido en multiples archivos archivos con un objeto cada uno.</p>
+
+<p>En PHP trabajar con objetos hace que la modularidad sea aún más fácil ya que al trabajar con estas estructuras podemos definir reglas simples para que el motor de PHP ensamble el software con los objetos necesarios según se van requiriendo.</p>
 
 
 
