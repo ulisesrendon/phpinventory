@@ -4,19 +4,87 @@
 
 <h1>Objetos en PHP</h1>
 
-Los objetos son estructuras que permiten encapsular y agrupar datos y su comportamiento, ocultando los detalles mas complejos y solo exponiendo los detalles necesarios promoviendo la abstracción y la reutilización de código.
+Los objetos son estructuras que permiten encapsular y agrupar datos y su comportamiento, ocultando los detalles mas complejos y solo exponiendo los detalles necesarios promoviendo la abstracción y la modularidad.
 
 <div class="li-note">Aviso: Te adelanto que trabajar con objetos es otro paradigma que puede que en un inicio se vea muy verboso y complicado, aún así te recomiendo fuertemente terminar de estudiar este apartado y te aseguro que con algo de paciencia se volverá más fácil y cómodo y te sera de mucha utilidad para poder resolver y gestionar problemas que con otros paradigmas sería mas complicado.</div>
 
-<p>Los objectos son una forma de agrupar y trabajar con datos que están muy relacionados entre sí.</p>
+<p>Cuando tenemos datos que están relacionados entre si podríamos optar por representarlos en forma de arreglo simple, arreglo asociativo o en forma de objeto.</p>
 
-<p>Y no solo permiten agruparlos, también permiten de forma fácil controlar que datos se pueden acceder y/o modificar y cuales no.</p>
+<p>¿Cuando se usa un arreglo simple o cuando se un arreglo asociativo?</p>
 
-<p>Esto se conoce como el principio de ocultamiento.</p>
+<p>Un arreglo simple será suficiente para representar información cuando esta tiene una forma secuencial que no necesita un orden en concreto o que basta con números enteros para darle orden (por ejemplo: los días de la semana, los meses del año, una lista de tareas, una lista de nombres, etc).</p>
 
-<p>Los objetos también pueden agrupar funciones que están relacionadas entre sí o agrupar a las funciones que deben trabajar con el mismo conjunto de datos.</p>
+<p>Los arreglos asociativos se usan con información que requiere una estructura u orden mas especifica</p>
 
-<p>Esto es lo que se conoce como el principio de encapsulamiento, el poder tratar datos y funciones como parte de una misma unidad.</p>
+<p>Mediante la forma clave => valor de un arreglo asociativo se puede llegar a estructuras muy complejas ya que podemos anidar arreglos libremente.</p>
+
+<p>Los objetos son en esencia conjuntos de datos relacionados entre si y con los que se pueden formar todo tipo de estructuras, como las que formaríamos combinando arreglos asociativos.</p>
+
+<h4>¿Cual es entonces la diferencia entre un objeto y un arreglo asociativo?</h4>
+
+<p>Si el objetivo es generar estructuras de información para poder compartirlas con otros programas o mediante internet, no hay ninguna diferencia entre usar arreglos asociativos u objetos.</p>
+
+<p>Al convertir datos de php a datos de otras tecnologías los arreglos asociativos se convierten en objetos de esas tecnologías y viceversa, al convertir datos de otras tecnologías a datos de php los datos de tipo objeto de otras tecnología se pueden convertir en arreglos asociativos de php.</p>
+
+<h4>¿Entonces para que sirven los objetos de PHP? ó ¿Cuando debería usar dichos tipos de datos?</h4>
+
+<p>Aunque en concepto y en su forma de transferir datos son lo mismo, un arreglo asociativo se diferencia de un objeto literal de PHP en que este ultimo cuenta con muchas mas características y funcionalidades, y a continuación veremos varias de esas características y veremos que problemas resuelve cada una.</p>
+
+<h3>Encapsulamiento y Comportamiento de los datos</h3>
+
+<p>Un objeto literal de PHP no solo contiene datos, también puede definir comportamiento para esos datos.</p>
+
+<p>Este comportamiento se crea a base de declarar funciones internas que operan con los datos del objeto y hacen referencia a estos pero entendiendo que dichos datos son parte de la misma unidad.</p>
+
+<p>En un arreglo asociativo podemos sin problema declarar funciones como valores, pero dentro de esas funciones no hay forma de detectar que se está dentro de una estructura, es es complicado intentar acceder a los demás datos dentro de la misma estructura.</p>
+
+<p>Por otro lado en los objetos tenemos el concepto de encapsulamiento, el cual es poder tratar los datos y funciones internos de un objeto como parte de una misma unidad y dentro de dicha unidad se permite referenciar de forma fácil a las demás partes del conjunto.</p>
+
+<p>Los datos encapsulados en objetos pasan a llamarse <strong>atributos</strong> y las funciones que definen el comportamiento de esos datos pasan a llamarse <strong>métodos</strong></p>
+
+<p>Los atributos y los métodos de un objeto se llaman en conjunto miembros.</p>
+
+
+<h3>Ocultamiento de los datos</h3>
+
+<p>Los objetos permiten de forma fácil controlar que datos pueden ser accedidos y modificados desde el exterior del objeto y cuales no.</p>
+
+<p>Trabajando solo con arreglos asociativos no es fácil evitar que los datos que estos contienen puedan ser accedidos o modificados por otros módulos u otras partes del mismo algoritmo.</p>
+
+<p>Tener un buen control del acceso a los datos de tu programa facilita el crear software mas seguro y robusto, ya que es mas fácil evitar errores por cambios inesperados en el estado de esos datos, ademas de que es más fácil hacer mantenimiento cuando puedes rastrear de forma clara que partes del código son las que acceden a los datos.</p>
+
+<h3>Abstracción</h3>
+
+<p>De la misma forma que se controla el acceso a los datos de un objeto se pueden ocultar las funcionalidades y así controlar que métodos pueden ser invocados desde cualquier parte del software y cuales están reservadas unicamente para ser usadas desde dentro del objeto.</p>
+
+<p>Mostrar solo los detalles mas importantes de las cosas y ocultar el resto de detalles es lo que se conoce como abstracción.</p>
+
+<p>Podemos representar conceptos e ideas de forma abstracta en nuestro código sin necesidad de usar objetos, pero con los objetos se vuelve mas claro, ya que literalmente podemos definir cuales son las funcionalidades visibles y palpables por el resto de módulos y partes del sistema.</p>
+
+
+<h3>Polimorfismo</h3>
+
+<p>A estas funcionalidades visibles y palpables de un objeto también se les conoce bajo el concepto de interfaces (superficie de contacto), y conociendo la interfaz que tiene un objeto podemos comunicarnos con el sin requerir muchos detalles de este.</p>
+
+<p>Pensemos en un aparato que da la hora, sin saber como funciona internamente algún aparato con interfaz de reloj podemos interactuar con el, sin importar si se trata de un reloj de pared, o de muñeca, o si es digital o análogo o sin en realidad se trata de otro aparato como un smartphone o un teléfono que simplemente tienen esa funcionalidad de dar la hora.</p>
+
+<p>Y por convención sabemos que un reloj debe primero dar la hora, si tiene un segundo valor o una segunda manecilla esta será para los minutos.</p>
+
+<p>Si vemos que algo tiene forma de reloj esperamos que funcione como tal y nos permita consultar la hora actual, y si por el contrario vemos que esa cosa no nos da la hora actual sabemos que esta descompuesto.</p>
+
+<p>A esta característica de poder tener cosas con diferentes formas y con diferentes funcionamientos internos pero que comparten una interfaz en común se le conoce en programación como <strong>Polimorfismo</strong></p>
+
+<p>En programación antes de crear los objetos podemos pensar en ideas y conceptos de forma abstracta y luego planear que debería haber en la superficie de contacto de estos objetos y declarar convenciones de como deben ser usados y que se espera de ellos para finalmente codificar objetos que implementarán estas interfaces y definiciones</p>
+
+<p>Luego podemos crear variaciones de estos mismos objetos o crear otros objetos completamente diferentes pero que respeten la misma interfaz.</p>
+
+<p>Y así sin mucho problema podemos crear código modular y extendible, con partes completamente intercambiables, las cuales serán más fácil y transparentes de mantener</p>
+
+<p>Ya que si intentamos cambiar algo o añadir código nuevo y este no respeta las reglas que definimos para la interfaz, el código ni siquiera correrá y PHP nos avisara de que hay una violación que debe ser reparada, y por el contrario si respetamos las interfaces el código funcionara como se espera</p>
+
+
+
+
 
 <p>La mejor forma y la principal forma de definir objetos es mediante clases.</p>
 
@@ -73,8 +141,6 @@ $Product = new Product;
 <p>Para poder declarar el comportamiento de un objeto se usa el formato que ya vimos antes para declarar funciones, solo que ahora estas funciones estarán dentro de las llaves que delimitan la clase.</p>
 
 <p>Y para permitir que estas funciones de clase puedan ser accedidas desde fuera del objeto las declaremos anteponiendoles la palabra reservada <strong>public</strong></p>
-
-<p>Los datos encapsulados en objetos se conocen como <strong>propiedades</strong> y las funciones encapsuladas en objectos se conocen como <strong>métodos</strong> y cuando para referirse a cualquiera de las dos cosas o a ambas en general se les conoce como <strong>miembros</strong></p>
 
 <div class="li-note">
 <p>Public y private se usan para controlar el nivel de visibilidad de los miembros de un objeto.</p>
@@ -194,9 +260,6 @@ echo "&lt;div&gt;
 -Composición
 -Herencia
 
-
-
-<p>Como evitas que la información de tus algoritmos sea accedida o modificada por otros módulos u otras partes del mismo algoritmo?</p>
 */
 
 
