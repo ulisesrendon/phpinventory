@@ -84,7 +84,7 @@ Los objetos son estructuras que permiten encapsular y agrupar datos y su comport
 
 <h3>Herencia</h3>
 
-<p>Otra característica importante de la programación orientada a objetos es la opción de poder tomar código de objetos para crear definiciones nuevas que reutilicen total o parcialmente el código existente y crear con esto nuevas variaciones variaciones de objetos que cuenten con nuevas funcionalidades ó que cambien el comportamiento previamente establecido y solo respeten las interfaces.</p>
+<p>Otra característica interesante de la programación orientada a objetos es la opción de poder tomar código de objetos para crear definiciones nuevas que reutilicen total o parcialmente el código existente y crear con esto nuevas variaciones variaciones de objetos que cuenten con nuevas funcionalidades ó que cambien el comportamiento previamente establecido y solo respeten las interfaces.</p>
 
 <p>A esta característica se le llama <strong>Herencia</strong> y aunque su comportamiento se puede emular en la programación sin tener que recurrir a objetos, con objetos lograr la herencia es extremadamente fácil.</p>
 
@@ -100,7 +100,19 @@ Los objetos son estructuras que permiten encapsular y agrupar datos y su comport
 
 <p>En PHP trabajar con objetos hace que la modularidad sea aún más fácil ya que al trabajar con estas estructuras podemos definir reglas simples para que el motor de PHP ensamble el software con los objetos necesarios según se van requiriendo.</p>
 
+<h3>Composición</h3>
 
+<p>La composición se basa en construir piezas de software juntando otras piezas mas pequeñas, básicamente sacarle todo el provecho a la modularidad</p>
+
+<p>Podemos definir objetos como atributos de otros objetos, lo que permite crear todo tipo de estructuras.</p>
+
+<p>Esta es otra forma de reutilizar código y es la mas recomendada, se recomienda incluso por sobre la herencia.</p>
+
+<p>Un código modular con piezas bien definidas y construidas con código limpio da lugar a poder componer y recomponer nuevas estructuras tan complejas según los casos de uso que enfrentemos lo requieran.</p>
+
+
+
+<h2>Aprendiendo a crear objetos en PHP</h2>
 
 <p>La mejor forma y la principal forma de definir objetos es mediante clases.</p>
 
@@ -263,18 +275,6 @@ echo "&lt;div&gt;
 <p>Las clases son planos de estructuras</p>
 
 <p>Mediante clases se define una interfaz para detallar como se puede interactuar con un objeto en particular</p>
-
-
-
--Ocultamiento
--Encapsulamiento
--Abstracción
-
--Modularidad
-
--Polimorfismo
--Composición
--Herencia
 
 */
 
