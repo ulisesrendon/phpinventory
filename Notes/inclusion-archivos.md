@@ -19,6 +19,8 @@ Como usar la inclusión de archivos para mantener el código organizado, modular
 
 <p>Afortunadamente PHP es muy flexible a la hora de permitirnos armar un software compuesto de múltiples módulos.</p>
 
+<h2>Aprendamos a organizar el código</h2>
+
 <p>Veamos mediante un ejemplo simple como hacer una ruptura de código Supongamos que tenemos un archivo que empieza a volverse una enorme pila de código:</p>
 ```
 ```php
@@ -34,21 +36,27 @@ const AVAILABLE_TAXES = [
     'tax2' => 0.08,
     // ...
 ];
+
 const MAX_LOGIN_ATTEMPTS = 10;
 const MAX_USERNAME_CHARACTERS = 16;
 
 const PRODUCTS_PER_PAGE = 20;
-function databaseConnection($args)
-{
-    // Código para conectar con la base de datos
-}
-function databaseSendCommands($args)
-{
-    // Código para enviar comandos a la base de datos
-}
-function databaseSendQuery($args)
-{
-    // Código para solicitar datos de la base de datos
+
+class DatabaseAccessLayer{
+    function databaseConnection($args)
+    {
+        // Código para conectar con la base de datos
+    }
+
+    function databaseSendCommands($args)
+    {
+        // Código para enviar comandos a la base de datos
+    }
+
+    function databaseSendQuery($args)
+    {
+        // Código para solicitar datos de la base de datos
+    }
 }
 function userController($args)
 {
@@ -70,6 +78,7 @@ function viewSignForm($args)
 {
     // Código para mostrar pantalla de acceso
 }
+
 function ecommerceController($args)
 {
     // Código para controlar rutas de los usuarios
@@ -78,6 +87,7 @@ function productSearch($args)
 {
     // Código para búsqueda de productos
 }
+
 function cartAddProduct($args)
 {
     // Código para añadir productos al carrito
@@ -91,33 +101,85 @@ function viewReportProductSales($args)
 ```html
 <p>Para cortar este código en rebanadas modulares lo primero será plantearnos que estructura de directorios deberíamos manejar.</p>
 
-<p>Lo mejor será siempre tener los directorios con nombres claros y una estructura simple de manera que la arquitectura del proyecto grite de que se trata cada cosa.</p>
+<p>Lo mejor será siempre tener los directorios con nombres claros y una estructura simple de manera que la arquitectura del proyecto sea tan clara que incluso se sienta grita de que se trata cada cosa.</p>
 
-<p>Aunque no siempre será posible, por ejemplo al decidir implementar algún framework poco flexible o al empezar a trabajar en un proyecto que ya tenga su propia estructura predefinida (muchas veces dictadas for Frameworks)</p>
+<p>Aunque no siempre será posible dejarlo tan claro, por ejemplo al decidir implementar algún framework o al empezar a trabajar en un proyecto ya existente, estos ya cuentan con estructuras predefinidas y muchas veces es poco clara y poco flexible.</p>
 
-<p>La idea general que aplica al menos a la mayoría de proyectos es la de separar las piezas del software en 4 conceptos:</p>
+<div class="li-note">
+    <p>Un <mark>Framework</mark> es una colección de piezas de software reutilizables que se emplean para ser mas eficientes a la hora de desarrollar.</p>
+</div>
+
+<p>La idea general que se aplica a la mayoría de proyectos es la de separar las piezas del software en al menos 4 conceptos:</p>
 
 <ul>
-    <li>Configuración</li>
-    <li>Framework</li>
-    <li>Módulos de terceros</li>
     <li>Módulos internos del programa en cuestión</li>
+    <li>Configuración</li>
+    <li>Framework e Infraestructura</li>
+    <li>Módulos de terceros</li>
 </ul>
 
-<p>Los frameworks y otros proyectos que algún día seguro te encontraras mantienen una estructura basada en estos conceptos principalmente y luego ya cada proyecto define varias capas extra para separar en aún mas conceptos los módulos internos del programa.</p>
-
-<p>La separación en capas minima que tienen demás proyectos para los módulos internos del programa sería:</p>
+<p>Luego ya cada proyecto define varias capas extra para separar en aún mas conceptos los módulos internos del programa. Las capas en las que se suelen separar serían:</p>
 
 <ul>
-    <li>Capa de presentación</li>
-    <li>Capa de datos</li>
     <li>Capa de dominio</li>
+    <li>Capa de datos</li>
+    <li>Capa de presentación</li>
 </ul>
 
-<p>La capa de dominio es donde viven las reglas que gobiernan el comportamiento y funcionalidades del software</p>
+<p>La capa de dominio es donde viven las reglas que gobiernan el comportamiento y funcionalidades del software.</p>
 
-<p></p>
+<p>Al ser esta capa el núcleo de un software, es la parte que conlleva mas mantenimiento y la que mas evoluciona y va cambiando conforme nacen nuevos requerimientos, por lo que identificar y separar los elementos de esta capa del resto de capas es muy importante.</p>
 
+<p>Basándonos en todo esto veamos cual sería una estructura base recomendada para los directorios de una aplicación en PHP:</p>
+
+<pre><code>config/ # Archivos de configuración
+public/ # Archivos visibles desde internet
+    index.php # Puerta de acceso a nuestra aplicación
+src/ # Código fuente de la aplicación
+vendor/ # Módulos de terceros</code></pre>
+
+<p>Esta estructura de directorios podría parecer rara de momento pero con el tiempo la normalizaremos y en un inicio no parece que se relacione directamente con la separación por conceptos que mencionamos, pero aún falta añadir el resto de conceptos y explicar que propósito cumple cada directorio.</p>
+
+<p>Con el directorio config creo que esta muy claro que clase de archivos agregaremos ahí.</p>
+
+<p>El directorio public es donde colocamos archivos estáticos normales de una web como: css, js, html, imágenes, etc.</p>
+
+<p>Por seguridad debemos bloquear el acceso a los archivos PHP de nuestro software, por ello es común encontrar la carpeta public un archivo index.php con la lógica para servir como puerta de entrada a la aplicación, y el servidor web se configura para enviar todas las peticiones a se archivo.</p>
+
+<p>La directorio vendor es el lugar donde el gestor de paquetes de PHP (Composer) normalmente descarga los módulos de terceros, aunque también podemos configurar el gestor para que descargue módulos que nosotros mismos hayamos creado.</p>
+
+<p>La carpeta src es la que contendrá el núcleo de la aplicación, dentro crearemos los directorios necesarios para ayudarnos a organizar el dominio de nuestro software, y hay varias formas de hacerlo.</p>
+
+<p>La forma con la que encontraremos muchos proyectos, sobre todo los que funcionan con frameworks de terceros es la que dentro del directorio principal inmediatamente añaden directorios extra para el resto de capas, dando una estructura como la siguiente: </p>
+
+<pre><code>config/ # Archivos de configuración
+public/ # Archivos visibles desde internet
+    index.php # Puerta de acceso a nuestra aplicación
+src/ # Código fuente de la aplicación
+    controllers/ # Código que comunica los datos con la interfaz de usuario
+    models/ # Código que gestiona los datos
+    views/  # Código que genera la interfaz de usuario
+vendor/ # Módulos de terceros</code></pre>
+
+<p>Esta estructura esta bien para apps pequeñas, pero para software mas robusto y con muchos módulos internos no se recomienda esta estructura, lo recomendable sería crear un directorio por módulo y luego dentro de cada módulo hacer la separación por capas, dejándonos con una estructura parecida a la siguiente:</p>
+
+<pre><code>config/ # Archivos de configuración
+public/ # Archivos visibles desde internet
+    index.php # Puerta de acceso a nuestra aplicación
+src/ # Código fuente de la aplicación
+    cart/
+        controllers/ # Código que comunica los datos con la interfaz de usuario
+        models/ # Código que gestiona los datos
+        views/  # Código que genera la interfaz de usuario
+    product/
+        controllers/ # Código que comunica los datos con la interfaz de usuario
+        models/ # Código que gestiona los datos
+        views/  # Código que genera la interfaz de usuario
+    user/
+        controllers/ # Código que comunica los datos con la interfaz de usuario
+        models/ # Código que gestiona los datos
+        views/  # Código que genera la interfaz de usuario
+vendor/ # Módulos de terceros</code></pre>
 ```
 
 ```php
