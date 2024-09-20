@@ -180,7 +180,22 @@ src/ # Código fuente de la aplicación
         models/ # Código que gestiona los datos
         views/  # Código que genera la interfaz de usuario
 vendor/ # Módulos de terceros</code></pre>
+
+
+<p>Una buena forma de mantener el código más legible y gestionable es separandolo en multiples archivos, y luego cargando esos archivos solo cuando sea necesario.</p>
+
+
+<p>Hay una instrucción en PHP para poder cargar código de otros archivos y es múy fácil de usar, el detalle es que viene en 4 estilos que habrá que aplicar según el contexto:</p>
+
+<ol>
+    <li>include</li>
+    <li>require</li>
+    <li>include_once</li>
+    <li>require_once</li>
+</ol>
 ```
+
+## Rutas relativas y rutas absolutas
 
 ```php
 include 'dir/file1';
