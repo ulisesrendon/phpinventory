@@ -3,7 +3,7 @@
 namespace App\Database\Migration;
 
 use App\Shared\Controller\DefaultController;
-use Lib\Http\Response;
+use Neuralpin\HTTPRouter\Response;
 
 class Migration extends DefaultController
 {

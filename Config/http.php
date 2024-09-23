@@ -2,13 +2,13 @@
 
 require __DIR__.'/../Config/routes.php';
 
-use Lib\Http\ControllerWrapped;
-use Lib\Http\Exception\MethodNotAllowedException;
-use Lib\Http\Exception\NotFoundException;
-use Lib\Http\Helper\RequestData;
-use Lib\Http\Response;
-use Lib\Http\RouteCollection;
-use Lib\Http\Router;
+use Neuralpin\HTTPRouter\ControllerWrapped;
+use Neuralpin\HTTPRouter\Exception\MethodNotAllowedException;
+use Neuralpin\HTTPRouter\Exception\NotFoundException;
+use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\Response;
+use Neuralpin\HTTPRouter\RouteCollection;
+use Neuralpin\HTTPRouter\Router;
 
 $_ENV['APP_DEBUG'] ??= 0;
 

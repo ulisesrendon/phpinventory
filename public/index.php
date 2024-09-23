@@ -1,6 +1,6 @@
 <?php
 
-use Lib\Http\ControllerWrapped;
+use Neuralpin\HTTPRouter\ControllerWrapped;
 
 require __DIR__.'/../vendor/autoload.php';
 require __DIR__.'/../Config/app.php';

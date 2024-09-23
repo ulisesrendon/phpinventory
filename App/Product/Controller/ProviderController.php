@@ -5,8 +5,8 @@ namespace App\Product\Controller;
 use App\Product\DAO\ProviderCommand;
 use App\Product\DAO\ProviderQuery;
 use App\Shared\Controller\DefaultController;
-use Lib\Http\Helper\RequestData;
-use Lib\Http\Response;
+use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\Response;
 
 class ProviderController extends DefaultController
 {

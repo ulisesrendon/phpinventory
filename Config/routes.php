@@ -5,7 +5,7 @@ use App\Product\Controller\ProductController;
 use App\Product\Controller\ProviderController;
 use App\Product\Controller\StockController;
 use App\Shared\Controller\DefaultController;
-use Lib\Http\RouteCollection as Routes;
+use Neuralpin\HTTPRouter\RouteCollection as Routes;
 
 Routes::any('/', fn() => 'Hello world!');
 Routes::any('/api/v1', [DefaultController::class, 'home']);

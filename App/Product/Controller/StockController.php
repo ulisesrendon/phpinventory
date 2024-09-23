@@ -5,8 +5,8 @@ namespace App\Product\Controller;
 use App\Product\DAO\StockCommand;
 use App\Product\DAO\StockQuery;
 use App\Shared\Controller\DefaultController;
-use Lib\Http\Helper\RequestData;
-use Lib\Http\Response;
+use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\Response;
 
 class StockController extends DefaultController
 {

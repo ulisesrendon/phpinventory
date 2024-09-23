@@ -3,7 +3,7 @@
 namespace App\Shared\Controller;
 
 use Lib\Database\DataBaseAccess;
-use Lib\Http\Response;
+use Neuralpin\HTTPRouter\Response;
 use PDO;
 
 class DefaultController
