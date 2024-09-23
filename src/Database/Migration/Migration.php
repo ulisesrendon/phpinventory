@@ -10,7 +10,7 @@ class Migration extends DefaultController
     public function start()
     {
         try {
-            $this->DataBaseAccess->executeCommand('CREATE table if not exists products(
+            $this->DataBaseAccess->command('CREATE table if not exists products(
                 id integer not null auto_increment primary key,
                 code varchar(255) null unique,
                 title varchar(255) null,
@@ -22,7 +22,7 @@ class Migration extends DefaultController
                 updated_at timestamp(0) null default now()
             )');
 
-            $this->DataBaseAccess->executeCommand("INSERT INTO 
+            $this->DataBaseAccess->command("INSERT INTO 
                 products (code, title, price)
                 VALUES 
                     ('700000001', 'Teclado Kumara Dragon Switches Blue', 1200),
@@ -30,7 +30,7 @@ class Migration extends DefaultController
                     ('700000003', 'Mouse Logitech G505 Hero', 1000)
             ");
 
-            $this->DataBaseAccess->executeCommand('CREATE table if not exists product_entries(
+            $this->DataBaseAccess->command('CREATE table if not exists product_entries(
                 id integer not null auto_increment primary key,
                 product_id bigint not null,
                 quantity integer not null,
@@ -43,7 +43,7 @@ class Migration extends DefaultController
                 updated_at timestamp(0) null default now()
             )');
 
-            $this->DataBaseAccess->executeCommand('INSERT INTO 
+            $this->DataBaseAccess->command('INSERT INTO 
                 product_entries (product_id, quantity, provider_id, cost)
                 VALUES 
                     (1, 10, 1, 800),
@@ -52,7 +52,7 @@ class Migration extends DefaultController
                     (3, 15, 3, 650)
             ');
 
-            $this->DataBaseAccess->executeCommand('CREATE table if not exists product_stocks(
+            $this->DataBaseAccess->command('CREATE table if not exists product_stocks(
                 id integer not null auto_increment primary key,
                 product_id bigint not null,
                 product_entry_id bigint null unique,
@@ -62,7 +62,7 @@ class Migration extends DefaultController
                 updated_at timestamp(0) null default now()
             )');
 
-            $this->DataBaseAccess->executeCommand('INSERT INTO 
+            $this->DataBaseAccess->command('INSERT INTO 
                 product_stocks (product_id, product_entry_id, stock)
                 VALUES 
                     (1, 1, 10),
@@ -71,7 +71,7 @@ class Migration extends DefaultController
                     (3, 4, 15)
             ');
 
-            $this->DataBaseAccess->executeCommand('CREATE table if not exists providers(
+            $this->DataBaseAccess->command('CREATE table if not exists providers(
                 id integer not null auto_increment primary key,
                 title varchar(255) null,
                 description varchar(255) null,
@@ -80,7 +80,7 @@ class Migration extends DefaultController
                 updated_at timestamp(0) null default now()
             )');
 
-            $this->DataBaseAccess->executeCommand("INSERT INTO 
+            $this->DataBaseAccess->command("INSERT INTO 
                 providers (title)
                 VALUES 
                     ('Provider #1 el principal'),

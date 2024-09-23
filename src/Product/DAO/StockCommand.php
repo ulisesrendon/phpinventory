@@ -2,15 +2,10 @@
 
 namespace App\Product\DAO;
 
-use App\Shared\Database\DataBaseAccess;
-use App\Shared\Database\DataBaseSendInsertTrait;
-use App\Shared\Database\DataBaseSendUpdateTrait;
+use App\Framework\Database\DataBaseAccess;
 
 class StockCommand
 {
-    use DataBaseSendInsertTrait;
-    use DataBaseSendUpdateTrait;
-
     public DataBaseAccess $DataBaseAccess;
 
     public function __construct(DataBaseAccess $DataBaseAccess)
@@ -27,7 +22,7 @@ class StockCommand
         ?string $expiration_date = null,
     ): bool|string|null {
 
-        return $this->sendInsert($this->DataBaseAccess, 'product_entries', [
+        return $this->DataBaseAccess->insert('product_entries', [
             'product_id' => $product_id,
             'quantity' => $quantity,
             'provider_id' => $provider_id,
@@ -39,17 +34,11 @@ class StockCommand
 
     public function deleteEntryById(int $id): bool
     {
-        return $this->DataBaseAccess->executeCommand('DELETE FROM product_entries WHERE id = :id', ['id' => $id]);
+        return $this->DataBaseAccess->delete('product_entries', $id);
     }
 
-    public function update(int $id, array $fields): ?bool
+    public function update(array $fields): ?bool
     {
-        if (empty($fields)) {
-            return null;
-        }
-
-        $fields['id'] = $id;
-
-        return $this->sendUpdate($this->DataBaseAccess, 'product_entries', $fields);
+        return $this->DataBaseAccess->update('product_entries', $fields);
     }
 }

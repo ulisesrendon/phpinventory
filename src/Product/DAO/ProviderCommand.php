@@ -2,15 +2,10 @@
 
 namespace App\Product\DAO;
 
-use App\Shared\Database\DataBaseAccess;
-use App\Shared\Database\DataBaseSendInsertTrait;
-use App\Shared\Database\DataBaseSendUpdateTrait;
+use App\Framework\Database\DataBaseAccess;
 
 class ProviderCommand
 {
-    use DataBaseSendInsertTrait;
-    use DataBaseSendUpdateTrait;
-
     public DataBaseAccess $DataBaseAccess;
 
     public function __construct(DataBaseAccess $DataBaseAccess)
@@ -22,25 +17,19 @@ class ProviderCommand
         string $title,
         string $description = '',
     ): bool|string|null {
-        return $this->sendInsert($this->DataBaseAccess, 'providers', [
+        return $this->DataBaseAccess->insert('providers', [
             'title' => $title,
             'description' => $description,
         ]);
     }
 
-    public function deleteByID(int $id): bool
+    public function delete(int $id): bool
     {
-        return $this->DataBaseAccess->executeCommand('DELETE FROM providers WHERE id = :id', ['id' => $id]);
+        return $this->DataBaseAccess->delete('providers', $id);
     }
 
-    public function update(int $id, array $fields): ?bool
+    public function update(array $fields): ?bool
     {
-        if (empty($fields)) {
-            return null;
-        }
-
-        $fields['id'] = $id;
-
-        return $this->sendUpdate($this->DataBaseAccess, 'providers', $fields);
+        return $this->DataBaseAccess->update('providers', $fields);
     }
 }

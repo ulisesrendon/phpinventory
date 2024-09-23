@@ -14,7 +14,7 @@ Routes::post('/api/v1/product', [ProductController::class, 'create']);
 Routes::get('/api/v1/product', [ProductController::class, 'list']);
 Routes::get('/api/v1/product/:id', [ProductController::class, 'getById']);
 Routes::patch('/api/v1/product/:id', [ProductController::class, 'update']);
-Routes::delete('/api/v1/product/:id', [ProductController::class, 'deleteById']);
+Routes::delete('/api/v1/product/:id', [ProductController::class, 'delete']);
 
 Routes::get('/api/v1/provider', [ProviderController::class, 'list']);
 Routes::post('/api/v1/provider', [ProviderController::class, 'create']);

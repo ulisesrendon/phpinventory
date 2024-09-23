@@ -2,7 +2,7 @@
 
 namespace App\Product\DAO;
 
-use App\Shared\Database\DataBaseAccess;
+use App\Framework\Database\DataBaseAccess;
 
 class StockQuery
 {
@@ -15,7 +15,7 @@ class StockQuery
 
     public function getByProductID(int $id): ?array
     {
-        return $this->DataBaseAccess->fetchQuery('SELECT 
+        return $this->DataBaseAccess->query('SELECT 
                 products.id as product_id,
                 product_stocks.id as stock_id,
                 product_entries.id as entry_id,
@@ -38,7 +38,7 @@ class StockQuery
 
     public function getProductDataByID(int $id): ?object
     {
-        return $this->DataBaseAccess->fetchFirst('SELECT 
+        return $this->DataBaseAccess->select('SELECT 
                 products.id, 
                 products.code,
                 products.title,
@@ -55,14 +55,14 @@ class StockQuery
 
     public function productIdExists(int $id): ?bool
     {
-        return $this->DataBaseAccess->fetchScalar('SELECT exists(
+        return $this->DataBaseAccess->scalar('SELECT exists(
             SELECT id from products where id = :id
         )', ['id' => $id]);
     }
 
     public function list(): ?array
     {
-        return $this->DataBaseAccess->fetchQuery('SELECT 
+        return $this->DataBaseAccess->query('SELECT 
                 products.id, 
                 products.code,
                 products.title,

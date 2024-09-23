@@ -2,7 +2,7 @@
 
 namespace App\Product\DAO;
 
-use App\Shared\Database\DataBaseAccess;
+use App\Framework\Database\DataBaseAccess;
 
 class ProviderQuery
 {
@@ -15,7 +15,7 @@ class ProviderQuery
 
     public function getByID(int $id): ?object
     {
-        return $this->DataBaseAccess->fetchFirst('SELECT 
+        return $this->DataBaseAccess->select('SELECT 
                 id, 
                 title,
                 description,
@@ -27,14 +27,14 @@ class ProviderQuery
 
     public function titleExists(string $title): ?bool
     {
-        return $this->DataBaseAccess->fetchScalar('SELECT exists(
+        return $this->DataBaseAccess->scalar('SELECT exists(
             SELECT title from providers where title like :title
         )', ['title' => $title]);
     }
 
     public function list(): ?array
     {
-        return $this->DataBaseAccess->fetchQuery('SELECT 
+        return $this->DataBaseAccess->query('SELECT 
                 id, 
                 title,
                 description,

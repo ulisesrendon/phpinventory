@@ -2,7 +2,7 @@
 
 namespace App\Product\DAO;
 
-use App\Shared\Database\DataBaseAccess;
+use App\Framework\Database\DataBaseAccess;
 
 class ProductQuery
 {
@@ -15,7 +15,7 @@ class ProductQuery
 
     public function getByID(int $id): ?array
     {
-        return $this->DataBaseAccess->fetchQuery('SELECT 
+        return $this->DataBaseAccess->query('SELECT 
                 products.id, 
                 products.code,
                 products.title,
@@ -33,14 +33,14 @@ class ProductQuery
 
     public function codeExists(string $code): ?bool
     {
-        return $this->DataBaseAccess->fetchScalar('SELECT exists(
+        return $this->DataBaseAccess->scalar('SELECT exists(
             SELECT products.code from products where products.code = :code
         )', ['code' => $code]);
     }
 
     public function list(): ?array
     {
-        return $this->DataBaseAccess->fetchQuery('SELECT 
+        return $this->DataBaseAccess->query('SELECT 
                 products.id, 
                 products.code,
                 products.title,

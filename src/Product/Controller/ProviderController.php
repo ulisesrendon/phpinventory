@@ -104,6 +104,7 @@ class ProviderController extends DefaultController
         }
 
         $fields = [
+            'id' => $id,
             'updated_at' => (new \DateTime)->format('Y-m-d H:i:s'),
         ];
         if (! is_null($title)) {
@@ -113,10 +114,7 @@ class ProviderController extends DefaultController
             $fields['description'] = (string) $description;
         }
 
-        $result = $this->ProviderCommand->update(
-            id: $id,
-            fields: $fields
-        );
+        $result = $this->ProviderCommand->update($fields);
 
         return Response::json([
             'status' => ! empty($result) ? 'success' : 'something went wrong',
@@ -125,7 +123,7 @@ class ProviderController extends DefaultController
 
     public function delete(int $id)
     {
-        $result = $this->ProviderCommand->deleteByID($id);
+        $result = $this->ProviderCommand->delete($id);
 
         return Response::json([
             'status' => ! empty($result) ? 'success' : 'something went wrong',

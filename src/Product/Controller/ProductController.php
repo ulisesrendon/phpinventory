@@ -130,6 +130,7 @@ class ProductController extends DefaultController
         }
 
         $fields = [
+            'id' => $id,
             'updated_at' => (new \DateTime)->format('Y-m-d H:i:s'),
         ];
 
@@ -146,10 +147,7 @@ class ProductController extends DefaultController
             $fields['price'] = (float) $price;
         }
 
-        $result = $this->ProductCommand->update(
-            id: $id,
-            fields: $fields
-        );
+        $result = $this->ProductCommand->update($fields);
 
         return Response::json([
             'status' => ! empty($result) ? 'success' : 'something went wrong',
@@ -157,9 +155,9 @@ class ProductController extends DefaultController
 
     }
 
-    public function deleteById(int $id)
+    public function delete(int $id)
     {
-        $result = $this->ProductCommand->deleteByID($id);
+        $result = $this->ProductCommand->delete($id);
 
         return Response::json([
             'status' => ! empty($result) ? 'success' : 'something went wrong',
