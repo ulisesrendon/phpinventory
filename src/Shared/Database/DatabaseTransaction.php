@@ -1,6 +1,6 @@
 <?php
 
-namespace Lib\Database;
+namespace App\Shared\Database;
 
 /**
  * It Works with Database Transactions

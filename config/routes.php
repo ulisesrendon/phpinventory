@@ -7,7 +7,7 @@ use App\Product\Controller\StockController;
 use App\Shared\Controller\DefaultController;
 use Neuralpin\HTTPRouter\RouteCollection as Routes;
 
-Routes::any('/', fn() => 'Hello world!');
+Routes::any('/', fn () => 'Hello world!');
 Routes::any('/api/v1', [DefaultController::class, 'home']);
 
 Routes::post('/api/v1/product', [ProductController::class, 'create']);

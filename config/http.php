@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__.'/../Config/routes.php';
+require __DIR__.'/routes.php';
 
 use Neuralpin\HTTPRouter\ControllerWrapped;
 use Neuralpin\HTTPRouter\Exception\MethodNotAllowedException;

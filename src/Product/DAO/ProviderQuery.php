@@ -2,7 +2,7 @@
 
 namespace App\Product\DAO;
 
-use Lib\Database\DataBaseAccess;
+use App\Shared\Database\DataBaseAccess;
 
 class ProviderQuery
 {

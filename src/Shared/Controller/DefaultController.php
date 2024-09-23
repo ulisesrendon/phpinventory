@@ -2,7 +2,7 @@
 
 namespace App\Shared\Controller;
 
-use Lib\Database\DataBaseAccess;
+use App\Shared\Database\DataBaseAccess;
 use Neuralpin\HTTPRouter\Response;
 use PDO;
 

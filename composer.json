@@ -22,8 +22,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "App/",
-            "Lib\\": "Lib/"
+            "App\\": "src/"
         }
     },
     "require-dev": {

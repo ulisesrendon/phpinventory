@@ -2,9 +2,9 @@
 
 namespace App\Product\DAO;
 
-use Lib\Database\DataBaseAccess;
-use Lib\Database\DataBaseSendInsertTrait;
-use Lib\Database\DataBaseSendUpdateTrait;
+use App\Shared\Database\DataBaseAccess;
+use App\Shared\Database\DataBaseSendInsertTrait;
+use App\Shared\Database\DataBaseSendUpdateTrait;
 
 class StockCommand
 {
@@ -39,7 +39,7 @@ class StockCommand
 
     public function deleteEntryById(int $id): bool
     {
-        return $this->DataBaseAccess->executeCommand('DELETE FROM product_entries WHERE id = :id', ['id' =>$id]);
+        return $this->DataBaseAccess->executeCommand('DELETE FROM product_entries WHERE id = :id', ['id' => $id]);
     }
 
     public function update(int $id, array $fields): ?bool

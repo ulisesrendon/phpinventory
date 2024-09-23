@@ -2,9 +2,9 @@
 
 namespace App\Product\DAO;
 
-use Lib\Database\DataBaseAccess;
-use Lib\Database\DataBaseSendInsertTrait;
-use Lib\Database\DataBaseSendUpdateTrait;
+use App\Shared\Database\DataBaseAccess;
+use App\Shared\Database\DataBaseSendInsertTrait;
+use App\Shared\Database\DataBaseSendUpdateTrait;
 
 class ProviderCommand
 {
