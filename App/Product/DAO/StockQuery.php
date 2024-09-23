@@ -33,7 +33,7 @@ class StockQuery
             left join providers on providers.id = product_entries.provider_id
             where product_stocks.product_id = :id
             order by product_entries.created_at desc
-        ', [$id]);
+        ', ['id' => $id]);
     }
 
     public function getProductDataByID(int $id): ?object
@@ -50,14 +50,14 @@ class StockQuery
                 products.id, 
                 products.code,
                 products.title
-        ', [$id]);
+        ', ['id' => $id]);
     }
 
     public function productIdExists(int $id): ?bool
     {
         return $this->DataBaseAccess->fetchScalar('SELECT exists(
             SELECT id from products where id = :id
-        )', [$id]);
+        )', ['id' => $id]);
     }
 
     public function list(): ?array

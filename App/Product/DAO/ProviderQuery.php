@@ -22,14 +22,14 @@ class ProviderQuery
                 updated_at
             from providers
             where deleted_at is null and id = :id
-        ', [$id]);
+        ', ['id' => $id]);
     }
 
     public function titleExists(string $title): ?bool
     {
         return $this->DataBaseAccess->fetchScalar('SELECT exists(
-            SELECT title from providers where title ilike :title
-        )', [$title]);
+            SELECT title from providers where title like :title
+        )', ['title' => $title]);
     }
 
     public function list(): ?array

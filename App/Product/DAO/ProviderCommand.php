@@ -8,7 +8,6 @@ use Lib\Database\DataBaseSendUpdateTrait;
 
 class ProviderCommand
 {
-
     use DataBaseSendInsertTrait;
     use DataBaseSendUpdateTrait;
 
@@ -31,7 +30,7 @@ class ProviderCommand
 
     public function deleteByID(int $id): bool
     {
-        return $this->DataBaseAccess->executeCommand('DELETE FROM providers WHERE id = :id', [$id]);
+        return $this->DataBaseAccess->executeCommand('DELETE FROM providers WHERE id = :id', ['id' => $id]);
     }
 
     public function update(int $id, array $fields): ?bool
@@ -42,6 +41,6 @@ class ProviderCommand
 
         $fields['id'] = $id;
 
-        $this->sendUpdate($this->DataBaseAccess, 'providers', $fields);
+        return $this->sendUpdate($this->DataBaseAccess, 'providers', $fields);
     }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Product\Controller;
 
-use Lib\Http\Response;
-use App\Product\DAO\ProviderQuery;
 use App\Product\DAO\ProviderCommand;
+use App\Product\DAO\ProviderQuery;
 use App\Shared\Controller\DefaultController;
+use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\Response;
 
 class ProviderController extends DefaultController
 {
@@ -43,10 +44,10 @@ class ProviderController extends DefaultController
         ]);
     }
 
-    public function create()
+    public function create(RequestData $Request)
     {
-        $title = $this->Request->body['title'] ?? null;
-        $description = $this->Request->body['description'] ?? '';
+        $title = $Request->getInput('title') ?? null;
+        $description = $Request->getInput('description') ?? '';
 
         if (empty($title)) {
             return Response::json([
@@ -72,11 +73,11 @@ class ProviderController extends DefaultController
 
     }
 
-    public function update(int $id)
+    public function update(int $id, RequestData $Request)
     {
 
-        $title = $this->Request->body['title'] ?? null;
-        $description = $this->Request->body['description'] ?? null;
+        $title = $Request->getInput('title') ?? null;
+        $description = $Request->getInput('description') ?? null;
 
         $OlderData = $this->ProviderQuery->getByID($id);
 

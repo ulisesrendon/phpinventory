@@ -1,7 +1,12 @@
 <?php
 
+use Neuralpin\HTTPRouter\ControllerWrapped;
+
 require __DIR__.'/../vendor/autoload.php';
 require __DIR__.'/../Config/app.php';
 
-$Response = require __DIR__.'/../Config/http.php';
-echo $Response;
+/**
+ * @var ControllerWrapped
+ */
+$Controller = require __DIR__.'/../Config/http.php';
+echo $Controller->getResponse();

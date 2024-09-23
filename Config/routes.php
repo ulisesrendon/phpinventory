@@ -1,13 +1,13 @@
 <?php
 
-use Lib\Http\Helper\RequestData;
 use App\Database\Migration\Migration;
-use Lib\Http\RouteCollection as Routes;
-use App\Product\Controller\StockController;
-use App\Shared\Controller\DefaultController;
 use App\Product\Controller\ProductController;
 use App\Product\Controller\ProviderController;
+use App\Product\Controller\StockController;
+use App\Shared\Controller\DefaultController;
+use Neuralpin\HTTPRouter\RouteCollection as Routes;
 
+Routes::any('/', fn() => 'Hello world!');
 Routes::any('/api/v1', [DefaultController::class, 'home']);
 
 Routes::post('/api/v1/product', [ProductController::class, 'create']);
@@ -28,11 +28,11 @@ Routes::post('/api/v1/stock', [StockController::class, 'create']);
 Routes::post('/api/v1/stock/:id/sync', [StockController::class, 'productStockSync']);
 Routes::delete('/api/v1/stock', [StockController::class, 'delete']);
 
-
 Routes::any('/api/v1/ping', fn () => 'pong');
 Routes::post('/api/v1/migrate', [Migration::class, 'start']);
-Routes::get('/api/v1/search/:search', function($search){
+Routes::get('/api/v1/search/:search', function ($search) {
     $search = explode('/', htmlspecialchars($search));
     $search = implode(' ', $search);
-    echo "Searching: $search";
+
+    return "Searching: $search";
 })->ignoreParamSlash();

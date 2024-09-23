@@ -1,13 +1,12 @@
 <?php
-namespace Lib\Database;
 
-use Lib\Database\DataBaseAccess;
+namespace Lib\Database;
 
 trait DataBaseSendUpdateTrait
 {
     public function sendUpdate(DataBaseAccess $DataBaseAccess, string $table, array $fields): ?bool
     {
-        if (empty($fields) || !isset($fields['id'])) {
+        if (empty($fields) || ! isset($fields['id'])) {
             return null;
         }
 

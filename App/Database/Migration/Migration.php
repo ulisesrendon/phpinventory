@@ -2,12 +2,12 @@
 
 namespace App\Database\Migration;
 
-use Lib\Http\Response;
 use App\Shared\Controller\DefaultController;
+use Neuralpin\HTTPRouter\Response;
 
 class Migration extends DefaultController
 {
-    public function start(array $args = [])
+    public function start()
     {
         try {
             $this->DataBaseAccess->executeCommand('CREATE table if not exists products(

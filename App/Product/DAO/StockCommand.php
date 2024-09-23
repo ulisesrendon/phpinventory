@@ -8,8 +8,9 @@ use Lib\Database\DataBaseSendUpdateTrait;
 
 class StockCommand
 {
-    use DataBaseSendUpdateTrait;
     use DataBaseSendInsertTrait;
+    use DataBaseSendUpdateTrait;
+
     public DataBaseAccess $DataBaseAccess;
 
     public function __construct(DataBaseAccess $DataBaseAccess)
@@ -38,7 +39,7 @@ class StockCommand
 
     public function deleteEntryById(int $id): bool
     {
-        return $this->DataBaseAccess->executeCommand('DELETE FROM product_entries WHERE id = :id', [$id]);
+        return $this->DataBaseAccess->executeCommand('DELETE FROM product_entries WHERE id = :id', ['id' =>$id]);
     }
 
     public function update(int $id, array $fields): ?bool

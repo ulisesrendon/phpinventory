@@ -2,31 +2,52 @@
 
 require __DIR__.'/../Config/routes.php';
 
-use Lib\Http\Router;
-use Lib\Http\Response;
-use Lib\Http\RouteCollection;
-use Lib\Http\Helper\RequestData;
-use Lib\Http\Exception\NotFoundException;
-use Lib\Http\Exception\MethodNotAllowedException;
+use Neuralpin\HTTPRouter\ControllerWrapped;
+use Neuralpin\HTTPRouter\Exception\MethodNotAllowedException;
+use Neuralpin\HTTPRouter\Exception\NotFoundException;
+use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\Response;
+use Neuralpin\HTTPRouter\RouteCollection;
+use Neuralpin\HTTPRouter\Router;
 
 $_ENV['APP_DEBUG'] ??= 0;
 
-try {
-    $Router = new Router(RequestData::createFromGlobals(), RouteCollection::$routes);
-    $Controller = $Router->getMatchingController();
+$Router = new Router;
+$RouteCollection = new RouteCollection;
+$RequestState = RequestData::createFromGlobals();
 
-    // Throw 404 server error if route doesn't exists
+try {
+
+    $Controller = $Router->getController($RouteCollection, $RequestState);
+
     if (is_null($Controller)) {
-        throw new NotFoundException();
+        throw new NotFoundException; // Throws 404 error when route doesn't exists
     }
+
 } catch (\Exception $Exception) {
     if ($Exception instanceof NotFoundException) {
-        $Controller = Response::template(__DIR__.'/../public/404.html', 404);
-    } else if ($Exception instanceof MethodNotAllowedException) {
-        $Controller = Response::template(__DIR__.'/../public/405.html', 405);
-    } else{
-        $Controller = $_ENV['APP_DEBUG'] == 0 ? Response::html($Exception, 500) : Response::template(__DIR__.'/../public/500.html', 500);
+        $Controller = new ControllerWrapped(
+            fn () => Response::template(__DIR__.'/../public/404.html', 404),
+            $RequestState,
+        );
+    } elseif ($Exception instanceof MethodNotAllowedException) {
+        $Controller = new ControllerWrapped(
+            fn () => Response::template(__DIR__.'/../public/405.html', 405),
+            $RequestState,
+        );
+    } else {
+        if ($_ENV['APP_DEBUG'] != 0) {
+            $Controller = new ControllerWrapped(
+                fn () => Response::html($Exception, 500),
+                $RequestState,
+            );
+        } else {
+            $Controller = new ControllerWrapped(
+                fn () => Response::template(__DIR__.'/../public/500.html', 500),
+                $RequestState,
+            );
+        }
     }
 }
 
-return (string) $Controller;
+return $Controller;

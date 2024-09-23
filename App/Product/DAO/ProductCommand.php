@@ -8,7 +8,6 @@ use Lib\Database\DataBaseSendUpdateTrait;
 
 class ProductCommand
 {
-
     use DataBaseSendInsertTrait;
     use DataBaseSendUpdateTrait;
 
@@ -22,7 +21,7 @@ class ProductCommand
     /**
      * Save new product data
      *
-     * @param  string  $descriptionf
+     * @param  string  $description
      * @return bool|int|null
      */
     public function create(
@@ -31,7 +30,7 @@ class ProductCommand
         string $description = '',
         float $price = 0,
     ): null|bool|int|string {
-        
+
         return $this->sendInsert($this->DataBaseAccess, 'products', [
             'code' => $code,
             'title' => $title,
@@ -42,7 +41,7 @@ class ProductCommand
 
     public function deleteByID(int $id): bool
     {
-        return $this->DataBaseAccess->executeCommand('DELETE FROM products WHERE id = :id', [$id]);
+        return $this->DataBaseAccess->executeCommand('DELETE FROM products WHERE id = :id', ['id' => $id]);
     }
 
     public function update(int $id, array $fields): ?bool
@@ -53,6 +52,6 @@ class ProductCommand
 
         $fields['id'] = $id;
 
-        $this->sendUpdate($this->DataBaseAccess, 'products', $fields);
+        return $this->sendUpdate($this->DataBaseAccess, 'products', $fields);
     }
 }

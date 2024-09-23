@@ -2,10 +2,11 @@
 
 namespace App\Product\Controller;
 
-use Lib\Http\Response;
-use App\Product\DAO\StockQuery;
 use App\Product\DAO\StockCommand;
+use App\Product\DAO\StockQuery;
 use App\Shared\Controller\DefaultController;
+use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\Response;
 
 class StockController extends DefaultController
 {
@@ -50,9 +51,9 @@ class StockController extends DefaultController
 
     }
 
-    public function create()
+    public function create(RequestData $Request)
     {
-        $stock = $this->Request->body['stock'] ?? null;
+        $stock = $Request->getInput('stock') ?? null;
 
         if (empty($stock) || gettype($stock) != 'array') {
             return Response::json([
@@ -126,9 +127,9 @@ class StockController extends DefaultController
 
     }
 
-    public function delete()
+    public function delete(RequestData $Request)
     {
-        $entries = $this->Request->body['entries'] ?? null;
+        $entries = $Request->getInput('entries') ?? null;
 
         if (! is_array($entries) || empty($entries)) {
             return Response::json([
