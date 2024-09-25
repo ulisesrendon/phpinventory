@@ -1,17 +1,29 @@
 
 # <h1>Separar, organizar y usar código en multiples archivos</h1>
 
+https://kevinsmith.io/modern-php-without-a-framework/
 https://dev.to/anwar_sadat/mastering-php-file-paths-simplifying-your-projects-structure-650
-
-
 https://www.nikolaposa.in.rs/blog/2017/01/16/on-structuring-php-projects/
+
+
+https://medium.com/@i.vikash/common-trade-offs-in-software-development-13d6f322e83b
+
+https://medium.com/@i.vikash/unlocking-architectural-patterns-real-life-examples-for-easy-understanding-9f7661689f79
+https://medium.com/@i.vikash/understanding-the-building-blocks-architectural-styles-vs-ac84d934f233
+https://medium.com/@i.vikash/design-patterns-in-everyday-life-when-did-you-use-one-today-98ab74456ce6
+
+https://medium.com/@i.vikash/the-positive-and-negative-aspects-of-chatgpt-for-me-as-a-software-developers-48e5c653c43a
+
+
+https://medium.com/@i.vikash/understanding-malware-exploring-the-world-of-cyber-threats-9ad2182d94b1
+https://medium.com/@i.vikash/protecting-the-cloud-common-malware-entry-points-dcf1869e5086
 
 Como usar la inclusión de archivos para mantener el código organizado, modular y mantenible
 
 ```html
 <p>Conforme van creciendo las funcionalidades de nuestro software cada vez tendremos más líneas de código y no es para nada recomendable sumar miles de líneas en un solo archivo, por lo que es necesario desde un inicio estar preparados para dividir nuestro software en partes mas pequeñas y modulares.</p>
 
-<p>También esta la opción de que necesitemos usar módulos creados por otras personas, por lo que será necesario que nuestro código desde un inicio sea compatible con código de terceros.</p>
+<p>También esta la opción de que necesitemos usar módulos creados por otras personas, por lo que es muy útil que nuestro código desde un inicio sea compatible con código de terceros.</p>
 
 <p>Hay muchas formas diferentes de crear directorios para organizar los módulos de nuestro software, y hay varias formas de cortar archivos grandes en rebanadas mas pequeñas y crear así módulos más pequeños.</p>
 
@@ -185,7 +197,7 @@ vendor/ # Módulos de terceros</code></pre>
 <p>Una buena forma de mantener el código más legible y gestionable es separandolo en multiples archivos, y luego cargando esos archivos solo cuando sea necesario.</p>
 
 
-<p>Hay una instrucción en PHP para poder cargar código de otros archivos y es múy fácil de usar, el detalle es que viene en 4 estilos que habrá que aplicar según el contexto:</p>
+<p>Hay una instrucción en PHP para poder cargar código de otros archivos y es múy fácil de usar, el detalle es que viene en 4 estilos que habrá que aplicar según el caso:</p>
 
 <ol>
     <li>include</li>

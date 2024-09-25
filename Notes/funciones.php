@@ -59,6 +59,7 @@ Al llamar a la función dos veces, ejecutaremos las instrucciones que encapsula 
 Para definir el argumento de una función debemos usar la misma sintaxis que para una variable y asignar un nombre de variable que contendrá el valor y lo pasaremos a la función  usando los paréntesis de esta, la función quedara de la siguiente manera:</p>
 */
 
+/*
 function taxPrice($value)
 {
     $taxedValue = $value * (1 + 0.16); // Aplicamos el impuesto 
@@ -66,16 +67,15 @@ function taxPrice($value)
     echo "Valor sin impuesto: \${$value}<br>";
     echo "Valor con impuesto (16%): \${$taxedValue}<br>";
 }
+*/
 
 /*
 Ahora podemos llavar nuestra función pasandole diferentes valores y ahora si estaremos reutilizando nuestro código, par esto al invocar la función debemos pasar el valor neceasrio entre los parentesis de la función tal que así:
-*/
 
 taxPrice(100);
 taxPrice(458);
 taxPrice(299);
 
-/*
 Valor sin impuesto: $100<br>
 Valor con impuesto (16%): $116<br>
 

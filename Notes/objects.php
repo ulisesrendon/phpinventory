@@ -2,6 +2,11 @@
 
 /*
 
+https://kevinsmith.io/sanitize-your-inputs/
+
+https://medium.com/@i.vikash/software-design-principles-building-a-solid-foundation-for-your-code-8ad92987f7d9
+https://medium.com/@i.vikash/difference-between-cohesion-and-coupling-with-real-life-example-fc367034da00
+
 <h1>Objetos en PHP</h1>
 
 Los objetos son estructuras que permiten encapsular y agrupar datos y su comportamiento, ocultando los detalles mas complejos y solo exponiendo los detalles necesarios promoviendo la abstracción y la modularidad.
@@ -142,7 +147,7 @@ $object = new NombreDeLaClase;
 
 <p>Creemos una clase que represente esto:</p>
 
-<pre><code>*/
+<pre><code>
 class Product
 {
     private string $title = 'Pasta dental';
@@ -152,7 +157,7 @@ class Product
 }
 
 $Product = new Product;
-/*</code></pre>
+</code></pre>
 
 <p>Ahora tenemos una clase producto que agrupa y oculta sus datos, simplemente definimos una variable para cada dato requerido y declaramos el tipo de dato, y antes de cada variable usamos la palabra <strong>private</strong> que es el indicativo de que el dato debe estar oculto y asi evitar que pueda ser accedido desde el exterior del objeto.</p>
 
