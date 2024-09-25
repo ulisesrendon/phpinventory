@@ -7,9 +7,9 @@ https://kevinsmith.io/sanitize-your-inputs/
 https://medium.com/@i.vikash/software-design-principles-building-a-solid-foundation-for-your-code-8ad92987f7d9
 https://medium.com/@i.vikash/difference-between-cohesion-and-coupling-with-real-life-example-fc367034da00
 
-<h1>Objetos en PHP</h1>
+<h1>Programación Orientada a Objetos en PHP</h1>
 
-Los objetos son estructuras que permiten encapsular y agrupar datos y su comportamiento, ocultando los detalles mas complejos y solo exponiendo los detalles necesarios promoviendo la abstracción y la modularidad.
+La programación orientada a objetos es un paradigma en el que se encapsulan datos y su comportamiento para dar lugar a estructuras con la que se representan en código ideas y conceptos de forma abstracta
 
 <div class="li-note">Aviso: Te adelanto que trabajar con objetos es otro paradigma que puede que en un inicio se vea muy verboso y complicado, aún así te recomiendo fuertemente terminar de estudiar este apartado y te aseguro que con algo de paciencia se volverá más fácil y cómodo y te sera de mucha utilidad para poder resolver y gestionar problemas que con otros paradigmas sería mas complicado.</div>
 
@@ -34,6 +34,8 @@ Los objetos son estructuras que permiten encapsular y agrupar datos y su comport
 <h4>¿Entonces para que sirven los objetos de PHP? ó ¿Cuando debería usar dichos tipos de datos?</h4>
 
 <p>Aunque en concepto y en su forma de transferir datos son lo mismo, un arreglo asociativo se diferencia de un objeto literal de PHP en que este ultimo cuenta con muchas mas características y funcionalidades, y a continuación veremos varias de esas características y veremos que problemas resuelve cada una.</p>
+
+<h2>Características de la Programación Orientada a Objetos</h2>
 
 <h3>Encapsulamiento</h3>
 
@@ -115,15 +117,28 @@ Los objetos son estructuras que permiten encapsular y agrupar datos y su comport
 
 <p>Un código modular con piezas bien definidas y construidas con código limpio da lugar a poder componer y recomponer nuevas estructuras tan complejas según los casos de uso que enfrentemos lo requieran.</p>
 
+<h2>En resumen</h2>
+
+<p>Los objectos permiten de forma fácil organizar y reutilizar código.</p>
+
+<p>Permiten pasar de un montón de variables y funciones sueltas que podrían o no estar relacionados entre si a capsulas que agrupan datos y su comportamiento y que definen una interfaz que detalla la forma en la que los objectos se conectan e interactúan con otros objetos y otros módulos</p>
+
+<p>Los objetos promueven el trabajar con abstracciones, que consiste en ocultar los detalles complejos y enfocarse solo en determinadas propiedades de las cosas.</p>
+
+<p>Los objetos que comparten la misma interfaz pueden ser intercambiados entre si, esto facilita la modularidad y la reutilización de código</p>
 
 
-<h2>Aprendiendo a crear objetos en PHP</h2>
 
-<p>La mejor forma y la principal forma de definir objetos es mediante clases.</p>
 
-<p>Las clases son el plano en donde se detallan las características de los objetos y con solo una clase se pueden generar muchos objetos, por lo que son muy útiles para reutilizar código.</p>
+<h1>Introducción a los objetos en PHP</h1>
 
-<p>Para crear un objeto a partir de una clase se usa la palabra clave de PHP <strong>new</strong></p>
+Los objetos son estructuras que permiten encapsular y agrupar datos y su comportamiento, ocultando los detalles mas complejos y solo exponiendo los detalles necesarios promoviendo la abstracción y la modularidad.
+
+<p>La principal forma de definir objetos en PHP es mediante unas estructuras especiales llamadas clases.</p>
+
+<p>Las clases son el plano en donde se detallan las características de los objetos y con solo definir una unica clase se pueden generar muchos objetos, por lo que son muy útiles para reutilizar código.</p>
+
+<p>Generar objetos a partir de clases se conoce como <strong>instanciar</strong> y para llevarlo a cabo se usa la palabra clave de PHP <strong>new</strong></p>
 
 <pre><code>
 */
@@ -134,7 +149,7 @@ $object = new NombreDeLaClase;
 /*
 </code></pre>
 
-<p>Para entender como funciona esto tenemos que ver algún ejemplo real.</p>
+<p>Para entender como es que esto funciona tenemos que ilustrarlo con código que resuelva problemas reales.</p>
 
 <p>Pensemos por ejemplo en un producto de una tienda en línea, este producto debería contar con los siguientes datos:</p>
 
@@ -217,17 +232,12 @@ class Product
 }
 
 $Product = new Product;
-$title = $Product->getTitle();
-$description = $Product->getDescription();
-$price = $Product->getPrice();
-$stock = $Product->getStock();
-
-echo "&lt;div&gt;
-    &lt;h4&gt;{$title}&lt;/h4&gt;
-    &lt;p&gt;{$description}&lt;/p&gt;
-    &lt;p&gt;Precio: \${$price}}&lt;/p&gt;
-    &lt;p&gt;Existencias: {$stock}&lt;/p&gt;
-&lt;/div&gt;";
+echo '&lt;div&gt;
+    &lt;h4&gt;'.$Product->getTitle().'&lt;/h4&gt;
+    &lt;p&gt;'.$Product->getDescription().'&lt;/p&gt;
+    &lt;p&gt;Precio: $'.$Product->getPrice().'&lt;/p&gt;
+    &lt;p&gt;Existencias: '.$Product->getStock().'&lt;/p&gt;
+&lt;/div&gt;';
 /*</code></pre>
 
 <div class="code-sample" data-url="objetos-ejemplo-1.php">
@@ -239,26 +249,14 @@ echo "&lt;div&gt;
     &lt;/div&gt;
 </div>
 
-<p>Hasta aquí pudiera parecer que con clases y objetos estamos haciendo varios pasos extra innecesarios para poder hacer algo que con simples variables o con un arreglo asociativo podríamos haber hecho en menos lineas de código.</p>
+<p>Hasta aquí pudiera parecer que con clases y objetos estamos haciendo varios pasos extra e innecesarios para poder hacer algo que con simples variables o con un arreglo asociativo podríamos haber hecho en menos lineas de código, pero hay que recordar que hacemos todo esto para poder <strong>proteger la integridad de los datos</strong>,</p>
 
-<p>Hay que recordar que hacemos todo esto para poder proteger los datos para que no sean modificados, si ponemos atención al código, no hay forma alguna de modificar los valores del producto mientras se ejecuta el programa.</p>
+<p>Si ponemos atención al código veremos que no hay forma alguna de modificar los valores del producto mientras se ejecuta el programa.</p>
+
 
 
 
 <p>Hay dos maneras para crear objetos, una de ellas es la de convertir arreglos en objetos, pero de esta forma no podemos controlar el ocultamiento y el encapsulamiento.</p>
-
-
-<h2>Resumen de los objetos en PHP</h2>
-
-<p>Los objectos permiten de forma fácil organizar y reutilizar código.</p>
-
-<p>Permiten pasar de un montón de variables y funciones sueltas que podrían o no estar relacionados entre si a capsulas que agrupan datos y su comportamiento y que definen una interfaz que detalla la forma en la que los objectos se conectan e interactúan con otros objetos y otros módulos</p>
-
-<p>Los objetos promueven el trabajar con abstracciones, que consiste en ocultar los detalles complejos y enfocarse solo en determinadas propiedades de las cosas.</p>
-
-<p>Los objetos que comparten la misma interfaz pueden ser intercambiados entre si, esto facilita la modularidad y la reutilización de código</p>
-
-
 
 <p>Mostrar solo los detalles mas importantes de las cosas y ocultar el resto facilita la abstracción de ideas.</p>
 
