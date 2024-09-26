@@ -194,17 +194,22 @@ src/ # Código fuente de la aplicación
 vendor/ # Módulos de terceros</code></pre>
 
 
-<p>Una buena forma de mantener el código más legible y gestionable es separandolo en multiples archivos, y luego cargando esos archivos solo cuando sea necesario.</p>
 
 
-<p>Hay una instrucción en PHP para poder cargar código de otros archivos y es múy fácil de usar, el detalle es que viene en 4 estilos que habrá que aplicar según el caso:</p>
+<p>Una buena forma de mantener nuestro código más legible y gestionable es separarlo en multiples archivos, y luego cargar esos archivos solo cuando se requiera.</p>
 
-<ol>
+<p>A php podemos darle en cualquier momento la instrucción de cargar en el programa multiples archivos con más código y así podemos crear software complejo compuesto de piezas de software mas pequeñas.</p>
+
+<p>Aunque existe el detalle de que la instrucción para cargar mas archivos viene en 4 estilos que habrá que aplicar según el caso:</p>
+
+<ol type="1">
     <li>include</li>
     <li>require</li>
     <li>include_once</li>
     <li>require_once</li>
 </ol>
+
+<p>Las instrucciones</p>
 ```
 
 ## Rutas relativas y rutas absolutas
