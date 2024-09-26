@@ -26,6 +26,8 @@ Step 5: Verify the Installation
 1. Open Command Prompt.
 2. |Type php -v and press Enter. You should see the PHP version information.
 
+
+
 Step 6: Configure PHP with a Web Server (Optional)
 If you want to use PHP with a web server like Apache or IIS, you’ll need to configure it:
 
@@ -38,12 +40,8 @@ LoadModule php_module "C:/php/php8apache2_4.dll"
 AddHandler application/x-httpd-php .php
 PHPIniDir "C:/php"
 
-1. Restart Apache.
+4. Restart Apache.
 
-Using IIS
-1. Install IIS from the Windows Features.
-2. Install thePHP Manager for IIS.
-3. Open IIS Manager and configure PHP using the PHP Manager.
 
 Step 7: Create a Test PHP File
 1. Create a new file named info.php in your web server’s root directory.
