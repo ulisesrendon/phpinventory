@@ -168,5 +168,76 @@ require __DIR__.'/../user/data/User.php'; // /var/www/project/user/data/User.php
 
 ## Usando la sentencia return en archivos a insertar
 
+<p>Es posible usar la sentencia <strong>return</strong> en un archivo que se desea incluir para obtener solo un valor de este y poder asignar ese valor resultante a una nueva variable o constante con el nombre deseado en el archivo que llama.</p>
+
+<p>Para ejemplificarlo veamos un caso común, incluir archivos con variables de configuración.</p>
+
+<p>Debido a la naturaleza de las variables en PHP al manejar multiples archivos podríamos reasignar sin querer alguna</p>
+
+<p>Para protegernos de esto podemos tener multiples archivos que retornen arreglos con los datos de configuración y luego ya en nuestro archivo principal armaremos el programa asignando los valores resultantes en variables o constantes con un nombre propio del contexto.</p>
+
+<p>Para ejemplificarlo veamos cuando se tienen datos de configuración para multiples servidores de bases de datos o para multiples servidores de correo o servidores de cualquier otra aplicación.</p>
+
+```php
+# project/config/db_products.php
+return [
+    'host' => 'localhost',
+    'name' => 'productdb',
+    'user' => 'root',
+    'password' => 'l0r3m123',
+    'port' => 5432,
+];
+```
+
+```php
+# project/config/db_users.php
+return [
+    'host' => 'localhost',
+    'name' => 'userdb',
+    'user' => 'root',
+    'password' => 'l0r3m321',
+    'port' => 5432,
+];
+```
+
+```php
+# project/config/mail_contact.php
+return [
+    'driver' => 'smtp',
+    'host' => 'localhost',
+    'name' => 'Contacto Empresa',
+    'username' => 'contacto@empresa.test',
+    'password' => 'l0r3m312',
+    'port' => 465,
+];
+```
+
+<p>Añadamos multiples archivos de configuración en un directorio especifico para ello y luego mandemos a llamar todo desde un archivo index.php</p>
+
+```php
+# project/public/index.php
+
+const CONFIG = [
+    'database' => [
+        'product' => require __DIR__.'/../config/db_products.php',
+        'user' => require __DIR__.'/../config/db_users.php',
+    ],
+    'mail' => [
+        'contact' => require __DIR__.'/../config/db_products.php',
+    ]
+];
+
+echo 'Connecting to database: '.CONFIG['database']['product']['host'].':'.CONFIG['']['name'].'@'.CONFIG['']['user']; // Connecting to database: localhost:productdb@root<br>
+echo 'Connecting to mail server: '.CONFIG['']['host'].':'.CONFIG['']['username']; // Connecting to mail server: localhost:contacto@empresa.test<br>
+echo 'Connecting to database: '.CONFIG['']['host'].':'.CONFIG['']['name'].'@'.CONFIG['']['user']; // Connecting to database: localhost:userdb@root<br>
+```
+
+<p>Al trabajar de esta forma podemos definir multiples variables de configuración en multiples archivos sin tener que pensar en nombres especiales con sus prefijos par evitar que colisionen con nombres de variables en otros archivos y al asignar esos valores a una constante en el archivo PHP podemos </p>
 
 ## En resumen
+
+<p>Separa tu software en multiples piezas pequeñas y luego incluye las que necesites en tu programa según sea el caso.</p>
+
+<p>Usa include para insertar archivos que no sean indispensables para la ejecución de tu script, pero usa require cuando quieras usar archivos imprescindibles.</p>
+
+<p>Usa las instrucciones include_once y require_once para evitar problemas cuando se vaya a importar el mismo archivo multiples veces.</p>
