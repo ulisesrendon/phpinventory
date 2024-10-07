@@ -120,13 +120,51 @@ project/
     public/
         index.php
 ```
-<p>Si dejamos el código como lo teníamos antes fallará por el tema de la ruta relativa.</p>
+<p>Si dejamos el código como lo teníamos antes fallará por el tema de la ruta relativa y tendremos un resultado como el siguiente:</p>
 
 ```php
 # project/public/index.php
-require '../user/data/User.php'; 
+require '../user/data/User.php'; // project/user/data/User.php
 ```
 
+```
+PHP Warning:  require(../helper/UserEncrypt.php): Failed to open stream: No such file or directory in /var/www/project/user/data/user.php on line 3 
+PHP Warning:  Uncaught Error: Failed opening required '../helper/UserEncrypt.php' (include_path='.:/usr/share/php') in /var/www/project/user/data/user.php:3
+Stack trace:
+#0 {main}
+  thrown in php shell code on line 1
+```
+
+<p>Esto es debido a que al incluir el archivo User en public/index.php, es como si copiáramos el contenido de este archivo, por lo que tendríamos un código equivalente al siguiente:</p>
+
+```php
+# project/public/index.php
+require '../helper/PasswordEncrypt.php'; // project/helper/PasswordEncrypt.php
+```
+
+<p>El cual esta buscando al archivo PasswordEncrypt dentro de un directorio helper a la misma altura del directorio public, lo cual no es correcto.</p>
+
+<p>Para solucionar este inconveniente PHP nos proporciona varias herramientas, una de ellas es la constante mágica <strong>__DIR__</strong>.</p>
+
+<p>Esta constante nos dará la ruta absoluta del directorio de trabajo del archivo original donde se halla definido</p>
+
+<p>Usando esta constante antes de una ruta de un archivo podremos calcular su ruta independiente del sistema e independiente del archivo donde se llame.</p>
+
+<p>Modificando el archivo User.php para añadir la constante mágica tendríamos:</p>
+
+```php
+# project/user/data/User.php
+require __DIR__.'/../helper/PasswordEncrypt.php'; // /var/www/project/user/helper/PasswordEncrypt.php
+```
+
+<p>Y usando la misma técnica en el archivo index.php, tendríamos:</p>
+
+```php
+# project/public/index.php
+require __DIR__.'/../user/data/User.php'; // /var/www/project/user/data/User.php
+```
+
+<p>De esta forma finalmente habríamos resuelto todos nuestros problemas a la hora de incluir archivos extra en nuestro programa de PHP.</p>
 
 ## Usando la sentencia return en archivos a insertar
 
