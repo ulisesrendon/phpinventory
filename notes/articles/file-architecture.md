@@ -20,6 +20,7 @@ https://medium.com/@i.vikash/protecting-the-cloud-common-malware-entry-points-dc
 
 Como usar la inclusión de archivos para mantener el código organizado, modular y mantenible
 
+
 ```html
 <p>Conforme van creciendo las funcionalidades de nuestro software cada vez tendremos más líneas de código y no es para nada recomendable sumar miles de líneas en un solo archivo, por lo que es necesario desde un inicio estar preparados para dividir nuestro software en partes mas pequeñas y modulares.</p>
 
@@ -192,29 +193,3 @@ src/ # Código fuente de la aplicación
         models/ # Código que gestiona los datos
         views/  # Código que genera la interfaz de usuario
 vendor/ # Módulos de terceros</code></pre>
-
-
-
-
-<p>Una buena forma de mantener nuestro código más legible y gestionable es separarlo en multiples archivos, y luego cargar esos archivos solo cuando se requiera.</p>
-
-<p>A php podemos darle en cualquier momento la instrucción de cargar en el programa multiples archivos con más código y así podemos crear software complejo compuesto de piezas de software mas pequeñas.</p>
-
-<p>Aunque existe el detalle de que la instrucción para cargar mas archivos viene en 4 estilos que habrá que aplicar según el caso:</p>
-
-<ol type="1">
-    <li>include</li>
-    <li>require</li>
-    <li>include_once</li>
-    <li>require_once</li>
-</ol>
-
-<p>Las instrucciones</p>
-```
-
-## Rutas relativas y rutas absolutas
-
-```php
-include 'dir/file1';
-require 'dir/file2';
-```
