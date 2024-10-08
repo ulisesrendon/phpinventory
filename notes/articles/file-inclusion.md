@@ -227,12 +227,12 @@ const CONFIG = [
     ]
 ];
 
-echo 'Connecting to database: '.CONFIG['database']['product']['host'].':'.CONFIG['']['name'].'@'.CONFIG['']['user']; // Connecting to database: localhost:productdb@root<br>
-echo 'Connecting to mail server: '.CONFIG['']['host'].':'.CONFIG['']['username']; // Connecting to mail server: localhost:contacto@empresa.test<br>
-echo 'Connecting to database: '.CONFIG['']['host'].':'.CONFIG['']['name'].'@'.CONFIG['']['user']; // Connecting to database: localhost:userdb@root<br>
+echo 'Connecting to database: '.CONFIG['database']['product']['host'].':'.CONFIG['database']['product']['name'].'@'.CONFIG['database']['product']['user']; // Connecting to database: localhost:productdb@root<br>
+echo 'Connecting to mail server: '.CONFIG['mail']['contact']['host'].':'.CONFIG['mail']['contact']['username']; // Connecting to mail server: localhost:contacto@empresa.test<br>
+echo 'Connecting to database: '.CONFIG['database']['user']['host'].':'.CONFIG['database']['user']['name'].'@'.CONFIG['database']['user']['user']; // Connecting to database: localhost:userdb@root<br>
 ```
 
-<p>Al trabajar de esta forma podemos definir multiples variables de configuración en multiples archivos sin tener que pensar en nombres especiales con sus prefijos par evitar que colisionen con nombres de variables en otros archivos y al asignar esos valores a una constante en el archivo PHP podemos </p>
+<p>Al trabajar de esta forma podemos definir multiples variables de configuración en multiples archivos sin tener que pensar en nombres especiales para cada uno o en prefijos para evitar que colisionen con nombres de variables en otros archivos y de forma fácil podemos continuar añadiendo aún mas variables de configuración conforme vayan surgiendo.</p>
 
 ## En resumen
 
