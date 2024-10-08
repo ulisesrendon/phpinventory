@@ -213,9 +213,66 @@ class Product
     }
 }
 ```
+
+<p>Para usar la clase emplearemos ahora una lista de productos, los cuales podrían ser leídos de alguna base de datos o proporcionados por una interfaz de usuario.</p>
+
+<p>Luego esa lista de productos la recorreremos con un bucle foreach y crearemos un objeto por cada producto.</p>
+
+```php
+$items = [
+    [
+        'title' => 'Pasta dental',
+        'description' => 'Producto de higiene bucal',
+        'price' => 39.9,
+        'stock' => 4,
+    ],
+    [
+        'title' => 'Crema corporal humectante',
+        'description' => 'Producto dermatológico',
+        'price' => 50.2
+        'stock' => 6,
+    ],
+    [
+        'title' => 'Protector Solar 50+fps',
+        'description' => 'Protector solar facial',
+        'price' => 50.2
+        'stock' => 10,
+    ],
+    [
+        'title' => 'Aspirina',
+        'description' => 'Tableta ácido acetilsalicílico',
+        'price' => 57
+        'stock' => 12,
+    ],
+    [
+        'title' => 'Enjuague bucal',
+        'description' => 'Producto de higiene bucal',
+        'price' => 57
+        'stock' => 12,
+    ],
+];
+
+$ProdcuctList = [];
+foreach($items as $item){
+    $ProductList[] = new Product(
+        $item['title'],
+        $item['description'],
+        $item['price'],
+        $item['stock'],
+    );
+}
+```
+
+<p>Con esto ya tendríamos un listado de objetos, que de momento solo es un conjunto de datos en el cual todos comparten el mismo comportamiento, lo cual de momento puede parecer mucho código para lo que realmente sirve.</p>
+
+<p>Para cambiar un poco esto y empezar a noción del potencial de la POO modifiquemos nuestro ejemplo añadiendo más lógica para una situación común.</p>
+
+<p>Para actualizar el comportamiento de todos nuestros objetos tipo producto solo hace falta modificar una sola pieza del software, que en este caso es la clase Product.</p>
+
+<p>Si tuviésemos que aplicar un impuesto al precio de los productos en la misma clase podríamos definir en una constante de clase cual es el impuesto fijo a aplicar por ejemplo, o si necesitáramos un método para imprimir la lista de productos en cierto formato </p>
+
 <!-- 
-
-
+Base de datos, Fechas, peticiones http
 <p>Hay dos maneras para crear objetos, una de ellas es la de convertir arreglos en objetos, pero de esta forma no podemos controlar el ocultamiento y el encapsulamiento.</p>
 
 <p>Mostrar solo los detalles mas importantes de las cosas y ocultar el resto facilita la abstracción de ideas.</p>
