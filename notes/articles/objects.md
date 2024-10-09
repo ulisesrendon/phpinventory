@@ -2,7 +2,12 @@
 https://kevinsmith.io/sanitize-your-inputs/
 
 https://medium.com/@i.vikash/software-design-principles-building-a-solid-foundation-for-your-code-8ad92987f7d9
+
 https://medium.com/@i.vikash/difference-between-cohesion-and-coupling-with-real-life-example-fc367034da00
+
+https://kevinsmith.io/whats-so-great-about-oop/
+
+https://www.simplilearn.com/tutorials/php-tutorial/oops-in-php
 -->
 
 # Introducción a los objetos en PHP
@@ -265,11 +270,57 @@ foreach($items as $item){
 
 <p>Con esto ya tendríamos un listado de objetos, que de momento solo es un conjunto de datos en el cual todos comparten el mismo comportamiento, lo cual de momento puede parecer mucho código para lo que realmente sirve.</p>
 
-<p>Para cambiar un poco esto y empezar a noción del potencial de la POO modifiquemos nuestro ejemplo añadiendo más lógica para una situación común.</p>
+<p>Para cambiar un poco esto y empezar a tener noción del potencial de la POO modifiquemos nuestro ejemplo añadiendo más lógica para una situación común.</p>
 
 <p>Para actualizar el comportamiento de todos nuestros objetos tipo producto solo hace falta modificar una sola pieza del software, que en este caso es la clase Product.</p>
 
 <p>Si tuviésemos que aplicar un impuesto al precio de los productos en la misma clase podríamos definir en una constante de clase cual es el impuesto fijo a aplicar por ejemplo, o si necesitáramos un método para imprimir la lista de productos en cierto formato </p>
+
+
+
+```php
+class Product
+{
+    const 
+    private string $title;
+    private string $description;
+    private float $price;
+    private int $stock;
+
+    public function __construct(
+        string $title,
+        string $description,
+        float $price,
+        int $stock,
+    )
+    {
+        $this->title = $title;
+        $this->description = $description;
+        $this->price = $price;
+        $this->stock = $stock;
+    }
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    public function getStock()
+    {
+        return $this->stock;
+    }
+}
+```
 
 <!-- 
 Base de datos, Fechas, peticiones http
