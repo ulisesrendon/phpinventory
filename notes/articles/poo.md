@@ -1,12 +1,28 @@
 <h1>Programación Orientada a Objetos en PHP</h1>
 
-La programación orientada a objetos es un paradigma en el que se encapsulan datos y su comportamiento para dar lugar a estructuras con la que se representan en código ideas y conceptos de forma abstracta
+La programación orientada a objetos es un paradigma en el que se encapsulan datos y su comportamiento para dar lugar a estructuras con las que se representa en código ideas y conceptos de forma abstracta
 
-<div class="li-note">Aviso: Te adelanto que trabajar con objetos es otro paradigma que puede que en un inicio se vea muy verboso y complicado, aún así te recomiendo fuertemente terminar de estudiar este apartado y te aseguro que con algo de paciencia se volverá más fácil y cómodo y te sera de mucha utilidad para poder resolver y gestionar problemas que con otros paradigmas sería mas complicado.</div>
+<div class="li-note">
+    <p>Aviso: Te adelanto que trabajar con objetos es más que trabajar con una nueva sintaxis, la programación orientada a objetos es un cambio de paradigma.</p>
+    <p>Puede que en un inicio se vea muy verboso y complicado, aún así te recomiendo fuertemente terminar de estudiar este apartado
+    </p>
+    <p>Te aseguramos que con algo de paciencia y practica este paradigma se volverá más fácil y cómodo y te sera de mucha utilidad para poder resolver y gestionar problemas que con otros paradigmas serían mas complicado.
+    </p>
+</div>
 
-<p>Cuando tenemos datos que están relacionados entre si podríamos optar por representarlos en forma de arreglo simple, arreglo asociativo o en forma de objeto.</p>
+<p>La programación orientada a objetos es un paradigma que promueve la creación de estructuras modulares y reutilizables llamadas objetos y que encierran el comportamiento y los datos del software.</p>
 
-<p>¿Cuando se usa un arreglo simple o cuando se un arreglo asociativo?</p>
+<p>La idea principal de usar objetos en vez de otras estructuras es la de reducir la complejidad del código y mejorar su mantenibilidad y esto se logra creando piezas de software mas abstractas y cada una con una responsabilidad clara dentro del sistema.</p>
+
+<p>La programación orientada a objetos es una forma especial de escribir código que cambia completamente la forma en la que pensamos y organizamos los algoritmos de nuestro software.</p>
+
+<h2>Arreglos vs Objetos</h2>
+
+<p>Los objetos a pesar de ser contenedores de datos no pueden remplazan a los arreglos directamente.</p>
+
+<p>Cuando tenemos datos relacionados entre si podríamos optar por representarlos en forma de arreglo simple, arreglo asociativo o en forma de objeto.</p>
+
+<h3>¿Cuando se usa un arreglo simple o cuando se un arreglo asociativo?</h3>
 
 <p>Un arreglo simple será suficiente para representar información cuando esta tiene una forma secuencial que no necesita un orden en concreto o que basta con números enteros para darle orden (por ejemplo: los días de la semana, los meses del año, una lista de tareas, una lista de nombres, etc).</p>
 
@@ -16,15 +32,16 @@ La programación orientada a objetos es un paradigma en el que se encapsulan dat
 
 <p>Los objetos son en esencia conjuntos de datos relacionados entre si y con los que se pueden formar todo tipo de estructuras, como las que formaríamos combinando arreglos asociativos.</p>
 
-<h4>¿Cual es entonces la diferencia entre un objeto y un arreglo asociativo?</h4>
+<h3>¿Cual es entonces la diferencia entre un objeto y un arreglo asociativo?</h3>
 
 <p>Si el objetivo es generar estructuras de información para poder compartirlas con otros programas o mediante internet, no hay ninguna diferencia entre usar arreglos asociativos u objetos.</p>
 
 <p>Al convertir datos de php a datos de otras tecnologías los arreglos asociativos se convierten en objetos de esas tecnologías y viceversa, al convertir datos de otras tecnologías a datos de php los datos de tipo objeto de otras tecnología se pueden convertir en arreglos asociativos de php.</p>
 
-<h4>¿Entonces para que sirven los objetos de PHP? ó ¿Cuando debería usar dichos tipos de datos?</h4>
+<h4>¿Entonces para que sirven los objetos en PHP? ó ¿Cuando debería usar dichos tipos de datos?</h4>
 
 <p>Aunque en concepto y en su forma de transferir datos son lo mismo, un arreglo asociativo se diferencia de un objeto literal de PHP en que este ultimo cuenta con muchas mas características y funcionalidades, y a continuación veremos varias de esas características y veremos que problemas resuelve cada una.</p>
+
 
 <h2>Características de la Programación Orientada a Objetos</h2>
 
