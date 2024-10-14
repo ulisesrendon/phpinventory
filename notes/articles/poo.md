@@ -1,6 +1,8 @@
 <h1>Programación Orientada a Objetos en PHP</h1>
 
-La programación orientada a objetos es un paradigma en el que se encapsulan datos y su comportamiento para dar lugar a estructuras con las que se representa en código ideas y conceptos de forma abstracta
+<blockquote>
+    La programación orientada a objetos es un paradigma en el que se encapsulan datos y su comportamiento para dar lugar a estructuras con las que se representa en código ideas y conceptos de forma abstracta
+</blockquote>
 
 <div class="li-note">
     <p>Aviso: Te adelanto que trabajar con objetos es más que trabajar con una nueva sintaxis, la programación orientada a objetos es un cambio de paradigma.</p>
@@ -22,7 +24,7 @@ La programación orientada a objetos es un paradigma en el que se encapsulan dat
 
 <p>Cuando tenemos datos relacionados entre si podríamos optar por representarlos en forma de arreglo simple, arreglo asociativo o en forma de objeto.</p>
 
-<h3>¿Cuando se usa un arreglo simple o cuando se un arreglo asociativo?</h3>
+<h4>¿Cuando se usa un arreglo simple o cuando se usa un arreglo asociativo?</h4>
 
 <p>Un arreglo simple será suficiente para representar información cuando esta tiene una forma secuencial que no necesita un orden en concreto o que basta con números enteros para darle orden (por ejemplo: los días de la semana, los meses del año, una lista de tareas, una lista de nombres, etc).</p>
 
@@ -32,7 +34,7 @@ La programación orientada a objetos es un paradigma en el que se encapsulan dat
 
 <p>Los objetos son en esencia conjuntos de datos relacionados entre si y con los que se pueden formar todo tipo de estructuras, como las que formaríamos combinando arreglos asociativos.</p>
 
-<h3>¿Cual es entonces la diferencia entre un objeto y un arreglo asociativo?</h3>
+<h4>¿Cual es entonces la diferencia entre un objeto y un arreglo asociativo?</h4>
 
 <p>Si el objetivo es generar estructuras de información para poder compartirlas con otros programas o mediante internet, no hay ninguna diferencia entre usar arreglos asociativos u objetos.</p>
 
@@ -123,14 +125,16 @@ La programación orientada a objetos es un paradigma en el que se encapsulan dat
 
 <p>Esta es otra forma de reutilizar código y es la mas recomendada, se recomienda incluso por sobre la herencia.</p>
 
-<p>Un código modular con piezas bien definidas y construidas con código limpio da lugar a poder componer y recomponer nuevas estructuras tan complejas según los casos de uso que enfrentemos lo requieran.</p>
+<p>Un código modular con piezas bien definidas y construidas con código limpio da lugar a poder componer y recomponer nuevas estructuras tan complejas según lo requieran los casos de uso a los que nos enfrentemos.</p>
 
 <h2>En resumen</h2>
 
 <p>Los objectos permiten de forma fácil organizar y reutilizar código.</p>
 
-<p>Permiten pasar de un montón de variables y funciones sueltas que podrían o no estar relacionados entre si a capsulas que agrupan datos y su comportamiento y que definen una interfaz que detalla la forma en la que los objectos se conectan e interactúan con otros objetos y otros módulos</p>
+<p>Permiten pasar de un montón de variables y funciones sueltas a capsulas que agrupan datos y comportamiento.</p>
 
-<p>Los objetos promueven el trabajar con abstracciones, que consiste en ocultar los detalles complejos y enfocarse solo en determinadas propiedades de las cosas.</p>
+<p>Los objetos definen una interfaz que detalla la forma en la que los se conectan e interactúan unos con otros.</p>
 
 <p>Los objetos que comparten la misma interfaz pueden ser intercambiados entre si, esto facilita la modularidad y la reutilización de código</p>
+
+<p>Los objetos promueven el trabajar con abstracciones, lo cual consiste en ocultar detalles complejos y enfocarse solo en determinadas propiedades de las cosas.</p>
