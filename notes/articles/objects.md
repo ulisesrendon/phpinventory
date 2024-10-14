@@ -257,7 +257,7 @@ $items = [
     ],
 ];
 
-$ProdcuctList = [];
+$ProductList = [];
 foreach($items as $item){
     $ProductList[] = new Product(
         $item['title'],
@@ -321,6 +321,9 @@ class Product
     }
 }
 ```
+<h2>En resumen</h2>
+
+<p>Con esto ya tenemos la sintaxis básica para trabajar con objetos en PHP, ya que ahora conocemos las clases, que son los planos que definen y permiten crear objetos y como se definen las propiedades y los métodos dentro de ellas.</p>
 
 <!-- 
 Base de datos, Fechas, peticiones http
@@ -341,9 +344,6 @@ Base de datos, Fechas, peticiones http
 
 <p>Una entidad es un concepto de alguna cosa del mundo real que representada en un objeto de la programación este se puede distinguido de los demás objetos</p>
 
-<p>Los objetos no remplazan los arreglos</p>
-
-<p>Las clases son planos de estructuras</p>
 
 <p>Mediante clases se define una interfaz para detallar como se puede interactuar con un objeto en particular</p>
 
