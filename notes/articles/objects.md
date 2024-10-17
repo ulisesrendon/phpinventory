@@ -268,7 +268,7 @@ foreach($items as $item){
 }
 ```
 
-<p>Con esto ya tendríamos un listado de objetos, que de momento solo es un conjunto de datos en el cual todos comparten el mismo comportamiento, lo cual de momento puede parecer mucho código para lo que realmente sirve.</p>
+<p>Con esto ya tendríamos un listado de objetos, que de momento solo es un conjunto de datos donde todos comparten el mismo comportamiento, lo cual de momento puede parecer mucho código para lo que realmente sirve.</p>
 
 <p>Para cambiar un poco esto y empezar a tener noción del potencial de la POO modifiquemos nuestro ejemplo añadiendo más lógica para una situación común.</p>
 
