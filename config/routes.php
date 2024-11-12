@@ -1,15 +1,14 @@
 <?php
 
 use App\Database\Migration\Migration;
-use App\Product\Controller\ProductController;
-use App\Product\Controller\ProviderController;
 use App\Product\Controller\StockController;
 use App\Shared\Controller\DefaultController;
+use App\Product\Controller\ProductController;
+use App\Product\Controller\ProviderController;
 use Neuralpin\HTTPRouter\RouteCollection as Routes;
 
 Routes::any('/', fn () => 'Hello world!');
 Routes::any('/api/v1', [DefaultController::class, 'home']);
-
 Routes::post('/api/v1/product', [ProductController::class, 'create']);
 Routes::get('/api/v1/product', [ProductController::class, 'list']);
 Routes::get('/api/v1/product/:id', [ProductController::class, 'getById']);
