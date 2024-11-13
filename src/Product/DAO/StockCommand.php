@@ -15,16 +15,16 @@ class StockCommand
 
     public function create(
         int $product_id,
-        int $quantity,
+        int $pieces,
         ?int $provider_id = null,
         float $cost = 0,
         ?string $lot = null,
         ?string $expiration_date = null,
     ): bool|string|null {
 
-        return $this->DataBaseAccess->insert('product_entries', [
+        return $this->DataBaseAccess->insert('entrylines', [
             'product_id' => $product_id,
-            'quantity' => $quantity,
+            'pieces' => $pieces,
             'provider_id' => $provider_id,
             'cost' => $cost,
             'lot' => $lot,
@@ -34,11 +34,11 @@ class StockCommand
 
     public function deleteEntryById(int $id): bool
     {
-        return $this->DataBaseAccess->delete('product_entries', $id);
+        return $this->DataBaseAccess->delete('entrylines', $id);
     }
 
     public function update(array $fields): ?bool
     {
-        return $this->DataBaseAccess->update('product_entries', $fields);
+        return $this->DataBaseAccess->update('entrylines', $fields);
     }
 }

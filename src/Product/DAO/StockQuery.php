@@ -18,21 +18,22 @@ class StockQuery
         return $this->DataBaseAccess->query('SELECT 
                 products.id as product_id,
                 product_stocks.id as stock_id,
-                product_entries.id as entry_id,
-                product_entries.lot,
-                product_entries.quantity,
+                entrylines.id as entry_id,
+                entrylines.lot,
+                entrylines.pieces,
                 product_stocks.stock,
                 products.price as base_price,
-                product_stocks.price as price_alt,
-                product_entries.provider_id,
+                product_stocks.price as price_alternative,
+                entries.provider_id,
                 providers.title as provider_title,
-                product_entries.created_at
+                entries.created_at
             from product_stocks
             left join products on products.id = product_stocks.product_id
-            left join product_entries on product_stocks.product_entry_id = product_entries.id
-            left join providers on providers.id = product_entries.provider_id
+            left join entrylines on product_stocks.product_entry_id = entrylines.id
+            left join entries on entries.id = entrylines.entry_id
+            left join providers on providers.id = entries.provider_id
             where product_stocks.product_id = :id
-            order by product_entries.created_at desc
+            order by entries.created_at desc
         ', ['id' => $id]);
     }
 

@@ -22,9 +22,10 @@ class DefaultController
         $PDO = new PDO(
             "$drive:host=$host;port=$port;dbname=$name",
             $user,
-            $password
+            $password,
         );
         $PDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $PDO->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $this->DataBaseAccess = new DataBaseAccess($PDO);
     }
 

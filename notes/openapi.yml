@@ -383,7 +383,7 @@ components:
           type: string
           nullable: true
           example: lot-123
-        quantity:
+        pieces:
           type: integer
           example: 5
         stock:
@@ -413,7 +413,7 @@ components:
         product_id:
           type: integer
           example: 1
-        quantity:
+        pieces:
           type: integer
           example: 5
         provider_id:

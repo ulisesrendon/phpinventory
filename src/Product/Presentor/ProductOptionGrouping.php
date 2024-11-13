@@ -36,6 +36,9 @@ class ProductOptionGrouping
                 'options' => [],
             ];
             foreach ($Group as $Item) {
+                if(is_null($Item->stock)){
+                    continue;
+                }
                 $Product['stock'] += $Item->stock;
                 $Product['options'][] = (object) [
                     'id' => $Item->entry_id,
@@ -43,7 +46,7 @@ class ProductOptionGrouping
                     'price' => $Item->price_alt ?? $Product['price'],
                 ];
             }
-            $ProductList[] = (object) $Product;
+            $ProductList[$Group[0]->id] = (object) $Product;
         }
 
         return $ProductList;

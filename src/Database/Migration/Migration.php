@@ -103,21 +103,11 @@ class Migration extends DefaultController
                     ('Provider #3 el otro')
             ");
 
-            $this->DataBaseAccess->command('CREATE table if not exists providers(
-                id integer not null auto_increment primary key,
-                title varchar(255) null,
-                description varchar(255) null,
-                deleted_at timestamp(0) null,
-                created_at timestamp(0) null default now(),
-                updated_at timestamp(0) null default now()
-            )');
-
-
             $this->DataBaseAccess->command('CREATE table if not exists orders(
                 id integer not null auto_increment primary key,
-                customer_id bigint not null,
-                payment_method_id bigint not null,
-                address_id bigint not null,
+                customer_id bigint null,
+                payment_method_id bigint null,
+                address_id bigint null,
                 amount_total decimal(10, 2) not null default 0,
                 deleted_at timestamp(0) null,
                 created_at timestamp(0) null default now(),

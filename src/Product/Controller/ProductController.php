@@ -24,8 +24,8 @@ class ProductController extends DefaultController
 
     public function getById(int $id)
     {
-        $ProductOptions = (new ProductOptionGrouping($this->ProductQuery->getByID($id)))->get();
-        $Product = empty($ProductOptions) ? null : $ProductOptions[0];
+        $ProductOptions = (new ProductOptionGrouping($this->ProductQuery->getById($id)))->get();
+        $Product = $ProductOptions[$id] ?? null;
 
         if (is_null($Product)) {
             return Response::json([
@@ -43,11 +43,12 @@ class ProductController extends DefaultController
 
     public function list()
     {
-        $ProductList = (new ProductOptionGrouping($this->ProductQuery->list()))->get();
+        $ProductData = $this->ProductQuery->list();
+        $ProductList = (new ProductOptionGrouping($ProductData))->get();
 
         return Response::json([
             'count' => count($ProductList),
-            'list' => $ProductList,
+            'list' => array_values($ProductList),
         ]);
     }
 
@@ -98,8 +99,8 @@ class ProductController extends DefaultController
         $description = $Request->getInput('description') ?? null;
         $price = $Request->getInput('price') ?? null;
 
-        $OlderProductOptions = (new ProductOptionGrouping($this->ProductQuery->getByID($id)))->get();
-        $OlderProductData = empty($OlderProductOptions) ? null : $OlderProductOptions[0];
+        $OlderProductOptions = (new ProductOptionGrouping($this->ProductQuery->getById($id)))->get();
+        $OlderProductData = $OlderProductOptions[$id] ?? null;
 
         if (empty($OlderProductData)) {
             return Response::json([

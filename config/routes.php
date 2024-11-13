@@ -1,6 +1,7 @@
 <?php
 
 use App\Database\Migration\Migration;
+use App\Order\Controller\OrderController;
 use App\Product\Controller\StockController;
 use App\Shared\Controller\DefaultController;
 use App\Product\Controller\ProductController;
@@ -20,6 +21,11 @@ Routes::post('/api/v1/provider', [ProviderController::class, 'create']);
 Routes::get('/api/v1/provider/:id', [ProviderController::class, 'getById']);
 Routes::patch('/api/v1/provider/:id', [ProviderController::class, 'update']);
 Routes::delete('/api/v1/provider/:id', [ProviderController::class, 'delete']);
+
+Routes::get('/api/v1/order', [OrderController::class, 'list']);
+Routes::post('/api/v1/order', [OrderController::class, 'create']);
+Routes::get('/api/v1/order/:id', [OrderController::class, 'getById']);
+Routes::patch('/api/v1/order/:id', [OrderController::class, 'update']);
 
 Routes::get('/api/v1/stock', [StockController::class, 'list']);
 Routes::get('/api/v1/stock/:id', [StockController::class, 'getByProductId']);

@@ -36,13 +36,14 @@ class StockController extends DefaultController
     {
 
         $ProductData = $this->StockQuery->getProductDataByID($id);
-        $Entries = $this->StockQuery->getByProductID($id);
 
         if (is_null($ProductData)) {
             return Response::json([
                 'error' => 'Product not found',
             ], 404);
         }
+
+        $Entries = $this->StockQuery->getByProductID($id);
 
         return Response::json([
             'product' => $ProductData,
@@ -73,7 +74,7 @@ class StockController extends DefaultController
             }
 
             if (
-                ! isset($ProductStock['quantity']) || ! is_numeric($ProductStock['quantity'])
+                ! isset($ProductStock['pieces']) || ! is_numeric($ProductStock['pieces'])
             ) {
                 continue;
             }
@@ -104,7 +105,7 @@ class StockController extends DefaultController
 
             $this->StockCommand->create(
                 product_id: $ProductStock['product_id'],
-                quantity: $ProductStock['quantity'],
+                pieces: $ProductStock['pieces'],
                 provider_id: $ProductStock['provider_id'] ?? null,
                 cost: $ProductStock['cost'] ?? null,
                 lot: $ProductStock['lot'] ?? null,
