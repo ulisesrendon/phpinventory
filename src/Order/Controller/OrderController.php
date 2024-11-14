@@ -2,6 +2,7 @@
 namespace App\Order\Controller;
 
 use App\Order\Data\OrderQuery;
+use App\Order\Data\OrderState;
 use App\Order\Data\OrderCommand;
 use App\Product\DAO\ProductQuery;
 use Neuralpin\HTTPRouter\Response;
@@ -44,6 +45,22 @@ class OrderController extends DefaultController
         // $itemIds = [];
         // foreach($items as $item){
         // }
+
+        $OrderState = new OrderState();
+        try{
+            $OrderState
+                ->setCustomer($customer)
+                ->setAddress($address)
+                ->setPaymentMethod($paymentMethod)
+                ->setItems($items);
+        }catch(\Exception|\Throwable){
+            return Response::json([
+                'status' => 'error',
+                'error' => 'invalid order data',
+            ], 400);
+        }
+
+        dd($OrderState);
 
         $amount = 0;
         $lines = [];
