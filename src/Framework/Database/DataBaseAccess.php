@@ -2,6 +2,8 @@
 
 namespace App\Framework\Database;
 
+use InvalidArgumentException;
+
 class DataBaseAccess extends DataBaseBasicAccess
 {
     /**
@@ -19,6 +21,46 @@ class DataBaseAccess extends DataBaseBasicAccess
         $result = $this->command("INSERT INTO $table($ColumnNames) values($FieldsString)", $fields);
 
         return $result ? $this->PDO->lastInsertId() : null;
+    }
+
+    /**
+     * Execute a single database insert command with multiple values
+     */
+    public function multiInsert(string $table, array $data): ?bool  
+    {
+        if (empty($data)) {
+            return null;
+        }
+
+        $dataFields = array_keys(array_values($data)[0]); // Get keys from first array
+
+        $params = [];
+        $fieldMarkers = [];
+        
+        foreach ($data as $index => $row) {
+            $fieldMakers = [];
+
+            if (count(array_diff_key($dataFields, array_keys($row))) > 0) {
+                throw new InvalidArgumentException('Not all product lines have the same fields');
+            }
+
+            foreach($row as $name => $value){
+                $paramName = "{$name}_{$index}";
+                $params[$paramName] = $value;
+                $fieldMakers[] = ":$paramName";
+            }
+            $fieldMarkers[] = '('.implode(', ', $fieldMakers).')';
+        }
+
+        $columnNames = implode(', ', $dataFields);
+        $valuesString = implode(', ', $fieldMarkers);
+
+        $result = $this->command(
+            "INSERT INTO $table($columnNames) values $valuesString",
+            $params
+        );
+
+        return $result;
     }
 
     public function select(string $query, array $params = []): ?object

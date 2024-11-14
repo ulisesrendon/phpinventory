@@ -58,6 +58,7 @@ class OrderController extends DefaultController
             $ProductList = (new ProductOptionGrouping($ProductData))->get();
 
             //[TODO] Validate product stock before creating order
+            //[TODO] Validate item entries
             foreach($items as $item){
                 if(!isset($ProductList[$item['id']])){
                     continue;
@@ -66,13 +67,14 @@ class OrderController extends DefaultController
                 $total = $ProductList[$item['id']]->price * $item['pieces'];
                 $amount += $total;
 
-                $lines[] = [
-                    'order_id' => null,
+                $lines[$item['id']] = [
                     'product_id' => $item['id'],
                     'pieces' => $item['pieces'],
                     'amount_by_piece' => $ProductList[$item['id']]->price,
                     'amount_total' => $total,
                 ];
+
+                $ProductList[$item['id']]->selected = &$lines[$item['id']];
             }
         }
 
@@ -81,6 +83,7 @@ class OrderController extends DefaultController
             customer: $customer,
             address: $address,
             paymentMethod: $paymentMethod,
+            lines: $lines,
         );
 
         return Response::json([
@@ -90,8 +93,8 @@ class OrderController extends DefaultController
                 'amount' => $amount,
                 'customer' => $customer,
                 'address' => $address,
+                'items' => $items,
                 'paymentMethod' => $paymentMethod,
-                'lines' => $lines,
             ],
             'products' => array_values($ProductList),
         ], 201);
