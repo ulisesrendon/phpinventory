@@ -1,6 +1,7 @@
 <?php
 namespace App\Order\Controller;
 
+use App\Framework\Validator;
 use App\Order\Data\OrderQuery;
 use App\Order\Data\OrderState;
 use App\Order\Data\OrderCommand;
@@ -41,10 +42,42 @@ class OrderController extends DefaultController
         $paymentMethod = $Request->getInput('paymentMethod');
         $items = $Request->getInput('items') ?? [];
 
-        // [TODO] Item list validation
-        // $itemIds = [];
-        // foreach($items as $item){
-        // }
+        // OrderLineItemValidation
+        $Validator = new Validator();
+        $itemListIsValid = array_reduce(
+            array: $items,
+            callback: function ($carry, $item) use($Validator): bool{
+                $productIdExists = isset($item['id']);
+
+                $productIdIsValid = $productIdExists && $Validator
+                    ->setField($item['id'])
+                    ->required()
+                    ->int()
+                    ->min(1)
+                    ->isCorrect();
+
+                $productPiecesExists = isset($item['pieces']);
+
+                $productPiecesIsValid = $productPiecesExists && $Validator
+                    ->setField($item['pieces'])
+                    ->required()
+                    ->int()
+                    ->min(0)
+                    ->isCorrect();
+
+                return $carry &= $productIdIsValid && $productPiecesIsValid;
+            },
+            initial: true
+        );
+
+        $customerIsValid = is_null($customer) || $Validator
+            ->setField($customer)
+            ->required()
+            ->int()
+            ->min(1)
+            ->isCorrect();
+
+        dd($items, $itemListIsValid);
 
         $OrderState = new OrderState();
         try{

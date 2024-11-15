@@ -16,15 +16,6 @@ class OrderState
      */
     protected array $items = [];
 
-    // public function __construct(
-    //     ?int $customer,
-    //     ?int $address,
-    //     ?int $paymentMethod,
-    //     ?array $items,
-    // )
-    // {
-    // }
-
     public function setCustomer(?int $customer)
     {
         $this->customer = $customer;
@@ -47,8 +38,8 @@ class OrderState
     {
         foreach($items as $item){
             $this->addItem(new OrderLineState(
-                id: $item['id'] ?? null,
-                pieces: $item['pieces'] ?? null,
+                id: $item['id'],
+                pieces: $item['pieces'],
             ));
         }
 

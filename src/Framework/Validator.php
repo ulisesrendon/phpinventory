@@ -21,14 +21,15 @@ class Validator
 
     protected mixed $field;
 
-    public function __construct(mixed $field)
+    public function __construct(mixed $field = null)
     {
         $this->field = $field;
     }
 
-    public static function field(mixed $field): static
+    public function setField(mixed $field): static
     {
-        return new static($field);
+        $this->field = $field;
+        return $this;
     }
     
     public function getErrors(): array
