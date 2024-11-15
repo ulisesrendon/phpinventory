@@ -4,14 +4,26 @@ namespace App\Product\Presentor;
 
 class ProductOptionGrouping
 {
+    /**
+     * Summary of List
+     * @var object[] $List 
+     */
     protected array $List = [];
 
+    /**
+     * @param object[] $ProductBaseList
+     */
     public function __construct(array $ProductBaseList)
     {
         $ProductGroup = $this->group($ProductBaseList);
         $this->List = $this->present($ProductGroup);
     }
 
+
+    /**
+     * @param object[] $ProductBaseList
+     * @return object[][]
+     */
     protected function group(array $ProductBaseList): array
     {
         $ProductGroup = [];
@@ -52,6 +64,10 @@ class ProductOptionGrouping
         return $ProductList;
     }
 
+    /**
+     * Summary of get
+     * @return object[]
+     */
     public function get(): array
     {
         return $this->List;

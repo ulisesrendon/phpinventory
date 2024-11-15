@@ -16,13 +16,13 @@ class OrderState
      */
     protected array $items = [];
 
-    public function setCustomer(?int $customer)
+    public function setCustomer(?int $customer): static
     {
         $this->customer = $customer;
         return $this;
     }
 
-    public function setAddress(?int $address)
+    public function setAddress(?int $address): static
     {
         $this->address = $address;
         return $this;
@@ -34,7 +34,7 @@ class OrderState
         return $this;
     }
 
-    public function setItems(array $items)
+    public function setItems(array $items): static
     {
         foreach($items as $item){
             $this->addItem(new OrderLineState(
@@ -46,7 +46,7 @@ class OrderState
         return $this;
     }
 
-    public function addItem(OrderLineItemInterface $item)
+    public function addItem(OrderLineItemInterface $item): static
     {
         $this->items[] = $item;
         return $this;

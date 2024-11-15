@@ -28,6 +28,8 @@ class Validator
 
     public function setField(mixed $field): static
     {
+        $this->isCorrect = true;
+        $this->errors = [];
         $this->field = $field;
         return $this;
     }

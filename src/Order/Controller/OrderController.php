@@ -42,11 +42,42 @@ class OrderController extends DefaultController
         $paymentMethod = $Request->getInput('paymentMethod');
         $items = $Request->getInput('items') ?? [];
 
-        // OrderLineItemValidation
-        $Validator = new Validator();
-        $itemListIsValid = array_reduce(
+        $errors = [];
+
+        $Validator = new Validator();    
+        $customerIsValid = is_null($customer) || $Validator
+            ->setField($customer)
+            ->int()
+            ->min(1)
+            ->isCorrect();
+
+        if(!$customerIsValid){
+            $errors[] = 'Invalid customer';
+        }
+
+        $addressIsValid = is_null($address) || $Validator
+            ->setField($address)
+            ->int()
+            ->min(1)
+            ->isCorrect();
+
+        if(!$addressIsValid){
+            $errors[] = 'Invalid customer address';
+        }
+
+        $paymentMethodIsValid = is_null($paymentMethod) || $Validator
+            ->setField($paymentMethod)
+            ->int()
+            ->min(1)
+            ->isCorrect();
+
+        if (!$paymentMethodIsValid) {
+            $errors[] = 'Invalid payment method';
+        }
+
+        $itemListIsValid = is_array($items) && array_reduce(
             array: $items,
-            callback: function ($carry, $item) use($Validator): bool{
+            callback: function ($carry, $item) use ($Validator): bool {
                 $productIdExists = isset($item['id']);
 
                 $productIdIsValid = $productIdExists && $Validator
@@ -70,62 +101,58 @@ class OrderController extends DefaultController
             initial: true
         );
 
-        $customerIsValid = is_null($customer) || $Validator
-            ->setField($customer)
-            ->required()
-            ->int()
-            ->min(1)
-            ->isCorrect();
-
-        dd($items, $itemListIsValid);
+        if (!$itemListIsValid) {
+            $errors[] = 'Invalid order items';
+        }
 
         $OrderState = new OrderState();
-        try{
-            $OrderState
-                ->setCustomer($customer)
-                ->setAddress($address)
-                ->setPaymentMethod($paymentMethod)
-                ->setItems($items);
-        }catch(\Exception|\Throwable){
+        $ProductIds = [];
+        if(empty($errors)){
+            try{
+                $OrderState
+                    ->setCustomer($customer)
+                    ->setAddress($address)
+                    ->setPaymentMethod($paymentMethod)
+                    ->setItems($items);
+            }catch(\Exception|\Throwable){
+                $errors[] = 'Invalid order data';
+            }
+
+            $ProductIds = array_column($items, 'id');
+        }
+
+        if(!empty($errors)){
             return Response::json([
                 'status' => 'error',
                 'error' => 'invalid order data',
             ], 400);
         }
 
-        dd($OrderState);
+        $ProductData = $this->ProductQuery->list($ProductIds);
+        $ProductList = (new ProductOptionGrouping($ProductData))->get();
+
 
         $amount = 0;
         $lines = [];
-        $ProductList = [];
 
-        if(
-            !empty($items) 
-            && is_array($items) 
-            && array_reduce($items, fn($carry, $item)=> $carry &= in_array('id', array_keys($item)), true)
-        ){
-            $ProductData = $this->ProductQuery->list(array_column($items, 'id'));
-            $ProductList = (new ProductOptionGrouping($ProductData))->get();
-
-            //[TODO] Validate product stock before creating order
-            //[TODO] Validate item entries
-            foreach($items as $item){
-                if(!isset($ProductList[$item['id']])){
-                    continue;
-                }
-
-                $total = $ProductList[$item['id']]->price * $item['pieces'];
-                $amount += $total;
-
-                $lines[$item['id']] = [
-                    'product_id' => $item['id'],
-                    'pieces' => $item['pieces'],
-                    'amount_by_piece' => $ProductList[$item['id']]->price,
-                    'amount_total' => $total,
-                ];
-
-                $ProductList[$item['id']]->selected = &$lines[$item['id']];
+        //[TODO] Validate product stock before creating order
+        //[TODO] Validate item entries
+        foreach ($items as $item) {
+            if (!isset($ProductList[$item['id']])) {
+                continue;
             }
+
+            $total = $ProductList[$item['id']]->price * $item['pieces'];
+            $amount += $total;
+
+            $lines[$item['id']] = [
+                'product_id' => $item['id'],
+                'pieces' => $item['pieces'],
+                'amount_by_piece' => $ProductList[$item['id']]->price,
+                'amount_total' => $total,
+            ];
+
+            $ProductList[$item['id']]->selected = &$lines[$item['id']];
         }
 
         $OrderId = $this->OrderCommand->create(
