@@ -18,7 +18,7 @@
     ],
     "require": {
         "vlucas/phpdotenv": "5.6.x-dev",
-        "neuralpin/httprouter": "^2.0"
+        "neuralpin/httprouter": "v3.*"
     },
     "autoload": {
         "psr-4": {

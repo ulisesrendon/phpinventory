@@ -5,7 +5,7 @@ namespace App\Product\Controller;
 use App\Product\DAO\StockCommand;
 use App\Product\DAO\StockQuery;
 use App\Shared\Controller\DefaultController;
-use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\RequestData as Request;
 use Neuralpin\HTTPRouter\Response;
 
 class StockController extends DefaultController
@@ -52,7 +52,7 @@ class StockController extends DefaultController
 
     }
 
-    public function create(RequestData $Request)
+    public function create(Request $Request)
     {
         $stock = $Request->getInput('stock') ?? null;
 
@@ -128,7 +128,7 @@ class StockController extends DefaultController
 
     }
 
-    public function delete(RequestData $Request)
+    public function delete(Request $Request)
     {
         $entries = $Request->getInput('entries') ?? null;
 

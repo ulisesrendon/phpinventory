@@ -8,7 +8,7 @@ use App\Order\Data\OrderCommand;
 use App\Product\DAO\ProductQuery;
 use Neuralpin\HTTPRouter\Response;
 use App\Shared\Controller\DefaultController;
-use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\RequestData;
 use App\Product\Presentor\ProductOptionGrouping;
 use Neuralpin\HTTPRouter\Interface\ResponseState;
 
@@ -175,5 +175,10 @@ class OrderController extends DefaultController
             ],
             'products' => array_values($ProductList),
         ], 201);
+    }
+
+    public function getById(int $id)
+    {
+        return Response::json($id);
     }
 }

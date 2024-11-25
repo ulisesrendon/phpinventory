@@ -5,7 +5,7 @@ namespace App\Product\Controller;
 use App\Product\DAO\ProviderCommand;
 use App\Product\DAO\ProviderQuery;
 use App\Shared\Controller\DefaultController;
-use Neuralpin\HTTPRouter\Helper\RequestData;
+use Neuralpin\HTTPRouter\RequestData as Request;
 use Neuralpin\HTTPRouter\Response;
 
 class ProviderController extends DefaultController
@@ -44,7 +44,7 @@ class ProviderController extends DefaultController
         ]);
     }
 
-    public function create(RequestData $Request)
+    public function create(Request $Request)
     {
         $title = $Request->getInput('title') ?? null;
         $description = $Request->getInput('description') ?? '';
@@ -73,7 +73,7 @@ class ProviderController extends DefaultController
 
     }
 
-    public function update(int $id, RequestData $Request)
+    public function update(int $id, Request $Request)
     {
 
         $title = $Request->getInput('title') ?? null;

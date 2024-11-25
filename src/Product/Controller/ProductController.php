@@ -6,8 +6,8 @@ use App\Product\DAO\ProductCommand;
 use App\Product\DAO\ProductQuery;
 use App\Product\Presentor\ProductOptionGrouping;
 use App\Shared\Controller\DefaultController;
-use Neuralpin\HTTPRouter\Helper\RequestData;
 use Neuralpin\HTTPRouter\Response;
+use Neuralpin\HTTPRouter\RequestData as Request;
 
 class ProductController extends DefaultController
 {
@@ -52,7 +52,7 @@ class ProductController extends DefaultController
         ]);
     }
 
-    public function create(RequestData $Request)
+    public function create(Request $Request)
     {
         $code = $Request->getInput('code');
         $title = $Request->getInput('title');
@@ -91,7 +91,7 @@ class ProductController extends DefaultController
 
     }
 
-    public function update(int $id, RequestData $Request)
+    public function update(int $id, Request $Request)
     {
 
         $code = $Request->getInput('code') ?? null;
