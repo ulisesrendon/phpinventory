@@ -10,3 +10,7 @@
 
 // Free plan for MySQL
 https://aiven.io/pricing?product=mysql
+
+
+// Configuring Monolog
+https://www.datadoghq.com/blog/php-logging-guide/#:~:text=error_log%20directive%20above.-,PHP's%20logging%20functions,file%20to%20write%20log%20messages.

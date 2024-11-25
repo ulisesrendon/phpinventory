@@ -2,8 +2,8 @@
 
 namespace App\Database\Migration;
 
-use App\Shared\Controller\DefaultController;
 use Neuralpin\HTTPRouter\Response;
+use App\Framework\HTTP\DefaultController;
 
 class Migration extends DefaultController
 {
@@ -16,6 +16,7 @@ class Migration extends DefaultController
                 title varchar(255) null,
                 description varchar(255) null,
                 price decimal(10, 2) not null default 0,
+                type int not null default 1,
                 active boolean not null default false,
                 deleted_at timestamp(0) null,
                 created_at timestamp(0) null default now(),
@@ -146,7 +147,7 @@ class Migration extends DefaultController
                     ('Entregado'),
                     ('Pagado'),
                     ('Devuelto'),
-                    ('Intento de entrega'),
+                    ('Intento de entrega')
             ");
 
             $this->DataBaseAccess->command("INSERT INTO 
