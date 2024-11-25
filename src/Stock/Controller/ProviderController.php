@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Product\Controller;
+namespace App\Stock\Controller;
 
-use App\Product\DAO\ProviderQuery;
+use App\Stock\Data\ProviderQuery;
 use Neuralpin\HTTPRouter\Response;
-use App\Product\DAO\ProviderCommand;
+use App\Stock\Data\ProviderCommand;
 use App\Framework\HTTP\DefaultController;
 use Neuralpin\HTTPRouter\RequestData as Request;
 

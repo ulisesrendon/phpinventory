@@ -10,6 +10,7 @@ class Migration extends DefaultController
     public function start()
     {
         try {
+            // -- Product structures
             $this->DataBaseAccess->command('CREATE table if not exists products(
                 id integer not null auto_increment primary key,
                 code varchar(255) null unique,
@@ -31,62 +32,6 @@ class Migration extends DefaultController
                     ('700000003', 'Mouse Logitech G505 Hero', 1000)
             ");
 
-            $this->DataBaseAccess->command('CREATE table if not exists entries(
-                id integer not null auto_increment primary key,
-                folio varchar(255) null,
-                provider_id bigint not null,
-                amount_total decimal(10, 2) not null default 0,
-                deleted_at timestamp(0) null,
-                created_at timestamp(0) null default now(),
-                updated_at timestamp(0) null default now()
-            )');
-
-            $this->DataBaseAccess->command('CREATE table if not exists entrylines(
-                id integer not null auto_increment primary key,
-                entry_id bigint not null,
-                product_id bigint not null,
-                pieces integer not null,
-                cost decimal(10, 2) not null default 0,
-                lot varchar(255) null,
-                expiration_date timestamp(0) null
-            )');
-
-            $this->DataBaseAccess->command(query: 'INSERT INTO 
-                entries (folio, provider_id, amount_total)
-                VALUES 
-                    (\'1234210\', 1, 800),
-                    (\'123-32421\', 2, 1490),
-                    (\'2H4-28HD2\', 3, 650)
-            ');
-
-            $this->DataBaseAccess->command('INSERT INTO 
-                entrylines (entry_id, product_id, pieces, cost)
-                VALUES 
-                    (1, 1, 10, 800),
-                    (2, 1, 2, 700),
-                    (2, 2, 10, 790),
-                    (3, 3, 15, 650)
-            ');
-
-            $this->DataBaseAccess->command('CREATE table if not exists product_stocks(
-                id integer not null auto_increment primary key,
-                product_id bigint not null,
-                product_entry_id bigint null unique,
-                stock integer not null default 0,
-                price decimal(10, 2) null,
-                created_at timestamp(0) null default now(),
-                updated_at timestamp(0) null default now()
-            )');
-
-            $this->DataBaseAccess->command('INSERT INTO 
-                product_stocks (product_id, product_entry_id, stock)
-                VALUES 
-                    (1, 1, 10),
-                    (1, 2, 2),
-                    (2, 3, 10),
-                    (3, 4, 15)
-            ');
-
             $this->DataBaseAccess->command('CREATE table if not exists providers(
                 id integer not null auto_increment primary key,
                 title varchar(255) null,
@@ -104,6 +49,66 @@ class Migration extends DefaultController
                     ('Provider #3 el otro')
             ");
 
+
+            // -- entries structures
+            $this->DataBaseAccess->command('CREATE table if not exists entries(
+                id integer not null auto_increment primary key,
+                folio varchar(255) null,
+                provider_id bigint not null,
+                amount_total decimal(10, 2) not null default 0,
+                deleted_at timestamp(0) null,
+                created_at timestamp(0) null default now(),
+                updated_at timestamp(0) null default now()
+            )');
+
+            $this->DataBaseAccess->command('CREATE table if not exists entries_products(
+                id integer not null auto_increment primary key,
+                product_id bigint not null,
+                product_entry_id bigint null unique,
+                stock integer not null default 0,
+                price decimal(10, 2) null,
+                created_at timestamp(0) null default now(),
+                updated_at timestamp(0) null default now()
+            )');
+
+            $this->DataBaseAccess->command('INSERT INTO 
+                entries_products (product_id, product_entry_id, stock)
+                VALUES 
+                    (1, 1, 10),
+                    (1, 2, 2),
+                    (2, 3, 10),
+                    (3, 4, 15)
+            ');
+
+            $this->DataBaseAccess->command('CREATE table if not exists entrylines(
+                id integer not null auto_increment primary key,
+                entry_id bigint not null,
+                product_id bigint not null,
+                pieces integer not null,
+                cost decimal(10, 2) not null default 0,
+                lot varchar(255) null,
+                expiration_date timestamp(0) null
+            )');
+
+            $this->DataBaseAccess->command('INSERT INTO 
+                entries (folio, provider_id, amount_total)
+                VALUES 
+                    (\'1234210\', 1, 800),
+                    (\'123-32421\', 2, 1490),
+                    (\'2H4-28HD2\', 3, 650)
+            ');
+
+            $this->DataBaseAccess->command('INSERT INTO 
+                entrylines (entry_id, product_id, pieces, cost)
+                VALUES 
+                    (1, 1, 10, 800),
+                    (2, 1, 2, 700),
+                    (2, 2, 10, 790),
+                    (3, 3, 15, 650)
+            ');
+
+
+            // -- Order structures
             $this->DataBaseAccess->command('CREATE table if not exists orders(
                 id integer not null auto_increment primary key,
                 customer_id bigint null,

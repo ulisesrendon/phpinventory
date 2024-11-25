@@ -2,9 +2,9 @@
 
 namespace App\Product\Controller;
 
-use App\Product\DAO\ProductQuery;
+use App\Product\Data\ProductQuery;
 use Neuralpin\HTTPRouter\Response;
-use App\Product\DAO\ProductCommand;
+use App\Product\Data\ProductCommand;
 use App\Framework\HTTP\DefaultController;
 use App\Product\Presentor\ProductOptionGrouping;
 use Neuralpin\HTTPRouter\RequestData as Request;
@@ -38,7 +38,6 @@ class ProductController extends DefaultController
             'id' => $id,
             'product' => $Product,
         ]);
-
     }
 
     public function list()

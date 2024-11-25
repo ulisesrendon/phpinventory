@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Product\DAO;
+namespace App\Product\Data;
 
 use App\Framework\Database\DataBaseAccess;
 
@@ -22,11 +22,11 @@ class ProductQuery
                 products.description,
                 products.updated_at,
                 products.price,
-                product_stocks.stock,
-                product_stocks.price as price_alt,
-                product_stocks.product_entry_id as entry_id
+                entries_products.stock,
+                entries_products.price as price_alt,
+                entries_products.product_entry_id as entry_id
             from products
-            left join product_stocks on product_stocks.product_id = products.id
+            left join entries_products on entries_products.product_id = products.id
             where deleted_at is null $condition";
     }
 

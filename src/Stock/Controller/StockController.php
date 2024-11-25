@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Product\Controller;
+namespace App\Stock\Controller;
 
-use App\Product\DAO\StockQuery;
-use App\Product\DAO\StockCommand;
+use App\Stock\Data\StockQuery;
+use App\Stock\Data\StockCommand;
 use Neuralpin\HTTPRouter\Response;
 use App\Framework\HTTP\DefaultController;
 use Neuralpin\HTTPRouter\RequestData as Request;

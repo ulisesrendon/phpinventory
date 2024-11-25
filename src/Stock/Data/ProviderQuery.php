@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Product\DAO;
+namespace App\Stock\Data;
 
 use App\Framework\Database\DataBaseAccess;
 

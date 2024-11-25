@@ -5,7 +5,7 @@ use App\Framework\Validator;
 use App\Order\Data\OrderQuery;
 use App\Order\Data\OrderState;
 use App\Order\Data\OrderCommand;
-use App\Product\DAO\ProductQuery;
+use App\Product\Data\ProductQuery;
 use Neuralpin\HTTPRouter\Response;
 use Neuralpin\HTTPRouter\RequestData;
 use App\Framework\HTTP\DefaultController;

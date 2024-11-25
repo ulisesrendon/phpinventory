@@ -5,9 +5,9 @@ use Neuralpin\HTTPRouter\Response;
 use App\Framework\HTTP\RouteMapper;
 use App\Database\Migration\Migration;
 use App\Order\Controller\OrderController;
-use App\Product\Controller\StockController;
+use App\Stock\Controller\StockController;
+use App\Stock\Controller\ProviderController;
 use App\Product\Controller\ProductController;
-use App\Product\Controller\ProviderController;
 
 $Router = new Router(ControllerMapper: RouteMapper::class);
 
@@ -24,16 +24,16 @@ $Router->get('/api/v1/provider/:id', [ProviderController::class, 'getById']);
 $Router->patch('/api/v1/provider/:id', [ProviderController::class, 'update']);
 $Router->delete('/api/v1/provider/:id', [ProviderController::class, 'delete']);
 
-$Router->get('/api/v1/order', [OrderController::class, 'list']);
-$Router->post('/api/v1/order', [OrderController::class, 'create']);
-$Router->get('/api/v1/order/:id', [OrderController::class, 'getById']);
-$Router->patch('/api/v1/order/:id', [OrderController::class, 'update']);
-
 $Router->get('/api/v1/stock', [StockController::class, 'list']);
 $Router->get('/api/v1/stock/:id', [StockController::class, 'getByProductId']);
 $Router->post('/api/v1/stock', [StockController::class, 'create']);
 $Router->post('/api/v1/stock/:id/sync', [StockController::class, 'productStockSync']);
 $Router->delete('/api/v1/stock', [StockController::class, 'delete']);
+
+$Router->get('/api/v1/order', [OrderController::class, 'list']);
+$Router->post('/api/v1/order', [OrderController::class, 'create']);
+$Router->get('/api/v1/order/:id', [OrderController::class, 'getById']);
+$Router->patch('/api/v1/order/:id', [OrderController::class, 'update']);
 
 $Router->post('/api/v1/migrate', [Migration::class, 'start']);
 

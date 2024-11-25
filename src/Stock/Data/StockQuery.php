@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Product\DAO;
+namespace App\Stock\Data;
 
 use App\Framework\Database\DataBaseAccess;
 
@@ -17,22 +17,22 @@ class StockQuery
     {
         return $this->DataBaseAccess->query('SELECT 
                 products.id as product_id,
-                product_stocks.id as stock_id,
+                entries_products.id as stock_id,
                 entrylines.id as entry_id,
                 entrylines.lot,
                 entrylines.pieces,
-                product_stocks.stock,
+                entries_products.stock,
                 products.price as base_price,
-                product_stocks.price as price_alternative,
+                entries_products.price as price_alternative,
                 entries.provider_id,
                 providers.title as provider_title,
                 entries.created_at
-            from product_stocks
-            left join products on products.id = product_stocks.product_id
-            left join entrylines on product_stocks.product_entry_id = entrylines.id
+            from entries_products
+            left join products on products.id = entries_products.product_id
+            left join entrylines on entries_products.product_entry_id = entrylines.id
             left join entries on entries.id = entrylines.entry_id
             left join providers on providers.id = entries.provider_id
-            where product_stocks.product_id = :id
+            where entries_products.product_id = :id
             order by entries.created_at desc
         ', ['id' => $id]);
     }
@@ -43,9 +43,9 @@ class StockQuery
                 products.id, 
                 products.code,
                 products.title,
-                COALESCE(sum(product_stocks.stock), 0) as stock
+                COALESCE(sum(entries_products.stock), 0) as stock
             from products
-            left join product_stocks on product_stocks.product_id = products.id
+            left join entries_products on entries_products.product_id = products.id
             where products.deleted_at is null and products.id = :id
             group by 
                 products.id, 
@@ -67,9 +67,9 @@ class StockQuery
                 products.id, 
                 products.code,
                 products.title,
-                COALESCE(sum(product_stocks.stock), 0) as stock
+                COALESCE(sum(entries_products.stock), 0) as stock
             from products
-            left join product_stocks on product_stocks.product_id = products.id
+            left join entries_products on entries_products.product_id = products.id
             where products.deleted_at is null
             group by 
                 products.id, 

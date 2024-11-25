@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Product\DAO;
+namespace App\Stock\Data;
 
 use App\Framework\Database\DataBaseAccess;
 
-class ProductCommand
+class ProviderCommand
 {
     public DataBaseAccess $DataBaseAccess;
 
@@ -13,33 +13,23 @@ class ProductCommand
         $this->DataBaseAccess = $DataBaseAccess;
     }
 
-    /**
-     * Save new product data
-     *
-     * @return bool|int|null
-     */
     public function create(
-        string $code,
         string $title,
         string $description = '',
-        float $price = 0,
-    ): null|bool|int|string {
-
-        return $this->DataBaseAccess->insert('products', [
-            'code' => $code,
+    ): bool|string|null {
+        return $this->DataBaseAccess->insert('providers', [
             'title' => $title,
             'description' => $description,
-            'price' => $price,
         ]);
     }
 
     public function delete(int $id): bool
     {
-        return $this->DataBaseAccess->delete('products', $id);
+        return $this->DataBaseAccess->delete('providers', $id);
     }
 
     public function update(array $fields): ?bool
     {
-        return $this->DataBaseAccess->update('products', $fields);
+        return $this->DataBaseAccess->update('providers', $fields);
     }
 }
