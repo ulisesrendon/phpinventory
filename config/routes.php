@@ -33,11 +33,11 @@ $Router->delete('/api/v1/stock', [StockController::class, 'delete']);
 $Router->get('/api/v1/order', [OrderController::class, 'list']);
 $Router->post('/api/v1/order', [OrderController::class, 'create']);
 $Router->get('/api/v1/order/:id', [OrderController::class, 'getById']);
-$Router->patch('/api/v1/order/:id', [OrderController::class, 'update']);
+// $Router->patch('/api/v1/order/:id', [OrderController::class, 'update']);
 
 $Router->post('/api/v1/migrate', [Migration::class, 'start']);
 
-$Router->get('/route-list', function() use($Router){
+$Router->get('/api/v1/route-list', function() use($Router){
     $list = [];
     foreach($Router->RouteCollection->getRoutes() as $uri => $Route){
         foreach($Route->getControllerAll() as $method => $Controller){
