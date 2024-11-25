@@ -13,15 +13,39 @@ class OrderQuery
         $this->DataBaseAccess = $DataBaseAccess;
     }
 
-    public function list(): ?array
+    public function getOrderQuery(string $extraParts = ''): string
     {
-        return $this->DataBaseAccess->query('SELECT 
-                *
+        return "SELECT 
+                orders.id,
+                orders.customer_id,
+                orders.payment_method_id,
+                orders.address_id,
+                orders.amount_total,
+                orders.created_at,
+                orders.updated_at
             from orders
-            where orders.deleted_at is null
-            order by orders.created_at desc
-        ');
+            where deleted_at is null $extraParts";
     }
 
-    
+    public function getById(int $id): ?array
+    {
+        return $this->DataBaseAccess->query($this->getOrderQuery('and orders.id = :id'), ['id' => $id]);
+    }
+
+    public function list(?array $ids = null): ?array
+    {
+        $idCondition = '';
+        $params = [];
+        if(!empty($ids)){
+            foreach($ids AS $id){
+                $params["id_$id"] = $id;
+            }
+            $markers = implode(',:', array_keys($params));
+            $idCondition = "and orders.id in (:$markers) ";
+        }
+
+        return $this->DataBaseAccess->query($this->getOrderQuery($idCondition.'order by orders.id'));
+    }
+
+
 }

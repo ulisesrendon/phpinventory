@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Product\Presentor;
+namespace App\Stock\Presentor;
 
 class ProductOptionGrouping
 {

@@ -6,7 +6,6 @@ use App\Product\Data\ProductQuery;
 use Neuralpin\HTTPRouter\Response;
 use App\Product\Data\ProductCommand;
 use App\Framework\HTTP\DefaultController;
-use App\Product\Presentor\ProductOptionGrouping;
 use Neuralpin\HTTPRouter\RequestData as Request;
 
 class ProductController extends DefaultController
@@ -24,8 +23,7 @@ class ProductController extends DefaultController
 
     public function getById(int $id)
     {
-        $ProductOptions = (new ProductOptionGrouping($this->ProductQuery->getById($id)))->get();
-        $Product = $ProductOptions[$id] ?? null;
+        $Product = $this->ProductQuery->getById($id);
 
         if (is_null($Product)) {
             return Response::json([
@@ -42,8 +40,7 @@ class ProductController extends DefaultController
 
     public function list()
     {
-        $ProductData = $this->ProductQuery->list();
-        $ProductList = (new ProductOptionGrouping($ProductData))->get();
+        $ProductList = $this->ProductQuery->list();
 
         return Response::json([
             'count' => count($ProductList),
@@ -98,8 +95,7 @@ class ProductController extends DefaultController
         $description = $Request->getInput('description') ?? null;
         $price = $Request->getInput('price') ?? null;
 
-        $OlderProductOptions = (new ProductOptionGrouping($this->ProductQuery->getById($id)))->get();
-        $OlderProductData = $OlderProductOptions[$id] ?? null;
+        $OlderProductData = $this->ProductQuery->getById($id);
 
         if (empty($OlderProductData)) {
             return Response::json([
@@ -115,7 +111,7 @@ class ProductController extends DefaultController
 
         if (
             ! empty($code)
-            && $code != $OlderProductData->code
+            && $code != $OlderProductData['code']
             && $this->ProductQuery->codeExists($code)
         ) {
             return Response::json([

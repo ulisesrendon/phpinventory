@@ -5,17 +5,18 @@ use App\Framework\Validator;
 use App\Order\Data\OrderQuery;
 use App\Order\Data\OrderState;
 use App\Order\Data\OrderCommand;
+use App\Order\Data\OrderLineQuery;
 use App\Product\Data\ProductQuery;
 use Neuralpin\HTTPRouter\Response;
 use Neuralpin\HTTPRouter\RequestData;
 use App\Framework\HTTP\DefaultController;
-use App\Product\Presentor\ProductOptionGrouping;
 use Neuralpin\HTTPRouter\Interface\ResponseState;
 
 class OrderController extends DefaultController
 {
     private readonly OrderQuery $OrderQuery;
     private readonly OrderCommand $OrderCommand;
+    private readonly OrderLineQuery $OrderLineQuery;
     private readonly ProductQuery $ProductQuery;
 
     public function __construct()
@@ -24,6 +25,7 @@ class OrderController extends DefaultController
         $this->OrderQuery = new OrderQuery($this->DataBaseAccess);
         $this->OrderCommand = new OrderCommand($this->DataBaseAccess);
         $this->ProductQuery = new ProductQuery($this->DataBaseAccess);
+        $this->OrderLineQuery = new OrderLineQuery($this->DataBaseAccess);
     }
 
     public function list(): ResponseState
@@ -129,14 +131,15 @@ class OrderController extends DefaultController
         }
 
         $ProductData = $this->ProductQuery->list($ProductIds);
-        $ProductList = (new ProductOptionGrouping($ProductData))->get();
-
+        
+        $ProductList = [];
+        foreach($ProductData as $row){
+            $ProductList[$row->id] = $row;
+        }
 
         $amount = 0;
         $lines = [];
 
-        //[TODO] Validate product stock before creating order
-        //[TODO] Validate item entries
         foreach ($items as $item) {
             if (!isset($ProductList[$item['id']])) {
                 continue;
@@ -151,8 +154,6 @@ class OrderController extends DefaultController
                 'amount_by_piece' => $ProductList[$item['id']]->price,
                 'amount_total' => $total,
             ];
-
-            $ProductList[$item['id']]->selected = &$lines[$item['id']];
         }
 
         $OrderId = $this->OrderCommand->create(
@@ -179,6 +180,19 @@ class OrderController extends DefaultController
 
     public function getById(int $id)
     {
-        return Response::json($id);
+        $Data = $this->OrderQuery->getById($id);
+
+        if (is_null($Data)) {
+            return Response::json([
+                'id' => $id,
+                'order' => [],
+            ], 404);
+        }
+
+        return Response::json([
+            'id' => $id,
+            'order' => $Data[0],
+            'products' => $this->OrderLineQuery->getByOrderId($id),
+        ]);
     }
 }

@@ -21,12 +21,8 @@ class ProductQuery
                 products.title,
                 products.description,
                 products.updated_at,
-                products.price,
-                entries_products.stock,
-                entries_products.price as price_alt,
-                entries_products.product_entry_id as entry_id
+                products.price
             from products
-            left join entries_products on entries_products.product_id = products.id
             where deleted_at is null $condition";
     }
 
