@@ -1,8 +1,8 @@
 <?php
 
-use App\Framework\RouteMapper;
 use Neuralpin\HTTPRouter\Router;
 use Neuralpin\HTTPRouter\Response;
+use App\Framework\HTTP\RouteMapper;
 use App\Database\Migration\Migration;
 use App\Order\Controller\OrderController;
 use App\Product\Controller\StockController;

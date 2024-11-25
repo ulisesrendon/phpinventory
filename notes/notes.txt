@@ -5,3 +5,8 @@
 
 #1 | Redragon Kumara | 1200 | 12
 #2 | LG Monitor 4k | 5500 | 5
+
+
+
+// Free plan for MySQL
+https://aiven.io/pricing?product=mysql

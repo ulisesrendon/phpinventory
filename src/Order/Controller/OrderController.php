@@ -7,8 +7,8 @@ use App\Order\Data\OrderState;
 use App\Order\Data\OrderCommand;
 use App\Product\DAO\ProductQuery;
 use Neuralpin\HTTPRouter\Response;
-use App\Shared\Controller\DefaultController;
 use Neuralpin\HTTPRouter\RequestData;
+use App\Framework\HTTP\DefaultController;
 use App\Product\Presentor\ProductOptionGrouping;
 use Neuralpin\HTTPRouter\Interface\ResponseState;
 

@@ -2,11 +2,11 @@
 
 namespace App\Product\Controller;
 
-use App\Product\DAO\ProviderCommand;
 use App\Product\DAO\ProviderQuery;
-use App\Shared\Controller\DefaultController;
-use Neuralpin\HTTPRouter\RequestData as Request;
 use Neuralpin\HTTPRouter\Response;
+use App\Product\DAO\ProviderCommand;
+use App\Framework\HTTP\DefaultController;
+use Neuralpin\HTTPRouter\RequestData as Request;
 
 class ProviderController extends DefaultController
 {

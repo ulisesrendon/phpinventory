@@ -2,11 +2,11 @@
 
 namespace App\Product\Controller;
 
-use App\Product\DAO\StockCommand;
 use App\Product\DAO\StockQuery;
-use App\Shared\Controller\DefaultController;
-use Neuralpin\HTTPRouter\RequestData as Request;
+use App\Product\DAO\StockCommand;
 use Neuralpin\HTTPRouter\Response;
+use App\Framework\HTTP\DefaultController;
+use Neuralpin\HTTPRouter\RequestData as Request;
 
 class StockController extends DefaultController
 {

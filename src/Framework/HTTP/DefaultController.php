@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Shared\Controller;
+namespace App\Framework\HTTP;
 
 use App\Framework\Database\DataBaseAccess;
 use Neuralpin\HTTPRouter\Response;

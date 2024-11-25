@@ -2,11 +2,11 @@
 
 namespace App\Product\Controller;
 
-use App\Product\DAO\ProductCommand;
 use App\Product\DAO\ProductQuery;
-use App\Product\Presentor\ProductOptionGrouping;
-use App\Shared\Controller\DefaultController;
 use Neuralpin\HTTPRouter\Response;
+use App\Product\DAO\ProductCommand;
+use App\Framework\HTTP\DefaultController;
+use App\Product\Presentor\ProductOptionGrouping;
 use Neuralpin\HTTPRouter\RequestData as Request;
 
 class ProductController extends DefaultController
