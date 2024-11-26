@@ -1,6 +1,6 @@
 <?php
 
-namespace Stradow\Order\Event;
+namespace Stradow\Framework\Event;
 
 use Stradow\Framework\Event\Interfaces\StoppableEventInterface;
 
