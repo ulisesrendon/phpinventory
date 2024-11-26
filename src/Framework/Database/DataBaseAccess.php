@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Framework\Database;
+namespace Stradow\Framework\Database;
 
 use InvalidArgumentException;
 
@@ -26,7 +26,7 @@ class DataBaseAccess extends DataBaseBasicAccess
     /**
      * Execute a single database insert command with multiple values
      */
-    public function multiInsert(string $table, array $data): ?bool  
+    public function multiInsert(string $table, array $data): ?bool
     {
         if (empty($data)) {
             return null;
@@ -36,7 +36,7 @@ class DataBaseAccess extends DataBaseBasicAccess
 
         $params = [];
         $fieldMarkers = [];
-        
+
         foreach ($data as $index => $row) {
             $fieldMakers = [];
 
@@ -44,7 +44,7 @@ class DataBaseAccess extends DataBaseBasicAccess
                 throw new InvalidArgumentException('Not all product lines have the same fields');
             }
 
-            foreach($row as $name => $value){
+            foreach ($row as $name => $value) {
                 $paramName = "{$name}_{$index}";
                 $params[$paramName] = $value;
                 $fieldMakers[] = ":$paramName";

@@ -1,8 +1,5 @@
 <?php
-namespace App\Framework\DependencyResolver;
 
-use App\Framework\DependencyResolver\ContainerException;
+namespace Stradow\Framework\DependencyResolver;
 
-class NotFoundException extends ContainerException
-{
-}
+class NotFoundException extends ContainerException {}

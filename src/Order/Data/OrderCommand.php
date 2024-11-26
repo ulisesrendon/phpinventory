@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Order\Data;
+namespace Stradow\Order\Data;
 
-use App\Framework\Database\DataBaseAccess;
+use Stradow\Framework\Database\DataBaseAccess;
 
 class OrderCommand
 {
@@ -19,13 +19,12 @@ class OrderCommand
         ?int $address = null,
         ?int $paymentMethod = null,
         array $lines = [],
-    ): ?int
-    {
+    ): ?int {
         $this->DataBaseAccess->beginTransaction();
 
-        try{
+        try {
             $orderId = $this->DataBaseAccess->insert(
-                table: 'orders', 
+                table: 'orders',
                 fields: [
                     'amount_total' => $amount,
                     'customer_id' => $customer,
@@ -34,7 +33,7 @@ class OrderCommand
                 ]
             );
 
-            foreach($lines as $k => $line){
+            foreach ($lines as $k => $line) {
                 $lines[$k]['order_id'] = $orderId;
             }
 
@@ -44,7 +43,7 @@ class OrderCommand
             );
 
             $this->DataBaseAccess->commit();
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->DataBaseAccess->rollback();
             throw $e;
         }

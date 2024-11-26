@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Product\Data;
+namespace Stradow\Product\Data;
 
-use App\Framework\Database\DataBaseAccess;
+use Stradow\Framework\Database\DataBaseAccess;
 
 class ProductQuery
 {
@@ -42,8 +42,8 @@ class ProductQuery
     {
         $idCondition = '';
         $params = [];
-        if(!empty($ids)){
-            foreach($ids AS $id){
+        if (! empty($ids)) {
+            foreach ($ids as $id) {
                 $params["id_$id"] = $id;
             }
             $markers = implode(',:', array_keys($params));
@@ -51,7 +51,7 @@ class ProductQuery
         }
 
         return $this->DataBaseAccess->query(
-            $this->getProductQuery($idCondition . 'order by products.title'),
+            $this->getProductQuery($idCondition.'order by products.title'),
             $params
         );
     }

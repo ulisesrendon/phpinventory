@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Framework\Database\Intertface;
+namespace Stradow\Framework\Database\Interface;
 
 /**
  * It Works with Database Transactions

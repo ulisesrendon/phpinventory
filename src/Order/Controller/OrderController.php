@@ -1,24 +1,28 @@
 <?php
-namespace App\Order\Controller;
 
-use App\Framework\Validator;
-use App\Framework\Event\Event;
-use App\Order\Data\OrderQuery;
-use App\Order\Data\OrderState;
-use App\Order\Data\OrderCommand;
-use App\Order\Event\OrderCreated;
-use App\Order\Data\OrderLineQuery;
-use App\Product\Data\ProductQuery;
-use Neuralpin\HTTPRouter\Response;
-use Neuralpin\HTTPRouter\RequestData;
-use App\Framework\HTTP\DefaultController;
+namespace Stradow\Order\Controller;
+
 use Neuralpin\HTTPRouter\Interface\ResponseState;
+use Neuralpin\HTTPRouter\RequestData;
+use Neuralpin\HTTPRouter\Response;
+use Stradow\Framework\Event\Event;
+use Stradow\Framework\HTTP\DefaultController;
+use Stradow\Framework\Validator;
+use Stradow\Order\Data\OrderCommand;
+use Stradow\Order\Data\OrderLineQuery;
+use Stradow\Order\Data\OrderQuery;
+use Stradow\Order\Data\OrderState;
+use Stradow\Order\Event\OrderCreated;
+use Stradow\Product\Data\ProductQuery;
 
 class OrderController extends DefaultController
 {
     private readonly OrderQuery $OrderQuery;
+
     private readonly OrderCommand $OrderCommand;
+
     private readonly OrderLineQuery $OrderLineQuery;
+
     private readonly ProductQuery $ProductQuery;
 
     public function __construct()
@@ -39,6 +43,7 @@ class OrderController extends DefaultController
             'list' => $Orders,
         ]);
     }
+
     public function create(RequestData $Request): ResponseState
     {
         $customer = $Request->getInput('customer');
@@ -48,14 +53,14 @@ class OrderController extends DefaultController
 
         $errors = [];
 
-        $Validator = new Validator();    
+        $Validator = new Validator;
         $customerIsValid = is_null($customer) || $Validator
             ->setField($customer)
             ->int()
             ->min(1)
             ->isCorrect();
 
-        if(!$customerIsValid){
+        if (! $customerIsValid) {
             $errors[] = 'Invalid customer';
         }
 
@@ -65,7 +70,7 @@ class OrderController extends DefaultController
             ->min(1)
             ->isCorrect();
 
-        if(!$addressIsValid){
+        if (! $addressIsValid) {
             $errors[] = 'Invalid customer address';
         }
 
@@ -75,7 +80,7 @@ class OrderController extends DefaultController
             ->min(1)
             ->isCorrect();
 
-        if (!$paymentMethodIsValid) {
+        if (! $paymentMethodIsValid) {
             $errors[] = 'Invalid payment method';
         }
 
@@ -105,27 +110,27 @@ class OrderController extends DefaultController
             initial: true
         );
 
-        if (!$itemListIsValid) {
+        if (! $itemListIsValid) {
             $errors[] = 'Invalid order items';
         }
 
-        $OrderState = new OrderState();
+        $OrderState = new OrderState;
         $ProductIds = [];
-        if(empty($errors)){
-            try{
+        if (empty($errors)) {
+            try {
                 $OrderState
                     ->setCustomer($customer)
                     ->setAddress($address)
                     ->setPaymentMethod($paymentMethod)
                     ->setItems($items);
-            }catch(\Exception|\Throwable){
+            } catch (\Exception|\Throwable) {
                 $errors[] = 'Invalid order data';
             }
 
             $ProductIds = array_column($items, 'id');
         }
 
-        if(!empty($errors)){
+        if (! empty($errors)) {
             return Response::json([
                 'status' => 'error',
                 'error' => 'invalid order data',
@@ -133,9 +138,9 @@ class OrderController extends DefaultController
         }
 
         $ProductData = $this->ProductQuery->list($ProductIds);
-        
+
         $ProductList = [];
-        foreach($ProductData as $row){
+        foreach ($ProductData as $row) {
             $ProductList[$row->id] = $row;
         }
 
@@ -143,7 +148,7 @@ class OrderController extends DefaultController
         $lines = [];
 
         foreach ($items as $item) {
-            if (!isset($ProductList[$item['id']])) {
+            if (! isset($ProductList[$item['id']])) {
                 continue;
             }
 

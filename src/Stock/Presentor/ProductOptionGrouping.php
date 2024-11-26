@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Stock\Presentor;
+namespace Stradow\Stock\Presentor;
 
 class ProductOptionGrouping
 {
     /**
      * Summary of List
-     * @var object[] $List 
+     *
+     * @var object[]
      */
     protected array $List = [];
 
     /**
-     * @param object[] $ProductBaseList
+     * @param  object[]  $ProductBaseList
      */
     public function __construct(array $ProductBaseList)
     {
@@ -19,9 +20,8 @@ class ProductOptionGrouping
         $this->List = $this->present($ProductGroup);
     }
 
-
     /**
-     * @param object[] $ProductBaseList
+     * @param  object[]  $ProductBaseList
      * @return object[][]
      */
     protected function group(array $ProductBaseList): array
@@ -48,7 +48,7 @@ class ProductOptionGrouping
                 'options' => [],
             ];
             foreach ($Group as $Item) {
-                if(is_null($Item->stock)){
+                if (is_null($Item->stock)) {
                     continue;
                 }
                 $Product['stock'] += $Item->stock;
@@ -66,6 +66,7 @@ class ProductOptionGrouping
 
     /**
      * Summary of get
+     *
      * @return object[]
      */
     public function get(): array

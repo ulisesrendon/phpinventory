@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Stock\Data;
+namespace Stradow\Stock\Data;
 
-use App\Framework\Database\DataBaseAccess;
+use Stradow\Framework\Database\DataBaseAccess;
 
 class ProviderCommand
 {

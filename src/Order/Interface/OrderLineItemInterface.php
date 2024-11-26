@@ -1,8 +1,10 @@
 <?php
-namespace App\Order\Interface;
+
+namespace Stradow\Order\Interface;
 
 interface OrderLineItemInterface
 {
-    public function getPieces(): null|int;
-    public function getProductId(): null|int;
+    public function getPieces(): ?int;
+
+    public function getProductId(): ?int;
 }

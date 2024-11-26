@@ -1,9 +1,6 @@
 <?php
 
-namespace App\Framework\DependencyResolver;
-
-use App\Framework\DependencyResolver\NotFoundException;
-use App\Framework\DependencyResolver\ContainerException;
+namespace Stradow\Framework\DependencyResolver;
 
 final class Container
 {
@@ -14,37 +11,38 @@ final class Container
 
     /**
      * Summary of resolve
-     * @param class-string $className
+     *
+     * @param  class-string  $className
+     *
      * @throws ContainerException|NotFoundException
-     * @return object
      */
     public function resolve(string $className): object
     {
-        try{
+        try {
             $reflectionClass = new \ReflectionClass($className);
-        }catch(\Exception $e ){
+        } catch (\Exception $e) {
             throw new NotFoundException($e->getMessage());
         }
 
         $constructor = $reflectionClass->getConstructor();
 
-        # If constructor is empty, we can do a `new $className()`
-        if (null === $constructor) {
+        // If constructor is empty, we can do a `new $className()`
+        if ($constructor === null) {
             return $reflectionClass->newInstance();
         }
 
-        # If not empty, let's resolve the class dependencies
+        // If not empty, let's resolve the class dependencies
         $dependencies = [];
         foreach ($constructor->getParameters() as $parameter) {
             $paramName = $parameter->getType()?->getName();
-            if(!is_null($paramName)){
-                $dependencies[] = $this->container[$paramName] ?? $this->resolve($paramName); # 🌀 Recursion
-            }else{
+            if (! is_null($paramName)) {
+                $dependencies[] = $this->container[$paramName] ?? $this->resolve($paramName); // 🌀 Recursion
+            } else {
                 $dependencies[] = null;
             }
         }
 
-        # Finally, we store in the container the resolved class
+        // Finally, we store in the container the resolved class
         $class = $reflectionClass->newInstanceArgs($dependencies);
         $this->container[$className] = $class;
 
@@ -54,11 +52,14 @@ final class Container
 
     /**
      * Summary of add
+     *
      * @template T
-     * @param class-string $className
-     * @param object<T> $instance
-     * @throws ContainerException
+     *
+     * @param  class-string  $className
+     * @param  object<T>  $instance
      * @return object<T>
+     *
+     * @throws ContainerException
      */
     public static function add(string $className, object $instance)
     {
@@ -66,7 +67,7 @@ final class Container
             self::$Instance = new self;
         }
 
-        if(isset(self::$Instance->container[$className])){
+        if (isset(self::$Instance->container[$className])) {
             throw new ContainerException('Dependency already exists');
         }
 
@@ -77,22 +78,25 @@ final class Container
 
     /**
      * Summary of get
+     *
      * @template T
-     * @param class-string<T> $className
-     * @throws NotFoundException
+     *
+     * @param  class-string<T>  $className
      * @return T
+     *
+     * @throws NotFoundException
      */
     public static function get(string $className): object
     {
-        if(is_null(self::$Instance)){
+        if (is_null(self::$Instance)) {
             self::$Instance = new self;
         }
 
-        if(!self::has($className)){
+        if (! self::has($className)) {
             self::$Instance->resolve($className);
         }
 
-        if(is_null(self::$Instance->container[$className])){
+        if (is_null(self::$Instance->container[$className])) {
             throw new NotFoundException;
         }
 

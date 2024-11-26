@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Stock\Controller;
+namespace Stradow\Stock\Controller;
 
-use App\Stock\Data\ProviderQuery;
-use Neuralpin\HTTPRouter\Response;
-use App\Stock\Data\ProviderCommand;
-use App\Framework\HTTP\DefaultController;
 use Neuralpin\HTTPRouter\RequestData as Request;
+use Neuralpin\HTTPRouter\Response;
+use Stradow\Framework\HTTP\DefaultController;
+use Stradow\Stock\Data\ProviderCommand;
+use Stradow\Stock\Data\ProviderQuery;
 
 class ProviderController extends DefaultController
 {

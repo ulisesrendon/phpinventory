@@ -1,5 +1,7 @@
 <?php
-namespace App\Framework;
+
+namespace Stradow\Framework;
+
 /*
 $test = 5;
 $result = (new Validator($test))
@@ -31,14 +33,15 @@ class Validator
         $this->isCorrect = true;
         $this->errors = [];
         $this->field = $field;
+
         return $this;
     }
-    
+
     public function getErrors(): array
     {
         return $this->errors;
     }
-    
+
     public function isCorrect(): bool
     {
         return $this->isCorrect;
@@ -46,7 +49,7 @@ class Validator
 
     public function required(?string $errorName = null): static
     {
-        if(is_null($this->field)){
+        if (is_null($this->field)) {
             $this->isCorrect = false;
             $this->errors[] = 'required';
         }
@@ -54,10 +57,9 @@ class Validator
         return $this;
     }
 
-
     public function populated(?string $errorName = null): static
     {
-        if(empty($this->field)){
+        if (empty($this->field)) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'populated';
         }
@@ -67,7 +69,7 @@ class Validator
 
     public function int(?string $errorName = null): static
     {
-        if(!is_int($this->field)){
+        if (! is_int($this->field)) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'int';
         }
@@ -77,7 +79,7 @@ class Validator
 
     public function bool(?string $errorName = null): static
     {
-        if(!is_bool($this->field)){
+        if (! is_bool($this->field)) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'bool';
         }
@@ -87,7 +89,7 @@ class Validator
 
     public function float(?string $errorName = null): static
     {
-        if(!is_float($this->field)){
+        if (! is_float($this->field)) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'float';
         }
@@ -97,7 +99,7 @@ class Validator
 
     public function numeric(?string $errorName = null): static
     {
-        if(!is_numeric($this->field)){
+        if (! is_numeric($this->field)) {
             $this->isCorrect = false;
             $this->errors[] = 'numeric';
             $this->errors[] = $errorName ? $errorName : 'numeric';
@@ -108,7 +110,7 @@ class Validator
 
     public function string(?string $errorName = null): static
     {
-        if(!is_string($this->field)){
+        if (! is_string($this->field)) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'string';
         }
@@ -118,7 +120,7 @@ class Validator
 
     public function max(int|float $value, ?string $errorName = null): static
     {
-        if($this->field > $value){
+        if ($this->field > $value) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'max';
         }
@@ -128,7 +130,7 @@ class Validator
 
     public function min(int|float $value, ?string $errorName = null): static
     {
-        if($this->field < $value){
+        if ($this->field < $value) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'min';
         }
@@ -138,16 +140,17 @@ class Validator
 
     public function equals(mixed $value, ?string $errorName = null): static
     {
-        if($this->field != $value){
+        if ($this->field != $value) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'equals';
         }
 
         return $this;
     }
+
     public function array(array $value, ?string $errorName = null): static
     {
-        if(!is_array($value)){
+        if (! is_array($value)) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'array';
         }
@@ -157,7 +160,7 @@ class Validator
 
     public function match(string $value, ?string $errorName = null): static
     {
-        if(!preg_match($value, (string) $this->field)){
+        if (! preg_match($value, (string) $this->field)) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'match';
         }
@@ -167,7 +170,7 @@ class Validator
 
     public function custom(\Closure $argument, ?string $errorName = null): static
     {
-        if(!$argument($this->field)){
+        if (! $argument($this->field)) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'custom';
         }
@@ -177,7 +180,7 @@ class Validator
 
     public function email(?string $errorName = null): static
     {
-        if(!filter_var($this->field, FILTER_VALIDATE_EMAIL)){
+        if (! filter_var($this->field, FILTER_VALIDATE_EMAIL)) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'email';
         }
@@ -187,12 +190,11 @@ class Validator
 
     public function url(?string $errorName = null): static
     {
-        if(!filter_var($this->field, FILTER_VALIDATE_URL)){
+        if (! filter_var($this->field, FILTER_VALIDATE_URL)) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'url';
         }
 
         return $this;
     }
-
 }

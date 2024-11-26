@@ -1,7 +1,7 @@
 <?php
 
-use App\Order\Event\OrderCreated;
-use App\Stock\Event\StockUpdatedListener;
+use Stradow\Order\Event\OrderCreated;
+use Stradow\Stock\Event\StockUpdatedListener;
 
 return [
     OrderCreated::class => [

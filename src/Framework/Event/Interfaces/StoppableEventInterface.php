@@ -1,5 +1,6 @@
 <?php
-namespace App\Framework\Event\Interfaces;
+
+namespace Stradow\Framework\Event\Interfaces;
 
 /**
  * An Event whose processing may be interrupted when the event has been handled.
@@ -17,8 +18,8 @@ interface StoppableEventInterface
      * previous listener halted propagation.
      *
      * @return bool
-     *   True if the Event is complete and no further listeners should be called.
-     *   False to continue calling listeners.
+     *              True if the Event is complete and no further listeners should be called.
+     *              False to continue calling listeners.
      */
     public function isPropagationStopped(): bool;
 }

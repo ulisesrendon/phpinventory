@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Order\Data;
+namespace Stradow\Order\Data;
 
-use App\Framework\Database\DataBaseAccess;
+use Stradow\Framework\Database\DataBaseAccess;
 
 class OrderLineQuery
 {

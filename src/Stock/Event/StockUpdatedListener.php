@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Stock\Event;
+namespace Stradow\Stock\Event;
 
-use App\Framework\Log;
+use Stradow\Framework\Log;
 
 class StockUpdatedListener
 {

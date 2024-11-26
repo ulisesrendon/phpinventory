@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Product\Controller;
+namespace Stradow\Product\Controller;
 
-use App\Product\Data\ProductQuery;
-use Neuralpin\HTTPRouter\Response;
-use App\Product\Data\ProductCommand;
-use App\Framework\HTTP\DefaultController;
 use Neuralpin\HTTPRouter\RequestData as Request;
+use Neuralpin\HTTPRouter\Response;
+use Stradow\Framework\HTTP\DefaultController;
+use Stradow\Product\Data\ProductCommand;
+use Stradow\Product\Data\ProductQuery;
 
 class ProductController extends DefaultController
 {

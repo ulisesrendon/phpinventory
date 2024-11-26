@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Framework\HTTP;
+namespace Stradow\Framework\HTTP;
 
 use Neuralpin\HTTPRouter\Route;
 

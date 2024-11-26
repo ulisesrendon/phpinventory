@@ -1,16 +1,16 @@
 <?php
-namespace App\Framework\Event;
 
-use App\Framework\Event\ListenerProvider;
-use App\Framework\DependencyResolver\Container;
-use App\Framework\Event\Interfaces\StoppableEventInterface;
+namespace Stradow\Framework\Event;
+
+use Stradow\Framework\DependencyResolver\Container;
+use Stradow\Framework\Event\Interfaces\StoppableEventInterface;
 
 class Event
 {
-
     /**
      * @template T
-     * @param object<T> $Event
+     *
+     * @param  object<T>  $Event
      * @return object<T>
      */
     public static function dispatch(object $Event)
@@ -20,8 +20,8 @@ class Event
 
         foreach ($Listeners as $Listener) {
             call_user_func($Listener, $Event);
-            
-            if($Event instanceof StoppableEventInterface && $Event->isPropagationStopped()){
+
+            if ($Event instanceof StoppableEventInterface && $Event->isPropagationStopped()) {
                 break;
             }
         }

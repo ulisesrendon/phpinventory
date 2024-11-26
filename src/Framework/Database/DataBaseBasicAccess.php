@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Framework\Database;
+namespace Stradow\Framework\Database;
 
-use App\Framework\Database\Intertface\DatabaseFetchQuery;
-use App\Framework\Database\Intertface\DatabaseSendCommand;
-use App\Framework\Database\Intertface\DatabaseTransaction;
 use PDO;
+use Stradow\Framework\Database\Interface\DatabaseFetchQuery;
+use Stradow\Framework\Database\Interface\DatabaseSendCommand;
+use Stradow\Framework\Database\Interface\DatabaseTransaction;
 
 /**
  * DataBaseAccess - Database Access Layer
@@ -17,7 +17,8 @@ class DataBaseBasicAccess implements DatabaseFetchQuery, DatabaseSendCommand, Da
     /**
      * Summary of __construct
      */
-    public function __construct(PDO $PDO) {
+    public function __construct(PDO $PDO)
+    {
         $this->PDO = $PDO;
     }
 

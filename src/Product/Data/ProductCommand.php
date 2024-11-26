@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Product\Data;
+namespace Stradow\Product\Data;
 
-use App\Framework\Database\DataBaseAccess;
+use Stradow\Framework\Database\DataBaseAccess;
 
 class ProductCommand
 {

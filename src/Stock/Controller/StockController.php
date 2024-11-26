@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Stock\Controller;
+namespace Stradow\Stock\Controller;
 
-use App\Stock\Data\StockQuery;
-use App\Stock\Data\StockCommand;
-use Neuralpin\HTTPRouter\Response;
-use App\Framework\HTTP\DefaultController;
 use Neuralpin\HTTPRouter\RequestData as Request;
+use Neuralpin\HTTPRouter\Response;
+use Stradow\Framework\HTTP\DefaultController;
+use Stradow\Stock\Data\StockCommand;
+use Stradow\Stock\Data\StockQuery;
 
 class StockController extends DefaultController
 {

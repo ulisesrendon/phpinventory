@@ -1,14 +1,13 @@
 <?php
 
-use Neuralpin\HTTPRouter\Router;
 use Neuralpin\HTTPRouter\Response;
-use App\Framework\HTTP\RouteMapper;
-use App\Database\Migration\Migration;
-use App\Order\Controller\OrderController;
-use App\Stock\Controller\StockController;
-use App\Stock\Controller\ProviderController;
-use App\Product\Controller\ProductController;
-
+use Neuralpin\HTTPRouter\Router;
+use Stradow\Database\Migration\Migration;
+use Stradow\Framework\HTTP\RouteMapper;
+use Stradow\Order\Controller\OrderController;
+use Stradow\Product\Controller\ProductController;
+use Stradow\Stock\Controller\ProviderController;
+use Stradow\Stock\Controller\StockController;
 
 $Router = new Router(ControllerMapper: RouteMapper::class);
 $Router->post('/api/v1/product', [ProductController::class, 'create']);
@@ -36,10 +35,10 @@ $Router->get('/api/v1/order/:id', [OrderController::class, 'getById']);
 
 $Router->post('/api/v1/migrate', [Migration::class, 'start']);
 
-$Router->get('/api/v1/route-list', function() use($Router){
+$Router->get('/api/v1/route-list', function () use ($Router) {
     $list = [];
-    foreach($Router->RouteCollection->getRoutes() as $uri => $Route){
-        foreach($Route->getControllerAll() as $method => $Controller){
+    foreach ($Router->RouteCollection->getRoutes() as $uri => $Route) {
+        foreach ($Route->getControllerAll() as $method => $Controller) {
             $list[] = "[$method] $uri";
         }
     }

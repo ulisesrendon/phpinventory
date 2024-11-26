@@ -1,11 +1,13 @@
 <?php
-namespace App\Order\Data;
 
-use App\Order\Interface\OrderLineItemInterface;
+namespace Stradow\Order\Data;
+
+use Stradow\Order\Interface\OrderLineItemInterface;
 
 class OrderLineState implements OrderLineItemInterface
 {
     private ?int $pieces;
+
     private ?int $productId;
 
     public function __construct(?int $id, ?int $pieces)
@@ -14,12 +16,12 @@ class OrderLineState implements OrderLineItemInterface
         $this->productId = $id;
     }
 
-    public function getPieces(): int|null
+    public function getPieces(): ?int
     {
         return $this->pieces;
     }
 
-    public function getProductId(): int|null
+    public function getProductId(): ?int
     {
         return $this->productId;
     }

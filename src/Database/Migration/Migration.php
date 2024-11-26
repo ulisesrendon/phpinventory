@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Database\Migration;
+namespace Stradow\Database\Migration;
 
 use Neuralpin\HTTPRouter\Response;
-use App\Framework\HTTP\DefaultController;
+use Stradow\Framework\HTTP\DefaultController;
 
 class Migration extends DefaultController
 {
@@ -48,7 +48,6 @@ class Migration extends DefaultController
                     ('Provider #2 el bueno'),
                     ('Provider #3 el otro')
             ");
-
 
             // -- entries structures
             $this->DataBaseAccess->command('CREATE table if not exists entries(
@@ -106,7 +105,6 @@ class Migration extends DefaultController
                     (2, 2, 10, 790),
                     (3, 3, 15, 650)
             ');
-
 
             // -- Order structures
             $this->DataBaseAccess->command('CREATE table if not exists orders(

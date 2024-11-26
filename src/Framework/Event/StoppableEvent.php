@@ -1,7 +1,8 @@
 <?php
-namespace App\Order\Event;
 
-use App\Framework\Event\Interfaces\StoppableEventInterface;
+namespace Stradow\Order\Event;
+
+use Stradow\Framework\Event\Interfaces\StoppableEventInterface;
 
 class StoppableEvent implements StoppableEventInterface
 {

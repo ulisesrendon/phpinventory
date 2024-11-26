@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Order\Data;
+namespace Stradow\Order\Data;
 
-use App\Framework\Database\DataBaseAccess;
+use Stradow\Framework\Database\DataBaseAccess;
 
 class OrderQuery
 {
@@ -36,8 +36,8 @@ class OrderQuery
     {
         $idCondition = '';
         $params = [];
-        if(!empty($ids)){
-            foreach($ids AS $id){
+        if (! empty($ids)) {
+            foreach ($ids as $id) {
                 $params["id_$id"] = $id;
             }
             $markers = implode(',:', array_keys($params));
@@ -46,6 +46,4 @@ class OrderQuery
 
         return $this->DataBaseAccess->query($this->getOrderQuery($idCondition.'order by orders.id'));
     }
-
-
 }

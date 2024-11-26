@@ -1,5 +1,6 @@
 <?php
-namespace App\Order\Event;
+
+namespace Stradow\Order\Event;
 
 class OrderCreated
 {
@@ -11,5 +12,4 @@ class OrderCreated
     {
         $this->Data = $Data;
     }
-
 }

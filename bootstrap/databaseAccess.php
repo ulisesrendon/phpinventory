@@ -1,7 +1,7 @@
 <?php
 
-use App\Framework\Database\DataBaseAccess;
-use App\Framework\DependencyResolver\Container;
+use Stradow\Framework\Database\DataBaseAccess;
+use Stradow\Framework\DependencyResolver\Container;
 
 $drive = DB_CONFIG['mainrdb']['drive'];
 $host = DB_CONFIG['mainrdb']['host'];
@@ -17,7 +17,6 @@ $PDO = new PDO(
 );
 $PDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $PDO->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
 
 $DataBaseAccess = new DataBaseAccess($PDO);
 Container::add(DataBaseAccess::class, $DataBaseAccess);

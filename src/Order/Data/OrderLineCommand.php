@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Order\Data;
+namespace Stradow\Order\Data;
 
-use App\Framework\Database\DataBaseAccess;
+use Stradow\Framework\Database\DataBaseAccess;
 
 class OrderLineCommand
 {
@@ -14,16 +14,15 @@ class OrderLineCommand
     }
 
     public function create(
-        ?int $order = null,
-        ?int $product = null,
+        ?int $order,
+        ?int $product,
         int $pieces,
         int|float $amountTotal = 0,
         int|float $amountByPiece = 0,
-    ): ?int 
-    {
+    ): ?int {
 
         $id = $this->DataBaseAccess->insert(
-            table: 'orderlines', 
+            table: 'orderlines',
             fields: [
                 'order_id' => $order,
                 'product_id' => $product,
