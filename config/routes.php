@@ -9,9 +9,8 @@ use App\Stock\Controller\StockController;
 use App\Stock\Controller\ProviderController;
 use App\Product\Controller\ProductController;
 
-$Router = new Router(ControllerMapper: RouteMapper::class);
 
-// $Router->any('/', fn () => 'Hello world!');
+$Router = new Router(ControllerMapper: RouteMapper::class);
 $Router->post('/api/v1/product', [ProductController::class, 'create']);
 $Router->get('/api/v1/product', [ProductController::class, 'list']);
 $Router->get('/api/v1/product/:id', [ProductController::class, 'getById']);
@@ -47,3 +46,5 @@ $Router->get('/api/v1/route-list', function() use($Router){
 
     return Response::json($list);
 });
+
+return $Router;

@@ -2,9 +2,11 @@
 namespace App\Order\Controller;
 
 use App\Framework\Validator;
+use App\Framework\Event\Event;
 use App\Order\Data\OrderQuery;
 use App\Order\Data\OrderState;
 use App\Order\Data\OrderCommand;
+use App\Order\Event\OrderCreated;
 use App\Order\Data\OrderLineQuery;
 use App\Product\Data\ProductQuery;
 use Neuralpin\HTTPRouter\Response;
@@ -164,18 +166,18 @@ class OrderController extends DefaultController
             lines: $lines,
         );
 
-        return Response::json([
-            'status' => 'success',
-            'order' => [
-                'id' => $OrderId,
-                'amount' => $amount,
-                'customer' => $customer,
-                'address' => $address,
-                'items' => $items,
-                'paymentMethod' => $paymentMethod,
-            ],
-            'products' => array_values($ProductList),
-        ], 201);
+        $OrderData = [
+            'id' => $OrderId,
+            'amount' => $amount,
+            'customer' => $customer,
+            'address' => $address,
+            'items' => $items,
+            'paymentMethod' => $paymentMethod,
+        ];
+
+        Event::dispatch(new OrderCreated($OrderData));
+
+        return Response::json($OrderData, 201);
     }
 
     public function getById(int $id)

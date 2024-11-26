@@ -1,3 +1,5 @@
 .env
 /vendor
+/logs/*
+!/logs/.gitkeep
 composer.lock

@@ -1,7 +1,5 @@
 <?php
 
-require __DIR__.'/routes.php';
-
 use Neuralpin\HTTPRouter\Response;
 
 $_ENV['APP_DEBUG'] ??= 0;

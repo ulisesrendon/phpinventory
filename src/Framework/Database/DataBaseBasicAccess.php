@@ -12,10 +12,14 @@ use PDO;
  */
 class DataBaseBasicAccess implements DatabaseFetchQuery, DatabaseSendCommand, DatabaseTransaction
 {
+    protected readonly PDO $PDO;
+
     /**
      * Summary of __construct
      */
-    public function __construct(protected readonly PDO $PDO) {}
+    public function __construct(PDO $PDO) {
+        $this->PDO = $PDO;
+    }
 
     /**
      * Return sql string binding params
@@ -72,5 +76,10 @@ class DataBaseBasicAccess implements DatabaseFetchQuery, DatabaseSendCommand, Da
     public function rollBack(): bool
     {
         return $this->PDO->rollBack();
+    }
+
+    public function getConnection(): PDO
+    {
+        return $this->PDO;
     }
 }
