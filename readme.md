@@ -8,13 +8,23 @@
 
 ## Installation
 
-### 1 Clone proyect with git
-### 2 Create and configure .env file with database and system variables
-### 3 Install dependencies
+### 1 - Clone project with git
+### 2 - Create and configure .env file with database and system variables
+```
+APP_DEBUG = 1
+
+DB_DRIVE = 'mysql'
+DB_HOST = 'localhost'
+DB_PORT = 3306
+DB_NAME = 'databasename'
+DB_USER = 'databaseuser'
+DB_PASSWORD = 'databasepassword'
+```
+### 3 - Install dependencies
 ```
 composer update
 ```
-### 4 Create database structures
+### 4 - Create database structures
 ```
 composer stradow-migrate
 ```
