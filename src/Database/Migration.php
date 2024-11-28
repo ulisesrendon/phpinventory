@@ -1,17 +1,26 @@
 <?php
 
-namespace Stradow\Database\Migration;
+namespace Stradow\Database;
 
 use Neuralpin\HTTPRouter\Response;
-use Stradow\Framework\HTTP\DefaultController;
+use Stradow\Framework\Database\DataBaseAccess;
+use Stradow\Framework\DependencyResolver\Container;
 
-class Migration extends DefaultController
-{
-    public function start()
+require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/../../bootstrap/environment.php';
+define('DB_CONFIG', require __DIR__ . '/../../config/database.php');
+require __DIR__ . '/../../bootstrap/databaseAccess.php';
+
+
+class Migration
+{    
+    public static function start()
     {
+        $DataBaseAccess = Container::get(DataBaseAccess::class);
+
         try {
             // -- Product structures
-            $this->DataBaseAccess->command('CREATE table if not exists products(
+            $DataBaseAccess->command('CREATE table if not exists products(
                 id integer not null auto_increment primary key,
                 code varchar(255) null unique,
                 title varchar(255) null,
@@ -24,7 +33,7 @@ class Migration extends DefaultController
                 updated_at timestamp(0) null default now()
             )');
 
-            $this->DataBaseAccess->command("INSERT INTO 
+            $DataBaseAccess->command("INSERT INTO 
                 products (code, title, price)
                 VALUES 
                     ('700000001', 'Teclado Kumara Dragon Switches Blue', 1200),
@@ -32,7 +41,7 @@ class Migration extends DefaultController
                     ('700000003', 'Mouse Logitech G505 Hero', 1000)
             ");
 
-            $this->DataBaseAccess->command('CREATE table if not exists providers(
+            $DataBaseAccess->command('CREATE table if not exists providers(
                 id integer not null auto_increment primary key,
                 title varchar(255) null,
                 description varchar(255) null,
@@ -41,7 +50,7 @@ class Migration extends DefaultController
                 updated_at timestamp(0) null default now()
             )');
 
-            $this->DataBaseAccess->command("INSERT INTO 
+            $DataBaseAccess->command("INSERT INTO 
                 providers (title)
                 VALUES 
                     ('Provider #1 el principal'),
@@ -50,7 +59,7 @@ class Migration extends DefaultController
             ");
 
             // -- entries structures
-            $this->DataBaseAccess->command('CREATE table if not exists entries(
+            $DataBaseAccess->command('CREATE table if not exists entries(
                 id integer not null auto_increment primary key,
                 folio varchar(255) null,
                 provider_id bigint not null,
@@ -60,7 +69,7 @@ class Migration extends DefaultController
                 updated_at timestamp(0) null default now()
             )');
 
-            $this->DataBaseAccess->command('CREATE table if not exists entries_products(
+            $DataBaseAccess->command('CREATE table if not exists entries_products(
                 id integer not null auto_increment primary key,
                 product_id bigint not null,
                 product_entry_id bigint null unique,
@@ -70,7 +79,7 @@ class Migration extends DefaultController
                 updated_at timestamp(0) null default now()
             )');
 
-            $this->DataBaseAccess->command('INSERT INTO 
+            $DataBaseAccess->command('INSERT INTO 
                 entries_products (product_id, product_entry_id, stock)
                 VALUES 
                     (1, 1, 10),
@@ -79,7 +88,7 @@ class Migration extends DefaultController
                     (3, 4, 15)
             ');
 
-            $this->DataBaseAccess->command('CREATE table if not exists entrylines(
+            $DataBaseAccess->command('CREATE table if not exists entrylines(
                 id integer not null auto_increment primary key,
                 entry_id bigint not null,
                 product_id bigint not null,
@@ -89,7 +98,7 @@ class Migration extends DefaultController
                 expiration_date timestamp(0) null
             )');
 
-            $this->DataBaseAccess->command('INSERT INTO 
+            $DataBaseAccess->command('INSERT INTO 
                 entries (folio, provider_id, amount_total)
                 VALUES 
                     (\'1234210\', 1, 800),
@@ -97,7 +106,7 @@ class Migration extends DefaultController
                     (\'2H4-28HD2\', 3, 650)
             ');
 
-            $this->DataBaseAccess->command('INSERT INTO 
+            $DataBaseAccess->command('INSERT INTO 
                 entrylines (entry_id, product_id, pieces, cost)
                 VALUES 
                     (1, 1, 10, 800),
@@ -107,7 +116,7 @@ class Migration extends DefaultController
             ');
 
             // -- Order structures
-            $this->DataBaseAccess->command('CREATE table if not exists orders(
+            $DataBaseAccess->command('CREATE table if not exists orders(
                 id integer not null auto_increment primary key,
                 customer_id bigint null,
                 payment_method_id bigint null,
@@ -118,7 +127,7 @@ class Migration extends DefaultController
                 updated_at timestamp(0) null default now()
             )');
 
-            $this->DataBaseAccess->command('CREATE table if not exists orderlines(
+            $DataBaseAccess->command('CREATE table if not exists orderlines(
                 id integer not null auto_increment primary key,
                 order_id bigint not null,
                 product_id bigint not null,
@@ -127,23 +136,23 @@ class Migration extends DefaultController
                 amount_total decimal(10, 2) not null default 0
             )');
 
-            $this->DataBaseAccess->command('CREATE table if not exists orderstates(
+            $DataBaseAccess->command('CREATE table if not exists orderstates(
                 id integer not null auto_increment primary key,
                 state_id bigint not null,
                 created_at timestamp(0) null default now()
             )');
 
-            $this->DataBaseAccess->command('CREATE table if not exists states(
+            $DataBaseAccess->command('CREATE table if not exists states(
                 id integer not null auto_increment primary key,
                 name varchar(255) not null unique
             )');
 
-            $this->DataBaseAccess->command('CREATE table if not exists paymentmethods(
+            $DataBaseAccess->command('CREATE table if not exists paymentmethods(
                 id integer not null auto_increment primary key,
                 name varchar(255) not null unique
             )');
 
-            $this->DataBaseAccess->command("INSERT INTO 
+            $DataBaseAccess->command("INSERT INTO 
                 states (name)
                 VALUES 
                     ('Cancelado'),
@@ -153,7 +162,7 @@ class Migration extends DefaultController
                     ('Intento de entrega')
             ");
 
-            $this->DataBaseAccess->command("INSERT INTO 
+            $DataBaseAccess->command("INSERT INTO 
                 paymentmethods (name)
                 VALUES 
                     ('Efectivo'),
@@ -163,14 +172,18 @@ class Migration extends DefaultController
             ");
 
         } catch (\Exception $e) {
-            return Response::json([
-                'data' => 'Migration Failed! - Data may be corrupt',
-            ], 500);
+            // return Response::json([
+            //     'data' => 'Migration Failed! - Data may be corrupt',
+            // ], 500);
+
+            file_put_contents('php://output', 'Migration Failed! - Data may be corrupt');
         }
 
-        return Response::json([
-            'data' => 'Migration Complete!',
-        ]);
+        // return Response::json([
+        //     'data' => 'Migration Complete!',
+        // ]);
+
+        file_put_contents('php://output', 'Migration Complete!');
 
     }
 }

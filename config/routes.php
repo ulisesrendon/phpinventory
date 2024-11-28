@@ -2,7 +2,6 @@
 
 use Neuralpin\HTTPRouter\Response;
 use Neuralpin\HTTPRouter\Router;
-use Stradow\Database\Migration\Migration;
 use Stradow\Framework\HTTP\RouteMapper;
 use Stradow\Order\Controller\OrderController;
 use Stradow\Product\Controller\ProductController;
@@ -10,6 +9,7 @@ use Stradow\Stock\Controller\ProviderController;
 use Stradow\Stock\Controller\StockController;
 
 $Router = new Router(ControllerMapper: RouteMapper::class);
+$Router->get('/', fn()=> '-Stradow says: ✋ Hello world!');
 $Router->post('/api/v1/product', [ProductController::class, 'create']);
 $Router->get('/api/v1/product', [ProductController::class, 'list']);
 $Router->get('/api/v1/product/:id', [ProductController::class, 'getById']);
@@ -32,8 +32,6 @@ $Router->get('/api/v1/order', [OrderController::class, 'list']);
 $Router->post('/api/v1/order', [OrderController::class, 'create']);
 $Router->get('/api/v1/order/:id', [OrderController::class, 'getById']);
 // $Router->patch('/api/v1/order/:id', [OrderController::class, 'update']);
-
-$Router->post('/api/v1/migrate', [Migration::class, 'start']);
 
 $Router->get('/api/v1/route-list', function () use ($Router) {
     $list = [];
