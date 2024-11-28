@@ -4,14 +4,17 @@
 
 ### System requirements:
 - PHP >= 8.2
-- Postgresql >= 15.4
+- MariaDB or MySQL
 
 ## Installation
 
 ### 1 Clone proyect with git
-### 2 Install dependencies
+### 2 Create and configure .env file with database and system variables
+### 3 Install dependencies
 ```
 composer update
 ```
-### 3 Create and configure .env file with database and system variables
-
+### 4 Create database structures
+```
+composer stradow-migrate
+```
