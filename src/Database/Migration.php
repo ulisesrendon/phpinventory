@@ -2,7 +2,6 @@
 
 namespace Stradow\Database;
 
-use Neuralpin\HTTPRouter\Response;
 use Stradow\Framework\Database\DataBaseAccess;
 use Stradow\Framework\DependencyResolver\Container;
 
@@ -10,7 +9,6 @@ require __DIR__ . '/../../vendor/autoload.php';
 require __DIR__ . '/../../bootstrap/environment.php';
 define('DB_CONFIG', require __DIR__ . '/../../config/database.php');
 require __DIR__ . '/../../bootstrap/databaseAccess.php';
-
 
 class Migration
 {    
@@ -249,16 +247,8 @@ class Migration
             $DataBaseAccess->command(require __DIR__.'/sql/fields.php');
 
         } catch (\Exception $e) {
-            // return Response::json([
-            //     'data' => 'Migration Failed! - Data may be corrupt',
-            // ], 500);
-
             file_put_contents('php://output', 'Migration Failed! - Data may be corrupt');
         }
-
-        // return Response::json([
-        //     'data' => 'Migration Complete!',
-        // ]);
 
         file_put_contents('php://output', 'Migration Complete!');
 

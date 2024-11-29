@@ -5,9 +5,7 @@ use Neuralpin\HTTPRouter\Response;
 $_ENV['APP_DEBUG'] ??= 0;
 
 try {
-
     $Controller = $Router->getController();
-
 } catch (\Exception $Exception) {
     if ($Router->isNotFoundException($Exception)) {
         $Controller = $Router->wrapController(
@@ -29,5 +27,4 @@ try {
         }
     }
 }
-
 return $Controller;

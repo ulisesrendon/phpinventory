@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schema Create</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body class="dark">
+    <div class="container">
+        <h2>Schema Create</h2>
+        <div class="container"><a href="index.html">Index</a></div>
+        <form class="container shcemaCreateForm">
+            <div class="form-field">
+                <label for="title">Title</label>
+                <input class="form-field-block" type="text" placeholder="title" name="title" id="title">
+            </div>
+            <div class="form-field">
+                <label for="name">Name</label>
+                <input class="form-field-block" type="text" placeholder="name" name="name" id="name">
+            </div>
+            <div class="form-field">
+                <label for="description">Description</label>
+                <textarea class="form-field-block" placeholder="description" name="description" id="description" rows="10"></textarea>
+            </div>
+            <div class="form-field">
+                <label for="config">Extra configuration</label>
+                <textarea class="form-field-block" placeholder="config" name="config" id="config" rows="10">{}</textarea>
+            </div>
+            <button type="submit" id="schemaCreate">Save</button>
+        </form>
+    </div>
+    <script src="js/schemaCreate.js"></script>
+</body>
+
+</html>

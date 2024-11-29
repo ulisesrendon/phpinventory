@@ -1,0 +1,55 @@
+*, *::after, *::before{
+    box-sizing: border-box;
+}
+html, body{
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+body{
+    background-color: #2A2B2A;
+    color: #f0f0f0;
+}
+.container{
+    margin: 0 auto;
+    max-width: 98%;
+}
+.box-x-1200{
+    width: 1200px;
+}
+.mg-y-4{
+    margin: 4rem 0;
+}
+
+#lieditor-output{
+    width: 100%;
+    height: 10rem;
+    margin-bottom: 2rem;
+}
+.lieditor-container{
+    min-height: 5rem;
+    background-color: #996888;
+}
+.lieditor-field{
+    padding: 1rem;
+}
+.lieditor-input-text-h1{
+    background-color: transparent;
+    font-size: 2rem;
+    padding: 0.5rem;
+    border: none;
+    width: 100%;
+    border-radius: 0.1em;
+}
+.lieditor-input-text-h1:focus-visible,
+.lieditor-text-large:focus-visible,
+.lieditor-text-small:focus-visible {
+	outline: 2px solid #3a2c34;
+}
+
+.lieditor-text-large{
+    background-color: #b592a8;
+    border: none;
+    width: 100%;
+    height: 3rem;
+    padding: 1rem;
+}

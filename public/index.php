@@ -1,8 +1,17 @@
 <?php
 
+use Neuralpin\HTTPRouter\ResponseRender;
+
 require __DIR__.'/../bootstrap/app.php';
 
 /**
- * @var \Neuralpin\HTTPRouter\ControllerWrapped
+ * @var ResponseRender $Response
  */
-echo $Controller->getResponse();
+try{
+    $Response = $Controller->getResponse();
+}catch(\Throwable|\Exception $Error){
+    $Error = (string) $Error;
+    echo "<pre>$Error</pre>";
+    exit();
+}
+echo $Response;
