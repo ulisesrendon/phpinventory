@@ -1,6 +1,6 @@
 const sessionStatus = async function () {
     const actualSession = localStorage.getItem('session');
-    const response = await fetch(`http://api.localhost/v2/auth/session/${actualSession}`);
+    const response = await fetch(`${API_URL}/auth/session/${actualSession}`);
     const { status } = await response.json();
     return status === "Active" ? true : false;
 };

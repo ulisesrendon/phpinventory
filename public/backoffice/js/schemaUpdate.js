@@ -13,7 +13,7 @@ const schemaSave = async function (nodeMap){
     const urlList = [];
     for (id in nodeMap) {
         urlList.push({
-            url: `http://api.localhost/v2/content/type/field/${nodeMap[id].data.id}`,
+            url: `${API_URL}/content/type/field/${nodeMap[id].data.id}`,
             body: JSON.stringify({
                 weight: nodeMap[id].weight,
                 parent: nodeMap[id].render.parentNode.getAttribute('data-id')
@@ -44,7 +44,7 @@ const schemaSave = async function (nodeMap){
 };
 
 const nodeUpdatePersist = async function (data) {
-    const request = await fetch(`http://api.localhost/v2/content/type/field/${data.id}`, {
+    const request = await fetch(`${API_URL}/content/type/field/${data.id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -65,7 +65,7 @@ const nodeUpdatePersist = async function (data) {
 };
 
 const schemaNodeDeletePersist = function (nodeId) {
-    fetch(`http://api.localhost/v2/content/type/field/${nodeId}`, {
+    fetch(`${API_URL}/content/type/field/${nodeId}`, {
         method: "DELETE",
         headers: {
             "x-session": localStorage.getItem('session') ?? null
@@ -74,7 +74,7 @@ const schemaNodeDeletePersist = function (nodeId) {
 };
 
 const schemaNodeAddPersist = async function (nodeId, contentId) {
-    const response = await fetch(`http://api.localhost/v2/content/type/${contentId}/field_assign/${nodeId}`, {
+    const response = await fetch(`${API_URL}/content/type/${contentId}/field_assign/${nodeId}`, {
         method: "POST",
         headers: {
             "x-session": localStorage.getItem('session') ?? null

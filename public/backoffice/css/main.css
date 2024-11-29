@@ -117,3 +117,10 @@ body.dark a {
 .aceeditor-big{
     height: 600px;
 }
+.nav-links a {
+    display: inline-block;
+    padding: 1rem 1rem;
+}
+.nav-links a:hover {
+    background-color: #666;
+}

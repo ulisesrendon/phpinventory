@@ -1,5 +1,5 @@
 const getNodeOptionList = async function () {
-    const response = await fetch('http://api.localhost/v2/content/field', {
+    const response = await fetch(`${API_URL}/content/field`, {
         headers: {
             "x-session": localStorage.getItem('session') ?? null,
         }
@@ -9,13 +9,12 @@ const getNodeOptionList = async function () {
 };
 
 const getNodeDataById = async function (contentId) {
-    const response = await fetch(`http://api.localhost/v2/content/type/${contentId}?unordered`, {
+    const response = await fetch(`${API_URL}/content/type/${contentId}?unordered`, {
         headers: {
             "x-session": localStorage.getItem('session') ?? null
         }
     });
-    const { data } = await response.json();
-    return data ?? {};
+    return await response.json();
 };
 
 const nodeItemBase = document.createElement('div');

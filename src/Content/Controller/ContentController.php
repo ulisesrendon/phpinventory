@@ -77,5 +77,24 @@ class ContentController extends DefaultController
         ]);
     }
 
+    public function typeFind(int $id): ResponseState
+    {
+        $type = $this->ContentQuery->typeFind($id);
+
+        if (empty($type)) {
+            return Response::json([], 404);
+        }
+
+        $type->config = json_decode($type->config);
+
+        $type->fields = $this->ContentQuery->typeListFields($id);
+
+        foreach($type->fields as $field){
+            $field->config = json_decode($field->config);
+        }
+
+        return Response::json($type);
+    }
+
 
 }

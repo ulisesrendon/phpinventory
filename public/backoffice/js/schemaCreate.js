@@ -1,5 +1,5 @@
 const schemaCreatePersist = async function (body) {
-    const response = await fetch(`http://api.localhost/v2/content/type`, {
+    const response = await fetch(`${API_URL}/content/type`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

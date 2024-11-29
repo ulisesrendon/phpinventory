@@ -1,7 +1,7 @@
 document.querySelector('.loginform').addEventListener('submit', async function(e){
     e.preventDefault();
 
-    const userAccess = await fetch('http://api.localhost/v2/auth/access', {
+    const userAccess = await fetch('${API_URL}/auth/access', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",

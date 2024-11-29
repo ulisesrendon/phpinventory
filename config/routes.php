@@ -9,6 +9,10 @@ use Stradow\Content\Controller\ContentController;
 use Stradow\Stock\Controller\ProviderController;
 use Stradow\Product\Controller\ProductController;
 
+/**
+ * Route System configuration - config/routes.php
+*/
+
 $Router = new Router(ControllerMapper: RouteMapper::class);
 $Router->get('/', fn()=> '-Stradow says: ✋ Hello world!');
 $Router->post('/api/v1/product', [ProductController::class, 'create']);
@@ -36,6 +40,7 @@ $Router->get('/api/v1/order/:id', [OrderController::class, 'getById']);
 
 $Router->get('/api/v1/content/field', [ContentController::class, 'fieldList']);
 $Router->get('/api/v1/content/type', [ContentController::class, 'typeList']);
+$Router->get('/api/v1/content/type/:id', [ContentController::class, 'typeFind']);
 
 $Router->get('/api/v1/content', [ContentController::class, 'list']);
 $Router->get('/api/v1/content/:id', [ContentController::class, 'find']);
@@ -52,3 +57,18 @@ $Router->get('/api/v1/route-list', function () use ($Router) {
 });
 
 return $Router;
+
+
+/*
+v2/content
+v2/content/${id}
+v2/content/field
+v2/content/type
+
+v2/content/type/${id}/schema
+v2/content/type/${id}?unordered
+v2/content/type/field
+v2/content/type/field/{nodeid}
+
+v2/content/${content}/field_assign/{nodeId}
+*/

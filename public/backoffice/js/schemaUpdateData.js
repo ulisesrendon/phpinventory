@@ -2,7 +2,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const contentId = urlParams.get('id');
 
 const schemaUpdatatingDataPersist = async function (id, body) {
-    const response = await fetch(`http://api.localhost/v2/content/type/${id}`, {
+    const response = await fetch(`${API_URL}/content/type/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",

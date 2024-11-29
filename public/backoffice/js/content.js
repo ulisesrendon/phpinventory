@@ -8,12 +8,12 @@ const contentTypeData = function() {
             this.getContentTypes();
         },
         async getContentTypes() {
-            const response = await fetch(`http://api.localhost/v2/content/type`, {
+            const response = await fetch(`${API_URL}/content/type`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json", }
             });
             if (await response.ok) {
-                this.ContentTypes = (await response.json()).data;
+                this.ContentTypes = (await response.json()).list;
 
                 this.ContentTypes.forEach(element => {
                     element.title = `(${element.id}) ${element.title}`;
@@ -24,7 +24,7 @@ const contentTypeData = function() {
 };
 
 const contentTypeSchema = async function(id) {
-    const response = await fetch(`http://api.localhost/v2/content/type/${id}/schema`, {
+    const response = await fetch(`${API_URL}/content/type/${id}/schema`, {
         method: "GET",
         headers: { "Content-Type": "application/json", }
     });
@@ -36,7 +36,7 @@ const contentTypeSchema = async function(id) {
 
 
 const ContentCreatePersist = async function (body) {
-    const response = await fetch(`http://api.localhost/v2/content`, {
+    const response = await fetch(`${API_URL}/content`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -54,7 +54,7 @@ const ContentCreatePersist = async function (body) {
 };
 
 const ContentUpdatePersist = async function (id, body) {
-    const response = await fetch(`http://api.localhost/v2/content/${id}`, {
+    const response = await fetch(`${API_URL}/content/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -72,7 +72,7 @@ const ContentUpdatePersist = async function (id, body) {
 };
 
 const GetContent = async function (id) {
-    const response = await fetch(`http://api.localhost/v2/content/${id}`, {
+    const response = await fetch(`${API_URL}/content/${id}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const GetContent = async function (id) {
     const resultStatus = await response.ok;
     if (resultStatus) {
         const resultJson = await response.json();
-        return resultJson.data;
+        return resultJson;
     }
     return {
         error: response.status.error
