@@ -10,16 +10,21 @@
         }
     ],
     "minimum-stability": "dev",
-    "repositories": [
-        {
+    "repositories": {
+        "neuralpin/httprouter": {
             "type": "vcs",
             "url": "https://github.com/neuralpin/httprouter"
+        },
+        "neuralpin/passencryption": {
+            "type": "vcs",
+            "url": "https://github.com/neuralpin/neuralpin_passencryption"
         }
-    ],
+    },
     "require": {
         "php": "^8.3",
         "vlucas/phpdotenv": "5.6.x-dev",
-        "neuralpin/httprouter": "v3.*"
+        "neuralpin/httprouter": "v3.*",
+        "neuralpin/passencryption": "v1.*"
     },
     "autoload": {
         "psr-4": {
@@ -31,8 +36,8 @@
         "laravel/pint": "dev-main",
         "phpunit/phpunit": "^12.0@dev"
     },
-    "scripts": {        
+    "scripts": {
         "stradow-test": "vendor/bin/phpunit --bootstrap vendor/autoload.php tests",
-        "stradow-migrate": "Stradow\\Database\\Migration::start"
+        "stradow-migrate": "Stradow\\Database\\Migrate::start"
     }
 }

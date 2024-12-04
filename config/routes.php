@@ -3,10 +3,11 @@
 use Neuralpin\HTTPRouter\Router;
 use Neuralpin\HTTPRouter\Response;
 use Stradow\Framework\HTTP\RouteMapper;
+use Stradow\User\Controller\AuthController;
 use Stradow\Order\Controller\OrderController;
 use Stradow\Stock\Controller\StockController;
-use Stradow\Content\Controller\ContentController;
 use Stradow\Stock\Controller\ProviderController;
+use Stradow\Content\Controller\ContentController;
 use Stradow\Product\Controller\ProductController;
 
 /**
@@ -44,6 +45,8 @@ $Router->get('/api/v1/content/type/:id', [ContentController::class, 'typeFind'])
 
 $Router->get('/api/v1/content', [ContentController::class, 'list']);
 $Router->get('/api/v1/content/:id', [ContentController::class, 'find']);
+
+$Router->post('/api/v1/auth/register', [AuthController::class, 'register']);
 
 $Router->get('/api/v1/route-list', function () use ($Router) {
     $list = [];
