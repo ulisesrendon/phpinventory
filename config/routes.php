@@ -3,6 +3,7 @@
 use Neuralpin\HTTPRouter\Router;
 use Neuralpin\HTTPRouter\Response;
 use Stradow\Framework\HTTP\RouteMapper;
+use Stradow\Blog\Controller\BlogController;
 use Stradow\User\Controller\AuthController;
 use Stradow\Order\Controller\OrderController;
 use Stradow\Stock\Controller\StockController;
@@ -58,6 +59,8 @@ $Router->get('/api/v1/route-list', function () use ($Router) {
 
     return Response::json($list);
 });
+
+$Router->get('/api/v1/blog/:id', [BlogController::class, 'pageGetById']);
 
 return $Router;
 

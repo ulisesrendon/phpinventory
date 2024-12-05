@@ -30,3 +30,5 @@ $Router = require __DIR__.'/../config/routes.php';
  * @var ControllerWrapper $Controller
  */
 $Controller = require __DIR__.'/http.php';
+
+define('RENDER_CONFIG', require __DIR__ . '/../config/render.php');

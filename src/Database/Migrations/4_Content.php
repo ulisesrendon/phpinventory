@@ -74,3 +74,15 @@ $DataBaseAccess->command(require __DIR__ . '/sql/content_types.php');
 $DataBaseAccess->command(require __DIR__ . '/sql/content_types_fields.php');
 $DataBaseAccess->command(require __DIR__ . '/sql/contents.php');
 $DataBaseAccess->command(require __DIR__ . '/sql/fields.php');
+
+/*
+CREATE TABLE "contentnodes" (
+	id varchar(20) NOT NULL PRIMARY KEY,
+	content INTEGER null default null,
+	parent varchar(20) NULL default null,
+	value TEXT null default null,
+	properties TEXT NOT NULL DEFAULT ('{}'),
+	type varchar(50),
+	weigth INTEGER DEFAULT (100)
+);
+*/
