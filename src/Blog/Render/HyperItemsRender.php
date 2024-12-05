@@ -6,8 +6,7 @@ class HyperItemsRender
 {
 
     private array $config;
-    private array $nodesAll = [];
-    private array $nodesBase = [];
+    private array $nodes = [];
 
     /**
      * @param object[] $items
@@ -17,31 +16,23 @@ class HyperItemsRender
     {
         $this->config = $config;
 
-        foreach ($items as $k => $item) {
-            $this->nodesAll[$item->id] = &$items[$k];
-        }
+        $Tree = new HyperTreeMap($items);
 
-        foreach ($this->nodesAll as $k => $item) {
-            if (!is_null($item->parent)) {
-                $this->nodesAll[$item->parent]->children[] = &$this->nodesAll[$k];
-            } else {
-                $this->nodesBase[] = &$this->nodesAll[$k];
-            }
-        }
-
-        foreach ($this->nodesAll as $k => $item) {
-            $this->nodesAll[$k] = $this->fabric(
+        foreach ($Tree as $k => $item) {
+            $Tree[$k] = $this->fabric(
                 $item->type,
                 $item->value,
                 $item->properties,
                 $item->children,
             );
         }
+
+        $this->nodes = $Tree->getNodes();
     }
 
     public function getNodes()
     {
-        return $this->nodesBase;
+        return $this->nodes;
     }
 
     public function fabric(
