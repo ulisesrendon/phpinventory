@@ -7,7 +7,7 @@ use Stradow\Blog\Render\HyperItemsRenderDefault;
 use Stradow\Blog\Render\HyperItemsRenderForItem;
 use Stradow\Blog\Render\HyperItemsRenderForText;
 use Stradow\Blog\Render\HyperItemsRenderForContainer;
-use Stradow\Blog\Render\HyperItemsRenderForPlaincode;
+use Stradow\Blog\Render\HyperItemsRenderForPlainCode;
 
 return [
     'default' => HyperItemsRenderDefault::class,
@@ -17,5 +17,5 @@ return [
     'h1' => HyperItemsRenderForH1::class,
     'item' => HyperItemsRenderForItem::class,
     'ul' => HyperItemsRenderForUl::class,
-    'code-plain' => HyperItemsRenderForPlaincode::class,
+    'code-plain' => HyperItemsRenderForPlainCode::class,
 ];

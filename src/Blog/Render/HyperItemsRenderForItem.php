@@ -1,27 +1,15 @@
 <?php
 namespace Stradow\Blog\Render;
 
-class HyperItemsRenderForItem implements \Stringable
+use Stradow\Blog\Render\Interface\NodeContextInterface;
+use Stradow\Blog\Render\Interface\RendereableInterface;
+
+class HyperItemsRenderForItem implements RendereableInterface
 {
-    public mixed $value;
 
-    public function __construct(
-        mixed $value = null, 
-        ?object $properties = null,
-        array $children = []
-    )
+    public function render(NodeContextInterface $context): string
     {
-        $this->value = $value;
-    }
-
-    public function render(): string
-    {
-        return $this->value;
-    }
-
-    public function __toString(): string
-    {
-        return $this->render();
+        return $context->getValue();
     }
 }
 

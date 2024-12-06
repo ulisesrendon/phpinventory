@@ -10,24 +10,26 @@ class HyperTreeMap implements \Iterator, \ArrayAccess
 
     public function __construct(array $items)
     {
-        $nodesBase = [];
-        $nodesAll = [];
+        $nodeTree = [];
+        $nodeMap = [];
         
+        // Generate map structure
         foreach ($items as $k => $item) {
-            $nodesAll[$item->id] = &$items[$k];
+            $nodeMap[$item->id] = $items[$k];
         }
 
-        foreach ($nodesAll as $k => $item) {
+        // Generate tree structure
+        foreach ($nodeMap as $k => $item) {
             if (!is_null($item->parent)) {
-                $nodesAll[$item->parent]->children[] = &$nodesAll[$k];
+                $nodeMap[$item->parent]->children[] = &$nodeMap[$k];
             } else {
-                $nodesBase[] = &$nodesAll[$k];
+                $nodeTree[] = &$nodeMap[$k];
             }
         }
 
-        $this->items = array_values($nodesAll);
+        $this->items = array_values($nodeMap);
 
-        $this->nodes = array_values($nodesBase);
+        $this->nodes = array_values($nodeTree);
     }
 
     public function current(): mixed

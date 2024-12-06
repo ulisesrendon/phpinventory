@@ -34,7 +34,6 @@ class BlogQuery
 
         foreach($items as $item){
             $item->properties = json_decode($item->properties);
-            $item->children = [];
         }
         return $items;
     }

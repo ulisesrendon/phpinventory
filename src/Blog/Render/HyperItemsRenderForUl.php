@@ -1,27 +1,15 @@
 <?php
 namespace Stradow\Blog\Render;
 
-class HyperItemsRenderForUl implements \Stringable
+use Stradow\Blog\Render\Interface\NodeContextInterface;
+use Stradow\Blog\Render\Interface\RendereableInterface;
+
+class HyperItemsRenderForUl implements RendereableInterface
 {
-    public array $children;
-
-    public function __construct(
-        mixed $value = null,
-        ?object $properties = null,
-        array $children = []
-    ) {
-        $this->children = $children;
-    }
-
-    public function render(): string
+    public function render(NodeContextInterface $context): string
     {
-        $content = array_reduce($this->children, fn($carry, $item) => $carry . "<li>$item</li>");
+        $content = array_reduce($context->getChildren(), fn($carry, $item) => $carry . "<li>$item</li>");
 
         return "<ul>$content</ul>";
-    }
-
-    public function __toString(): string
-    {
-        return $this->render();
     }
 }

@@ -2,58 +2,49 @@
 
 namespace Stradow\Blog\Render;
 
+use Stradow\Blog\Render\Interface\NestableInterface;
+use Stradow\Blog\Render\Interface\NodeContextInterface;
+
 class HyperItemsRender
 {
-
-    private array $config;
+    /**
+     * Summary of nodes
+     * @var NestableInterface&NodeContextInterface[] $nodes
+     */
     private array $nodes = [];
 
     /**
-     * @param object[] $items
+     * @param NestableInterface&NodeContextInterface[] $items
      * @param array<string, class-string> $config
      */
-    public function __construct(array $items, array $config)
+    public function __construct(array $items)
     {
-        $this->config = $config;
-
-        $Tree = new HyperTreeMap($items);
-
-        foreach ($Tree as $k => $item) {
-            $Tree[$k] = $this->fabric(
-                $item->type,
-                $item->value,
-                $item->properties,
-                $item->children,
-            );
+        // Generate map structure
+        $nodeMap = [];
+        foreach ($items as $k => $item) {
+            $nodeMap[$item->getId()] = $items[$k];
         }
 
-        $this->nodes = $Tree->getNodes();
-    }
+        $this->nodes = $nodeMap;
 
-    public function getNodes()
+    }
+    public function render(): string
     {
-        return $this->nodes;
-    }
+        $nodeTree = [];
 
-    public function fabric(
-        string $type = '',
-        mixed $value = null,
-        ?object $properties = null,
-        array $children = []
-    ): \Stringable {
-
-        $render = $this->config[$type] ?? null;
-
-        if(!isset($render)){
-            $render = $this->config['default'];
+        // Generate tree structure
+        foreach ($this->nodes as $k => $item) {
+            if (!is_null($item->getParent())) {
+                $this->nodes[$item->getParent()]->addChild($this->nodes[$k]);
+            } else {
+                $nodeTree[] = &$this->nodes[$k];
+            }
         }
 
-        return new $render($value, $properties, $children);
-    }
-
-    public function render()
-    {
-        return array_reduce($this->getNodes(), fn($carry, $item) => $carry . $item);
+        return array_reduce(
+            array: $nodeTree, 
+            callback: fn(?string $carry, \Stringable $item): string => $carry.$item
+        );
     }
 }
 

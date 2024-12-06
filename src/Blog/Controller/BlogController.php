@@ -4,6 +4,7 @@ namespace Stradow\Blog\Controller;
 use PDO;
 use Stradow\Blog\Data\BlogQuery;
 use Neuralpin\HTTPRouter\Response;
+use Stradow\Blog\Render\HyperNode;
 use Stradow\Blog\Render\HyperItemsRender;
 use Stradow\Framework\Database\DataBaseAccess;
 
@@ -25,14 +26,28 @@ class BlogController
     public function pageGetById(int $id)
     {
 
-        $items = $this->BlogQuery->getContentById($id);
+        $itemsData = $this->BlogQuery->getContentById($id);
 
-        if(empty($items)){
+        if (empty($itemsData)) {
             return Response::json([], 404);
         }
 
-        $HyperRender = new HyperItemsRender($items, RENDER_CONFIG);
+        /**
+         * @var HyperNode[] $items
+         */
+        $items = [];
 
+        foreach($itemsData as $item){
+            $node = new HyperNode();
+            $node->setId($item->id);
+            $node->setValue($item->value);
+            $node->setParent($item->parent);
+            $node->setRender(new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']));
+
+            $items[] = $node;
+        }
+
+        $HyperRender = new HyperItemsRender($items);
 
         return Response::html($HyperRender->render());
     }
