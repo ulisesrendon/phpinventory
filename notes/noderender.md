@@ -1,6 +1,6 @@
 # Algoritmos y estructuras de datos para renderizar sistema de bloques HTML
 
-<h2>Content data</h2>
+<h2>De árbol de nodos HTML a tabla</h2>
 <table>
     <tr>
         <th>id</th>
@@ -10,21 +10,21 @@
         <th>weight</th>
     </tr>
     <tr>
-        <td>1bccc7b7-94bb-4384-ab97-24093bb71a01</td>
+        <td>1</td>
         <td>null</td>
         <td>Hello world!</td>
         <td>h1</td>
         <td>100</td>
     </tr>
     <tr>
-        <td>a4ce0b7a-5d1f-4a49-85f7-41cbfb0dd6fb</td>
+        <td>2</td>
         <td>null</td>
         <td>null</td>
         <td>container</td>
         <td>100</td>
     </tr>
     <tr>
-        <td>53afa943-ed66-44c6-a94b-3730877f54fe</td>
+        <td>3</td>
         <td>null</td>
         <td><pre>&lt;h1&gt;Hello world!&lt;/h1&gt;
 &lt;div&gt;
@@ -42,50 +42,50 @@
         <td>100</td>
     </tr>
     <tr>
-        <td>ec6b9ea6-d971-426c-9cd2-c76d27398b3a</td>
-        <td>a4ce0b7a-5d1f-4a49-85f7-41cbfb0dd6fb</td>
+        <td>4</td>
+        <td>2</td>
         <td>null</td>
         <td>text</td>
         <td>100</td>
     </tr>
     <tr>
-        <td>b5dd35c0-a18b-41b6-8af4-9ddeb0eb7f87</td>
-        <td>a4ce0b7a-5d1f-4a49-85f7-41cbfb0dd6fb</td>
+        <td>5</td>
+        <td>2</td>
         <td>null</td>
         <td>ul</td>
         <td>100</td>
     </tr>
     <tr>
-        <td>abc56ea7-b014-409c-b724-1be0d7191fbc</td>
-        <td>b5dd35c0-a18b-41b6-8af4-9ddeb0eb7f87</td>
+        <td>6</td>
+        <td>5</td>
         <td>lorem ipsum dolor</td>
         <td>item</td>
         <td>100</td>
     </tr>
     <tr>
-        <td>db85a32e-b50e-4c72-8ce5-5b38dd702a19</td>
-        <td>b5dd35c0-a18b-41b6-8af4-9ddeb0eb7f87</td>
+        <td>7</td>
+        <td>5</td>
         <td>sit amet consectetur</td>
         <td>item</td>
         <td>100</td>
     </tr>
     <tr>
-        <td>45a6ba9e-b3ef-4f74-994e-1e932c0115a0</td>
-        <td>ec6b9ea6-d971-426c-9cd2-c76d27398b3a</td>
+        <td>8</td>
+        <td>4</td>
         <td>lorem ipsum dolor</td>
         <td>item</td>
         <td>90</td>
     </tr>
     <tr>
-        <td>9e433cf7-8645-452c-bab5-592b5bb33fa3</td>
-        <td>ec6b9ea6-d971-426c-9cd2-c76d27398b3a</td>
+        <td>9</td>
+        <td>4</td>
         <td>sit amet consectetur</td>
         <td>item</td>
         <td>100</td>
     </tr>
     <tr>
-        <td>4206ea2d-380f-4e83-a5df-59ccd3a5c3be</td>
-        <td>ec6b9ea6-d971-426c-9cd2-c76d27398b3a</td>
+        <td>10</td>
+        <td>4</td>
         <td>https://picsum.photos/200/300</td>
         <td>img</td>
         <td>100</td>
@@ -93,6 +93,8 @@
 </table>
 
 <h2>Código PHP</h2>
+
+<h3>Clase base para renderizar bloques de contenido</h3>
 
 ```php
 class HyperItemsRenderDefault implements \Stringable
@@ -121,6 +123,11 @@ class HyperItemsRenderDefault implements \Stringable
         return $this->render();
     }
 }
+```
+
+<h3>Resto de clases derivadas</h3>
+
+```php
 
 class HyperItemsRenderForContainer extends HyperItemsRenderDefault
 {
@@ -181,7 +188,11 @@ class HyperItemsRenderForPlainCode extends HyperItemsRenderDefault
         return "<pre><code>$value</code></pre>";
     }
 }
+```
 
+<h3>Mapeo de clases y tipos de bloque de contenido</h3>
+
+```php
 $RenderClasses = [
     'default' => HyperItemsRenderDefault::class,
     'container' => HyperItemsRenderForContainer::class,
@@ -192,10 +203,14 @@ $RenderClasses = [
     'ul' => HyperItemsRenderForUl::class,
     'code-plain' => HyperItemsRenderForPlainCode::class,
 ];
+```
 
+<h3>Arreglo de prueba con datos de bloques de contenido</h3>
+
+```php
 $items = [
     [
-        "id" => "1bccc7b7-94bb-4384-ab97-24093bb71a01",
+        "id" => "1",
         "parent" => null,
         "value" => "Hello world!",
         "weight" => 100,
@@ -203,7 +218,7 @@ $items = [
         "children" => [],
     ],
     [
-        "id" => "a4ce0b7a-5d1f-4a49-85f7-41cbfb0dd6fb",
+        "id" => "2",
         "parent" => null,
         "value" => null,
         "weight" => 100,
@@ -211,7 +226,7 @@ $items = [
         "children" => [],
     ],
     [
-        "id" => "53afa943-ed66-44c6-a94b-3730877f54fe",
+        "id" => "3",
         "parent" => null,
         "value" => '<h1>Hello world!</h1>
 <div>
@@ -230,63 +245,67 @@ $items = [
         "children" => [],
     ],
     [
-        "id" => "ec6b9ea6-d971-426c-9cd2-c76d27398b3a",
-        "parent" => "a4ce0b7a-5d1f-4a49-85f7-41cbfb0dd6fb",
+        "id" => "4",
+        "parent" => "2",
         "value" => null,
         "weight" => 100,
         "type" => "text",
         "children" => [],
     ],
     [
-        "id" => "b5dd35c0-a18b-41b6-8af4-9ddeb0eb7f87",
-        "parent" => "a4ce0b7a-5d1f-4a49-85f7-41cbfb0dd6fb",
+        "id" => "5",
+        "parent" => "2",
         "value" => null,
         "weight" => 100,
         "type" => "ul",
         "children" => [],
     ],
     [
-        "id" => "abc56ea7-b014-409c-b724-1be0d7191fbc",
-        "parent" => "b5dd35c0-a18b-41b6-8af4-9ddeb0eb7f87",
+        "id" => "6",
+        "parent" => "5",
         "value" => "lorem ipsum dolor",
         "weight" => 100,
         "type" => "item",
         "children" => [],
     ],
     [
-        "id" => "db85a32e-b50e-4c72-8ce5-5b38dd702a19",
-        "parent" => "b5dd35c0-a18b-41b6-8af4-9ddeb0eb7f87",
+        "id" => "7",
+        "parent" => "5",
         "value" => "sit amet consectetur",
         "weight" => 100,
         "type" => "item",
         "children" => [],
     ],
     [
-        "id" => "45a6ba9e-b3ef-4f74-994e-1e932c0115a0",
-        "parent" => "ec6b9ea6-d971-426c-9cd2-c76d27398b3a",
+        "id" => "8",
+        "parent" => "4",
         "value" => "lorem ipsum dolor",
         "weight" => 90,
         "type" => "item",
         "children" => [],
     ],
     [
-        "id" => "9e433cf7-8645-452c-bab5-592b5bb33fa3",
-        "parent" => "ec6b9ea6-d971-426c-9cd2-c76d27398b3a",
+        "id" => "9",
+        "parent" => "4",
         "value" => "sit amet consectetur",
         "weight" => 100,
         "type" => "item",
         "children" => [],
     ],
     [
-        "id" => "4206ea2d-380f-4e83-a5df-59ccd3a5c3be",
-        "parent" => "ec6b9ea6-d971-426c-9cd2-c76d27398b3a",
+        "id" => "10",
+        "parent" => "4",
         "value" => "https://picsum.photos/200/300",
         "weight" => 100,
         "type" => "img",
         "children" => [],
     ],
 ];
+```
 
+<h3>Algoritmo para convertir de tabla de datos a árbol de nodos</h3>
+
+```php
 $nodesMap = []; // Nodes in Map structure
 $nodesTree = []; // Nodes in Tree structure
 
@@ -303,7 +322,11 @@ foreach ($nodesMap as $k => $item) {
         $nodesTree[] = &$nodesMap[$k];
     }
 }
+```
 
+<h3>Algoritmo para asignar la lógica de renderizado y poder imprimir HTML final</h3>
+
+```php
 // Instantiate the correct Render Object for each node
 foreach ($nodesMap as $k => $item) {
     $render = $RenderClasses[$item['type']] ?? null;
@@ -313,12 +336,12 @@ foreach ($nodesMap as $k => $item) {
     $nodesMap[$k] = new $render($item['value'], $item['children']);
 }
 
-$HTMLrender = array_reduce($nodesTree, fn($carry, $item) => $carry . $item);
+$HTMLrender = array_reduce($nodesTree, fn($carry, $item) => $carry . $item); // Final HTML
 
 echo $HTMLrender;
 ```
 
-<h2>Resuling HTML</h2>
+<h2>Código HTML resultante</h2>
 
 <pre><code>&lt;h1&gt;Hello world!&lt;/h1&gt;
 &lt;div&gt;
