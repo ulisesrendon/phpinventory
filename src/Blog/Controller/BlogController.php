@@ -34,8 +34,6 @@ class BlogController
         $HyperRender = new HyperItemsRender($items, RENDER_CONFIG);
 
 
-        // dd($nodesBase);
-
         return Response::html($HyperRender->render());
     }
 
