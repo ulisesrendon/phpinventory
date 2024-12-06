@@ -1,4 +1,4 @@
-# Algoritmos y estructuras de datos para renderizar sistema de bloques
+# Algoritmos y estructuras de datos para renderizar sistema de bloques HTML
 
 <h2>Content data</h2>
 <table>
@@ -290,12 +290,12 @@ $items = [
 $nodesMap = []; // Nodes in Map structure
 $nodesTree = []; // Nodes in Tree structure
 
-// Generate Array structure
+// Generate Map structure
 foreach ($items as $k => $item) {
     $nodesMap[$item['id']] = &$items[$k];
 }
 
-// Nest nodes generating tree structure
+// Nesting nodes and generate tree structure
 foreach ($nodesMap as $k => $item) {
     if (!is_null($item['parent'])) {
         $nodesMap[$item['parent']]['children'][] = &$nodesMap[$k];
