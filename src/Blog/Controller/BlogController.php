@@ -7,6 +7,7 @@ use Neuralpin\HTTPRouter\Response;
 use Stradow\Blog\Render\HyperNode;
 use Stradow\Blog\Render\HyperItemsRender;
 use Stradow\Framework\Database\DataBaseAccess;
+use Stradow\Framework\DependencyResolver\Container;
 
 class BlogController
 {
@@ -21,6 +22,11 @@ class BlogController
         $this->PDOLite->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $this->DataBaseAccess = new DataBaseAccess($this->PDOLite);
         $this->BlogQuery = new BlogQuery($this->DataBaseAccess);
+
+        Container::add(
+            className: 'ContentDataAccess',
+            instance: $this->DataBaseAccess
+        );
     }
 
     public function pageGetById(int $id)

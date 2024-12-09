@@ -1,5 +1,6 @@
 <?php
 
+use Stradow\Blog\Render\Block\CollectionBlock;
 use Stradow\Blog\Render\Block\ImgBlock;
 use Stradow\Blog\Render\Block\ItemBlock;
 use Stradow\Blog\Render\Block\ListBlock;
@@ -29,4 +30,5 @@ return [
     'row' => TableBlock::class,
     'table-heading' => TableBlock::class,
     'cell' => TableBlock::class,
+    'collection' => CollectionBlock::class,
 ];
