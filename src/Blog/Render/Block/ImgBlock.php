@@ -1,14 +1,13 @@
 <?php
-namespace Stradow\Blog\Render;
+namespace Stradow\Blog\Render\Block;
 
 use Stradow\Blog\Render\Interface\NodeContextInterface;
 use Stradow\Blog\Render\Interface\RendereableInterface;
 
-class HyperItemsRenderForH1 implements RendereableInterface
+class ImgBlock implements RendereableInterface
 {
-
     public function render(NodeContextInterface $context): string
     {
-        return "<h1>{$context->getValue()}</h1>";
+        return htmlspecialchars("<img src=\"{$context->getValue()}\">");
     }
 }

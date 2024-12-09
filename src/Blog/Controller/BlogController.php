@@ -41,6 +41,11 @@ class BlogController
             $node = new HyperNode();
             $node->setId($item->id);
             $node->setValue($item->value);
+            $node->setProperties([
+                ...$item->properties,
+                'id' => $item->id,
+                'type' => $item->type,
+            ]);
             $node->setParent($item->parent);
             $node->setRender(new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']));
 

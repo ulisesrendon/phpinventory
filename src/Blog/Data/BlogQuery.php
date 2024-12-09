@@ -33,7 +33,7 @@ class BlogQuery
         $items = $this->DataBaseAccess->query($this->getContentQuery('where content = :id'), ['id' => $id]);
 
         foreach($items as $item){
-            $item->properties = json_decode($item->properties);
+            $item->properties = json_decode($item->properties, true);
         }
         return $items;
     }

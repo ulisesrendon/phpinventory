@@ -17,6 +17,8 @@ class HyperNode implements NodeContextInterface, NestableInterface
 
     private mixed $value;
 
+    private array $properties = [];
+
     public function setValue(mixed $value)
     {
         $this->value = $value;
@@ -39,10 +41,6 @@ class HyperNode implements NodeContextInterface, NestableInterface
 
     public function __tostring(): string 
     {
-        // if(count($this->getChildren())){
-        //     throw new \Exception('Imposible to render multidimensional node');
-        // }
-
         return $this->render->render($this);
     }
 
@@ -74,6 +72,21 @@ class HyperNode implements NodeContextInterface, NestableInterface
     public function getChildren(): array
     {
         return $this->children;
+    }
+
+    public function setProperties(array $properties = [])
+    {
+        $this->properties = $properties;
+    }
+
+    // public function setProperty($property)
+    // {
+    //     $this->properties[] = $property;
+    // }
+
+    public function getProperties(): array
+    {
+        return $this->properties;
     }
 }
 
