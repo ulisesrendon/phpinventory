@@ -26,8 +26,8 @@ class HyperItemsRender
         }
 
         $this->nodes = $nodeMap;
-
     }
+    
     public function render(): string
     {
         $nodeTree = [];

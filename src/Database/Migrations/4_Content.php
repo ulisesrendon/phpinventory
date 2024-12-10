@@ -1,5 +1,13 @@
 <?php
 
+$DataBaseAccess->command("CREATE TABLE config (
+	name varchar(100) NOT NULL,
+	value TEXT NULL,
+	CONSTRAINT config_name_unique UNIQUE KEY (name)
+)");
+
+$DataBaseAccess->command("INSERT INTO config (name,value) VALUES ('site_url','http://phpinventory.localhost')");
+
 $DataBaseAccess->command("CREATE TABLE contentnodes (
 	id varchar(255) NOT NULL PRIMARY KEY,
 	content varchar(255) null default null,

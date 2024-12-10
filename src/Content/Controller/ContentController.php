@@ -34,7 +34,6 @@ class ContentController
          * @var HyperNode[] $items
          */
         $items = [];
-
         foreach($Content->nodes as $item){
             $node = new HyperNode();
             $node->setId($item->id);
@@ -52,7 +51,13 @@ class ContentController
 
         $HyperRender = new HyperItemsRender($items);
 
-        return Response::html($HyperRender->render());
+        return Response::template(
+            content: CONTENT_DIR."/templates/page.template.php",
+            context: [
+                'Content' => $Content,
+                'render' => $HyperRender->render(),
+            ]
+        );
     }
 
 }

@@ -58,5 +58,46 @@ class ContentQuery
         return $Content;
     }
 
+    public function getCollection($context): object|null
+    {
+        $Collection = $this->DataBaseAccess->select("SELECT 
+                collections.id,
+                collections.title,
+                collections.properties,
+                collections.type
+                from collections
+                where 
+                    collections.title = :collection_title
+                limit 1
+            ",
+            [
+                'collection_title' => $context->getValue(),
+            ]
+        );
+        $Collection->properties = json_decode($Collection->properties);
+
+        $Contents = $this->DataBaseAccess->query("SELECT 
+                contents.id,
+                contents.path,
+                contents.type
+                from contents
+                join collections_contents on collection
+                contents.title,
+                contents.properties,s_contents.content_id = contents.id
+                where 
+                    collections_contents.collection_id = :collection_id
+                order by
+                    collections_contents.weigth
+            ",
+            [
+                'collection_id' => $Collection->id,
+            ]
+        );
+
+        $Collection->Contents = $Contents;
+
+        return $Collection;
+    }
+
 
 }
