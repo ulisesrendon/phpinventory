@@ -3,12 +3,11 @@
 use Neuralpin\HTTPRouter\Router;
 use Neuralpin\HTTPRouter\Response;
 use Stradow\Framework\HTTP\RouteMapper;
-use Stradow\Blog\Controller\BlogController;
+use Stradow\Blog\Controller\ContentController;
 use Stradow\User\Controller\AuthController;
 use Stradow\Order\Controller\OrderController;
 use Stradow\Stock\Controller\StockController;
 use Stradow\Stock\Controller\ProviderController;
-use Stradow\Content\Controller\ContentController;
 use Stradow\Product\Controller\ProductController;
 
 /**
@@ -40,13 +39,6 @@ $Router->post('/api/v1/order', [OrderController::class, 'create']);
 $Router->get('/api/v1/order/:id', [OrderController::class, 'getById']);
 // $Router->patch('/api/v1/order/:id', [OrderController::class, 'update']);
 
-$Router->get('/api/v1/content/field', [ContentController::class, 'fieldList']);
-$Router->get('/api/v1/content/type', [ContentController::class, 'typeList']);
-$Router->get('/api/v1/content/type/:id', [ContentController::class, 'typeFind']);
-
-$Router->get('/api/v1/content', [ContentController::class, 'list']);
-$Router->get('/api/v1/content/:id', [ContentController::class, 'find']);
-
 $Router->post('/api/v1/auth/register', [AuthController::class, 'register']);
 
 $Router->get('/api/v1/route-list', function () use ($Router) {
@@ -60,7 +52,7 @@ $Router->get('/api/v1/route-list', function () use ($Router) {
     return Response::json($list);
 });
 
-$Router->get('/api/v1/blog/:id', [BlogController::class, 'pageGetById']);
+$Router->get('/:path', [ContentController::class, 'get'])->ignoreParamSlash();
 
 return $Router;
 

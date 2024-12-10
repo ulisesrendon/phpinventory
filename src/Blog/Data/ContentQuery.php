@@ -4,7 +4,7 @@ namespace Stradow\Blog\Data;
 
 use Stradow\Framework\Database\DataBaseAccess;
 
-class BlogQuery
+class ContentQuery
 {
     public DataBaseAccess $DataBaseAccess;
 
@@ -36,6 +36,25 @@ class BlogQuery
             $item->properties = json_decode($item->properties, true);
         }
         return $items;
+    }
+
+    public function getContentByPath(string $path): ?object
+    {
+        $content = $this->DataBaseAccess->select("SELECT id, path, title, properties, active, type from contents where path = :path ", ['path' => $path]);
+
+        if(is_null($content)){
+            return null;
+        }
+
+        $items = $this->DataBaseAccess->query($this->getContentQuery('where content = :id'), ['id' => $content->id]);
+
+        foreach($items as $item){
+            $item->properties = json_decode($item->properties, true);
+        }
+
+        $content->nodes = $items;
+
+        return $content;
     }
 
 
