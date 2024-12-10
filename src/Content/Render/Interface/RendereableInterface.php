@@ -1,5 +1,5 @@
 <?php
-namespace Stradow\Blog\Render\Interface;
+namespace Stradow\Content\Render\Interface;
 
 interface RendereableInterface
 {

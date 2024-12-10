@@ -1,6 +1,6 @@
 <?php
 
-namespace Stradow\Blog\Data;
+namespace Stradow\Content\Data;
 
 use Stradow\Framework\Database\DataBaseAccess;
 
@@ -40,21 +40,22 @@ class ContentQuery
 
     public function getContentByPath(string $path): ?object
     {
-        $content = $this->DataBaseAccess->select("SELECT id, path, title, properties, active, type from contents where path = :path ", ['path' => $path]);
+        $Content = $this->DataBaseAccess->select("SELECT id, path, title, properties, active, type from contents where path = :path ", ['path' => $path]);
 
-        if(is_null($content)){
+        if(is_null($Content)){
             return null;
         }
 
-        $items = $this->DataBaseAccess->query($this->getContentQuery('where content = :id'), ['id' => $content->id]);
+        $items = $this->DataBaseAccess->query($this->getContentQuery('where content = :id'), ['id' => $Content->id]);
 
         foreach($items as $item){
             $item->properties = json_decode($item->properties, true);
         }
 
-        $content->nodes = $items;
+        $Content->properties = json_decode($Content->properties);
+        $Content->nodes = $items;
 
-        return $content;
+        return $Content;
     }
 
 

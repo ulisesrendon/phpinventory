@@ -3,7 +3,7 @@
 use Neuralpin\HTTPRouter\Router;
 use Neuralpin\HTTPRouter\Response;
 use Stradow\Framework\HTTP\RouteMapper;
-use Stradow\Blog\Controller\ContentController;
+use Stradow\Content\Controller\ContentController;
 use Stradow\User\Controller\AuthController;
 use Stradow\Order\Controller\OrderController;
 use Stradow\Stock\Controller\StockController;

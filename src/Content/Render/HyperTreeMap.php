@@ -1,5 +1,5 @@
 <?php
-namespace Stradow\Blog\Render;
+namespace Stradow\Content\Render;
 
 class HyperTreeMap implements \Iterator, \ArrayAccess
 {

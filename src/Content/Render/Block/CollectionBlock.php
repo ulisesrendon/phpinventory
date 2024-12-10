@@ -1,12 +1,12 @@
 <?php
-namespace Stradow\Blog\Render\Block;
+namespace Stradow\Content\Render\Block;
 
 use Stradow\Framework\Validator;
 use Stradow\Framework\Database\DataBaseAccess;
 use Neuralpin\HTTPRouter\Helper\TemplateRender;
 use Stradow\Framework\DependencyResolver\Container;
-use Stradow\Blog\Render\Interface\NodeContextInterface;
-use Stradow\Blog\Render\Interface\RendereableInterface;
+use Stradow\Content\Render\Interface\NodeContextInterface;
+use Stradow\Content\Render\Interface\RendereableInterface;
 
 class CollectionBlock implements RendereableInterface
 {

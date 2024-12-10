@@ -1,8 +1,8 @@
 <?php
-namespace Stradow\Blog\Render\Block;
+namespace Stradow\Content\Render\Block;
 
-use Stradow\Blog\Render\Interface\NodeContextInterface;
-use Stradow\Blog\Render\Interface\RendereableInterface;
+use Stradow\Content\Render\Interface\NodeContextInterface;
+use Stradow\Content\Render\Interface\RendereableInterface;
 
 class ItemBlock implements RendereableInterface
 {
