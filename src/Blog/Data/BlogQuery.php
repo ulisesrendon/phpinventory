@@ -28,7 +28,7 @@ class BlogQuery
         ";
     }
 
-    public function getContentById(int $id): ?array
+    public function getContentById(string $id): ?array
     {
         $items = $this->DataBaseAccess->query($this->getContentQuery('where content = :id'), ['id' => $id]);
 

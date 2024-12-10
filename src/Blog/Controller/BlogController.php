@@ -17,19 +17,11 @@ class BlogController
 
     public function __construct()
     {
-        $this->PDOLite = new PDO('sqlite:'.realpath(__DIR__ . '/../../Database/static.db'));
-        $this->PDOLite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->PDOLite->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        $this->DataBaseAccess = new DataBaseAccess($this->PDOLite);
+        $this->DataBaseAccess = Container::get(DataBaseAccess::class);
         $this->BlogQuery = new BlogQuery($this->DataBaseAccess);
-
-        Container::add(
-            className: 'ContentDataAccess',
-            instance: $this->DataBaseAccess
-        );
     }
 
-    public function pageGetById(int $id)
+    public function pageGetById(string $id)
     {
 
         $itemsData = $this->BlogQuery->getContentById($id);
