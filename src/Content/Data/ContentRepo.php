@@ -26,11 +26,11 @@ class ContentRepo
                 parent,
                 value,
                 properties,
-                weigth,
+                weight,
                 type
             from contentnodes
             $extraParts
-            order by parent, weigth
+            order by parent, weight
         ";
     }
 
@@ -99,7 +99,7 @@ class ContentRepo
                 where 
                     collections_contents.collection_id = :collection_id
                 order by
-                    collections_contents.weigth
+                    collections_contents.weight
             ',
             [
                 'collection_id' => $Collection->id,

@@ -2,7 +2,7 @@
 
 return <<<'SQL'
 
-INSERT INTO contentnodes (id,content,parent,value,properties,type,weigth) VALUES
+INSERT INTO contentnodes (id,content,parent,value,properties,type,weight) VALUES
 	 ('1bccc7b7-94bb-4384-ab97-24093bb71a01','df056abc-dca6-41b1-9662-6b3b47e583ca',NULL,'Hello world!','{}','h1',100),
 	 ('ec6b9ea6-d971-426c-9cd2-c76d27398b3a','df056abc-dca6-41b1-9662-6b3b47e583ca','049c355c-7d6b-4354-9690-48e72edd56e0',NULL,'{}','text',100),
 	 ('9e433cf7-8645-452c-bab5-592b5bb33fa3','df056abc-dca6-41b1-9662-6b3b47e583ca','ec6b9ea6-d971-426c-9cd2-c76d27398b3a','sit amet consectetur','{}','item',100),
@@ -43,7 +43,7 @@ INSERT INTO contentnodes (id,content,parent,value,properties,type,weigth) VALUES
 	 ('7eeb89bd-9f11-4a4e-8154-8751bcb321a9','df056abc-dca6-41b1-9662-6b3b47e583ca','9cf6f60a-520f-4e3a-85e9-a2779af1a502','Heading 2','{}','table-heading',100),
 	 ('9cf6f60a-520f-4e3a-85e9-a2779af1a502','df056abc-dca6-41b1-9662-6b3b47e583ca','bcfd6865-3c55-4e26-acff-493a413a44c2',NULL,'{}','row',25),
 	 ('6f91c4c7-faf8-4fe5-88a6-65f21ed3d71c','df056abc-dca6-41b1-9662-6b3b47e583ca',NULL,'main-nav','{
-	"template": "templates/nav-template.php"
+	"template": "templates/nav.template.php"
 }','collection',100);
 
 SQL;

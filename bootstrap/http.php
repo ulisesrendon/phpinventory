@@ -16,7 +16,7 @@ try {
             fn () => Response::template(__DIR__.'/../public/405.html', 405),
         );
     } else {
-        if ($_ENV['APP_DEBUG'] != 0) {
+        if (1 == $_ENV['APP_DEBUG']) {
             $Controller = $Router->wrapController(
                 fn () => Response::html($Exception, 500),
             );

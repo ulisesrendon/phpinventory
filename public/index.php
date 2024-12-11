@@ -1,20 +1,23 @@
 <?php
 
-use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
-use Neuralpin\HTTPRouter\ResponseRender;
+use Neuralpin\HTTPRouter\Response;
+
 
 require __DIR__.'/../bootstrap/app.php';
 
 try {
     /**
-     * @var ControllerWrapper $Controller
-     * @var ResponseRender $Response
+     * @var \Neuralpin\HTTPRouter\Interface\ControllerWrapper $Controller
+     * @var \Neuralpin\HTTPRouter\ResponseRender $Response
      */
     $Response = $Controller->getResponse();
 } catch (\Throwable|\Exception $Error) {
-    $Error = (string) $Error;
-    echo "<pre>$Error</pre>";
-    exit();
+    if (1 == $_ENV['APP_DEBUG']) {
+        $Response = "<pre>{$Error}</pre>";
+    } else {
+        $Response = Response::template(__DIR__ . '/500.html', 500);
+    }
+    
 }
 
 echo $Response;

@@ -15,7 +15,7 @@ $DataBaseAccess->command("CREATE TABLE contentnodes (
 	value TEXT null default null,
 	properties TEXT NOT NULL DEFAULT ('{}'),
 	type varchar(150),
-	weigth INTEGER DEFAULT (100)
+	weight INTEGER DEFAULT (100)
 )");
 
 $DataBaseAccess->command("CREATE TABLE contents (
@@ -31,7 +31,7 @@ $DataBaseAccess->command("CREATE TABLE contents (
 $DataBaseAccess->command('CREATE TABLE collections_contents (
 	content_id varchar(255) not null,
 	collection_id varchar(255) not null,
-	weigth INTEGER DEFAULT (100),
+	weight INTEGER DEFAULT (100),
     PRIMARY KEY (content_id, collection_id),
     CONSTRAINT collections_contents_content_id_collection_id_unique UNIQUE (content_id, collection_id)
 )');
@@ -41,7 +41,7 @@ $DataBaseAccess->command("CREATE TABLE collections (
 	title varchar(255) NULL default null,
 	properties TEXT NOT NULL DEFAULT ('{}'),
 	type varchar(150),
-	weigth INTEGER DEFAULT (100)
+	weight INTEGER DEFAULT (100)
 )");
 
 $DataBaseAccess->command("INSERT INTO contents (id,path,title,properties,active,type) VALUES
@@ -50,7 +50,7 @@ $DataBaseAccess->command("INSERT INTO contents (id,path,title,properties,active,
     ('6886548b-a022-4aa0-ab36-6cc43f248a7b','https://google.com','Ir a google','{}',true,'link')
 ");
 
-$DataBaseAccess->command("INSERT INTO collections_contents (content_id,collection_id,weigth) VALUES
+$DataBaseAccess->command("INSERT INTO collections_contents (content_id,collection_id,weight) VALUES
     ('df056abc-dca6-41b1-9662-6b3b47e583ca','f596b3c9-a1fa-4d3d-be13-fd7d0ef29d11',100),
     ('6eee6539-7743-4b18-b70a-b9121d801783','f596b3c9-a1fa-4d3d-be13-fd7d0ef29d11',100),
     ('6886548b-a022-4aa0-ab36-6cc43f248a7b','f596b3c9-a1fa-4d3d-be13-fd7d0ef29d11',100),
@@ -59,7 +59,7 @@ $DataBaseAccess->command("INSERT INTO collections_contents (content_id,collectio
 ");
 
 $DataBaseAccess->command(<<<'SQL'
-    INSERT INTO collections (id,title,properties,type,weigth) VALUES
+    INSERT INTO collections (id,title,properties,type,weight) VALUES
         ('f596b3c9-a1fa-4d3d-be13-fd7d0ef29d11','main-nav','{
         "template": "templates/nav.template.php"
     }','1',100),

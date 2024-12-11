@@ -1,7 +1,5 @@
 <?php
 
-use Neuralpin\HTTPRouter\Interface\ControllerWrapper;
-use Neuralpin\HTTPRouter\Router;
 use Stradow\Framework\DependencyResolver\Container;
 use Stradow\Framework\Event\ListenerProvider;
 
@@ -22,12 +20,12 @@ define('EVENT_CONFIG', require __DIR__.'/../config/events.php');
 Container::add(ListenerProvider::class, new ListenerProvider(EVENT_CONFIG));
 
 /**
- * @var Router $Router
+ * @var \Neuralpin\HTTPRouter\Router $Router
  */
 $Router = require __DIR__.'/../config/routes.php';
 
 /**
- * @var ControllerWrapper $Controller
+ * @var \Neuralpin\HTTPRouter\Interface\ControllerWrapper $Controller
  */
 $Controller = require __DIR__.'/http.php';
 
