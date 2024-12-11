@@ -6,8 +6,8 @@ use Stradow\Content\Render\Interface\RendereableInterface;
 
 class ImgBlock implements RendereableInterface
 {
-    public function render(NodeContextInterface $context): string
+    public function render(NodeContextInterface $Context): string
     {
-        return htmlspecialchars("<img src=\"{$context->getValue()}\">");
+        return htmlspecialchars("<img src=\"{$Context->getValue()}\">");
     }
 }

@@ -6,9 +6,9 @@ use Stradow\Content\Render\Interface\RendereableInterface;
 
 class TextBlock implements RendereableInterface
 {
-    public function render(NodeContextInterface $context): string
+    public function render(NodeContextInterface $Context): string
     {
-        $content = array_reduce($context->getChildren(), fn($carry, $item) => $carry . "<p>$item</p>");
+        $content = array_reduce($Context->getChildren(), fn($carry, $item) => $carry . "<p>$item</p>");
 
         return "<div>$content</div>";
     }

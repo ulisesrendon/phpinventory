@@ -10,4 +10,6 @@ interface NodeContextInterface
     public function getChildren(): array;
 
     public function getProperties(): array;
+
+    public function getExtra(string $key): mixed;
 }

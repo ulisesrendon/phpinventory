@@ -7,10 +7,10 @@ use Stradow\Content\Render\Interface\NodeContextInterface;
 class DefaultBlock implements RendereableInterface
 {
 
-    public function render(NodeContextInterface $context): string
+    public function render(NodeContextInterface $Context): string
     {
         $children = [];
-        foreach($context->getChildren() as $item){
+        foreach($Context->getChildren() as $item){
             $children[] = [
                 'type' => htmlspecialchars($item->getProperties()['type']),
                 'value' => htmlspecialchars($item->getValue()),
@@ -20,8 +20,8 @@ class DefaultBlock implements RendereableInterface
 
         return '<pre><code>'.json_encode([
             // 'id' => htmlspecialchars($context->getId()),
-            'type' => htmlspecialchars($context->getProperties()['type']),
-            'value' => htmlspecialchars($context->getValue()),
+            'type' => htmlspecialchars($Context->getProperties()['type']),
+            'value' => htmlspecialchars($Context->getValue()),
             'children' => $children,
         ]).'</code></pre>';
     }

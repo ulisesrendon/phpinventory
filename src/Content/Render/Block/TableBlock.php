@@ -6,28 +6,28 @@ use Stradow\Content\Render\Interface\RendereableInterface;
 
 class TableBlock implements RendereableInterface
 {
-    public function render(NodeContextInterface $context): string
+    public function render(NodeContextInterface $Context): string
     {
-        $type = $context->getProperties()['type'];
+        $type = $Context->getProperties()['type'];
 
         $content = '';
 
         if ($type == 'table') {
             $tag = 'table';
-            foreach ($context->getChildren() as $row) {
+            foreach ($Context->getChildren() as $row) {
                 $content .= $row;
             }
         } else if ($type == 'row') {
             $tag = 'tr';
-            foreach ($context->getChildren() as $cell) {
+            foreach ($Context->getChildren() as $cell) {
                 $content .= $cell;
             }
         } else if ($type == 'cell') {
             $tag = 'td';
-            $content = $context->getValue();
+            $content = $Context->getValue();
         } else if ($type == 'table-heading') {
             $tag = 'th';
-            $content = $context->getValue();
+            $content = $Context->getValue();
         }
 
         return "<{$tag}>{$content}</{$tag}>";

@@ -6,11 +6,11 @@ use Stradow\Content\Render\Interface\RendereableInterface;
 
 class ListBlock implements RendereableInterface
 {
-    public function render(NodeContextInterface $context): string
+    public function render(NodeContextInterface $Context): string
     {
-        $blockProperties = $context->getProperties();
+        $blockProperties = $Context->getProperties();
 
-        $content = array_reduce($context->getChildren(), fn($carry, $item) => $carry . "<li>$item</li>");
+        $content = array_reduce($Context->getChildren(), fn($carry, $item) => $carry . "<li>$item</li>");
 
         $tag = $blockProperties['type'];
 

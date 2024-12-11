@@ -7,10 +7,10 @@ use Stradow\Content\Render\Interface\RendereableInterface;
 class HeadingBlock implements RendereableInterface
 {
 
-    public function render(NodeContextInterface $context): string
+    public function render(NodeContextInterface $Context): string
     {
-        $tag = $context->getProperties()['type'];
+        $tag = $Context->getProperties()['type'];
 
-        return "<$tag>{$context->getValue()}</$tag>";
+        return "<$tag>{$Context->getValue()}</$tag>";
     }
 }

@@ -6,9 +6,9 @@ use Stradow\Content\Render\Interface\RendereableInterface;
 
 class ContainerBlock implements RendereableInterface
 {
-    public function render(NodeContextInterface $context): string
+    public function render(NodeContextInterface $Context): string
     {
-        $content = array_reduce($context->getChildren(), fn($carry, $item)=> $carry.$item);
+        $content = array_reduce($Context->getChildren(), fn($carry, $item)=> $carry.$item);
         return "<div>$content</div>";
     }
 

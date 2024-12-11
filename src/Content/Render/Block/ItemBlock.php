@@ -7,9 +7,9 @@ use Stradow\Content\Render\Interface\RendereableInterface;
 class ItemBlock implements RendereableInterface
 {
 
-    public function render(NodeContextInterface $context): string
+    public function render(NodeContextInterface $Context): string
     {
-        return $context->getValue();
+        return $Context->getValue();
     }
 }
 

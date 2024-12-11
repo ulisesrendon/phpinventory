@@ -2,7 +2,7 @@
 namespace Stradow\Content\Controller;
 
 use PDO;
-use Stradow\Content\Data\ContentQuery;
+use Stradow\Content\Data\ContentRepo;
 use Neuralpin\HTTPRouter\Response;
 use Stradow\Content\Render\HyperNode;
 use Stradow\Content\Render\HyperItemsRender;
@@ -13,43 +13,42 @@ class ContentController
 {
     private PDO $PDOLite;
     private DataBaseAccess $DataBaseAccess;
-    private ContentQuery $ContentQuery;
+    private ContentRepo $ContentRepo;
 
     public function __construct()
     {
         $this->DataBaseAccess = Container::get(DataBaseAccess::class);
-        $this->ContentQuery = new ContentQuery($this->DataBaseAccess);
+        $this->ContentRepo = new ContentRepo($this->DataBaseAccess);
     }
 
     public function get(string $path)
     {
 
-        $Content = $this->ContentQuery->getContentByPath($path);
+        $Content = $this->ContentRepo->getContentByPath($path);
 
         if (empty($Content)) {
             return Response::template(PUBLIC_DIR.'/404.html', 404);
         }
 
-        /**
-         * @var HyperNode[] $items
-         */
-        $items = [];
-        foreach($Content->nodes as $item){
-            $node = new HyperNode();
-            $node->setId($item->id);
-            $node->setValue($item->value);
-            $node->setProperties([
-                ...$item->properties,
-                'id' => $item->id,
-                'type' => $item->type,
-            ]);
-            $node->setParent($item->parent);
-            $node->setRender(new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']));
+        $HyperRender = new HyperItemsRender();
 
-            $items[] = $node;
+        foreach ($Content->nodes as $item) {
+            $HyperRender->addNode(
+                id: $item->id, 
+                node: new HyperNode(
+                    id: $item->id,
+                    value: $item->value,
+                    properties: $item->properties,
+                    type: $item->type,
+                    parent: $item->parent,
+                    RenderEngine: new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']),
+                    context: [
+                        'tree' => $HyperRender,
+                        'repo' => $this->ContentRepo,
+                    ],
+                )
+            );
         }
-
-        $HyperRender = new HyperItemsRender($items);
 
         return Response::template(
             content: CONTENT_DIR."/templates/page.template.php",

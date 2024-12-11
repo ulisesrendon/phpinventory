@@ -7,9 +7,9 @@ use Stradow\Content\Render\Interface\RendereableInterface;
 class PlainCodeBlock implements RendereableInterface
 {
 
-    public function render(NodeContextInterface $context): string
+    public function render(NodeContextInterface $Context): string
     {
-        $value = htmlspecialchars($context->getValue());
+        $value = htmlspecialchars($Context->getValue());
         return "<pre><code>$value</code></pre>";
     }
 }

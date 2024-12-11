@@ -7,7 +7,7 @@ use Stradow\Content\Render\Interface\RendereableInterface;
 
 class HyperNode implements NodeContextInterface, NestableInterface
 {
-    private RendereableInterface $render;
+    private RendereableInterface $RenderEngine;
 
     private array $children = [];
 
@@ -18,6 +18,31 @@ class HyperNode implements NodeContextInterface, NestableInterface
     private mixed $value;
 
     private array $properties = [];
+
+    private readonly array $context;
+
+    public function __construct(
+        string|int|float $id,
+        mixed $value,
+        array $properties,
+        string|int|float $type,
+        null|string|int|float $parent,
+        RendereableInterface $RenderEngine,
+        array $context = [],
+    )
+    {
+        $this->setId($id);
+        $this->setValue($value);
+        $this->setProperties([
+            ...$properties,
+            'id' => $id,
+            'type' => $type,
+        ]);
+        $this->setParent($parent);
+        $this->setRenderEngine($RenderEngine);
+
+        $this->context = $context;
+    }
 
     public function setValue(mixed $value)
     {
@@ -34,14 +59,14 @@ class HyperNode implements NodeContextInterface, NestableInterface
         $this->parent = $parent;
     }
 
-    public function setRender(RendereableInterface $render)
+    public function setRenderEngine(RendereableInterface $RenderEngine)
     {
-        $this->render = $render;
+        $this->RenderEngine = $RenderEngine;
     }
 
     public function __tostring(): string 
     {
-        return $this->render->render($this);
+        return $this->RenderEngine->render($this);
     }
 
     public function setId(mixed $id)
@@ -54,7 +79,7 @@ class HyperNode implements NodeContextInterface, NestableInterface
         return $this->id;
     }
 
-    public function getParent(): mixed
+    public function getParent(): null|string|int|float
     {
         return $this->parent;
     }
@@ -87,6 +112,11 @@ class HyperNode implements NodeContextInterface, NestableInterface
     public function getProperties(): array
     {
         return $this->properties;
+    }
+
+    public function getExtra(string $key): mixed
+    {
+        return $this->context[$key] ?? null;
     }
 }
 

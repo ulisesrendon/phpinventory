@@ -2,15 +2,21 @@
 
 namespace Stradow\Content\Data;
 
+use Stradow\Framework\Validator;
 use Stradow\Framework\Database\DataBaseAccess;
 
-class ContentQuery
+class ContentRepo
 {
-    public DataBaseAccess $DataBaseAccess;
+    protected DataBaseAccess $DataBaseAccess;
 
     public function __construct(DataBaseAccess $DataBaseAccess)
     {
         $this->DataBaseAccess = $DataBaseAccess;
+    }
+
+    public function getDatabaseAccess(): DataBaseAccess
+    {
+        return $this->DataBaseAccess;
     }
 
     public function getContentQuery(string $extraParts = ''): string
@@ -58,7 +64,7 @@ class ContentQuery
         return $Content;
     }
 
-    public function getCollection($context): object|null
+    public function getCollectionByTitle(string $title): object|null
     {
         $Collection = $this->DataBaseAccess->select("SELECT 
                 collections.id,
@@ -71,19 +77,24 @@ class ContentQuery
                 limit 1
             ",
             [
-                'collection_title' => $context->getValue(),
+                'collection_title' => $title,
             ]
         );
+        
+        if(empty($Collection)){
+            return null;
+        }
+
         $Collection->properties = json_decode($Collection->properties);
 
         $Contents = $this->DataBaseAccess->query("SELECT 
                 contents.id,
                 contents.path,
-                contents.type
-                from contents
-                join collections_contents on collection
+                contents.type,
                 contents.title,
-                contents.properties,s_contents.content_id = contents.id
+                contents.properties
+                from contents
+                join collections_contents on collections_contents.content_id = contents.id
                 where 
                     collections_contents.collection_id = :collection_id
                 order by
@@ -93,6 +104,11 @@ class ContentQuery
                 'collection_id' => $Collection->id,
             ]
         );
+
+        foreach($Contents as $Content){
+            $Content->properties = json_decode($Content->properties);
+            $Content->url = (new Validator($Content->path))->url()->isCorrect() ? $Content->path : "http://phpinventory.test/{$Content->path}";
+        }
 
         $Collection->Contents = $Contents;
 
