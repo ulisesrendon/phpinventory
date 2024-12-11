@@ -2,8 +2,8 @@
 
 namespace Stradow\Content\Data;
 
-use Stradow\Framework\Validator;
 use Stradow\Framework\Database\DataBaseAccess;
+use Stradow\Framework\Validator;
 
 class ContentRepo
 {
@@ -38,23 +38,24 @@ class ContentRepo
     {
         $items = $this->DataBaseAccess->query($this->getContentQuery('where content = :id'), ['id' => $id]);
 
-        foreach($items as $item){
+        foreach ($items as $item) {
             $item->properties = json_decode($item->properties, true);
         }
+
         return $items;
     }
 
     public function getContentByPath(string $path): ?object
     {
-        $Content = $this->DataBaseAccess->select("SELECT id, path, title, properties, active, type from contents where path = :path ", ['path' => $path]);
+        $Content = $this->DataBaseAccess->select('SELECT id, path, title, properties, active, type from contents where path = :path ', ['path' => $path]);
 
-        if(is_null($Content)){
+        if (is_null($Content)) {
             return null;
         }
 
         $items = $this->DataBaseAccess->query($this->getContentQuery('where content = :id'), ['id' => $Content->id]);
 
-        foreach($items as $item){
+        foreach ($items as $item) {
             $item->properties = json_decode($item->properties, true);
         }
 
@@ -64,9 +65,9 @@ class ContentRepo
         return $Content;
     }
 
-    public function getCollectionByTitle(string $title): object|null
+    public function getCollectionByTitle(string $title): ?object
     {
-        $Collection = $this->DataBaseAccess->select("SELECT 
+        $Collection = $this->DataBaseAccess->select('SELECT 
                 collections.id,
                 collections.title,
                 collections.properties,
@@ -75,19 +76,19 @@ class ContentRepo
                 where 
                     collections.title = :collection_title
                 limit 1
-            ",
+            ',
             [
                 'collection_title' => $title,
             ]
         );
-        
-        if(empty($Collection)){
+
+        if (empty($Collection)) {
             return null;
         }
 
         $Collection->properties = json_decode($Collection->properties);
 
-        $Contents = $this->DataBaseAccess->query("SELECT 
+        $Contents = $this->DataBaseAccess->query('SELECT 
                 contents.id,
                 contents.path,
                 contents.type,
@@ -99,13 +100,13 @@ class ContentRepo
                     collections_contents.collection_id = :collection_id
                 order by
                     collections_contents.weigth
-            ",
+            ',
             [
                 'collection_id' => $Collection->id,
             ]
         );
 
-        foreach($Contents as $Content){
+        foreach ($Contents as $Content) {
             $Content->properties = json_decode($Content->properties);
             $Content->url = (new Validator($Content->path))->url()->isCorrect() ? $Content->path : "http://phpinventory.test/{$Content->path}";
         }
@@ -114,6 +115,4 @@ class ContentRepo
 
         return $Collection;
     }
-
-
 }

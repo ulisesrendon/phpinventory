@@ -1,4 +1,5 @@
 <?php
+
 namespace Stradow\Order\Controller;
 
 use Stradow\Framework\Validator;
@@ -14,25 +15,24 @@ class OrderInputValidation
         ?int $address,
         ?int $paymentMethod,
         array $items = [],
-    )
-    {
+    ) {
         $this->errors = [];
 
         $this->Validator = new Validator;
 
-        if (!$this->customerIsValid($customer)) {
+        if (! $this->customerIsValid($customer)) {
             $this->errors[] = 'Invalid customer';
         }
 
-        if (!$this->addressIsValid($address)) {
+        if (! $this->addressIsValid($address)) {
             $this->errors[] = 'Invalid customer address';
         }
 
-        if (!$this->paymentMethodIsValid($paymentMethod)) {
+        if (! $this->paymentMethodIsValid($paymentMethod)) {
             $this->errors[] = 'Invalid payment method';
         }
 
-        if (!$this->itemListIsValid($items)) {
+        if (! $this->itemListIsValid($items)) {
             $this->errors[] = 'Invalid order items';
         }
     }

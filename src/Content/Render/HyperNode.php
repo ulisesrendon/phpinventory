@@ -1,11 +1,12 @@
 <?php
+
 namespace Stradow\Content\Render;
 
 use Stradow\Content\Render\Interface\NestableInterface;
 use Stradow\Content\Render\Interface\NodeContextInterface;
 use Stradow\Content\Render\Interface\RendereableInterface;
 
-class HyperNode implements NodeContextInterface, NestableInterface
+class HyperNode implements NestableInterface, NodeContextInterface
 {
     private RendereableInterface $RenderEngine;
 
@@ -29,8 +30,7 @@ class HyperNode implements NodeContextInterface, NestableInterface
         null|string|int|float $parent,
         RendereableInterface $RenderEngine,
         array $context = [],
-    )
-    {
+    ) {
         $this->setId($id);
         $this->setValue($value);
         $this->setProperties([
@@ -64,7 +64,7 @@ class HyperNode implements NodeContextInterface, NestableInterface
         $this->RenderEngine = $RenderEngine;
     }
 
-    public function __tostring(): string 
+    public function __toString(): string
     {
         return $this->RenderEngine->render($this);
     }
@@ -119,4 +119,3 @@ class HyperNode implements NodeContextInterface, NestableInterface
         return $this->context[$key] ?? null;
     }
 }
-

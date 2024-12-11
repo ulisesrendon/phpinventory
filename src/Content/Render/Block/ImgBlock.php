@@ -1,4 +1,5 @@
 <?php
+
 namespace Stradow\Content\Render\Block;
 
 use Stradow\Content\Render\Interface\NodeContextInterface;

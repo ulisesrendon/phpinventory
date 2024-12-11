@@ -1,21 +1,20 @@
 <?php
 
-use Neuralpin\HTTPRouter\Router;
 use Neuralpin\HTTPRouter\Response;
-use Stradow\Framework\HTTP\RouteMapper;
+use Neuralpin\HTTPRouter\Router;
 use Stradow\Content\Controller\ContentController;
-use Stradow\User\Controller\AuthController;
+use Stradow\Framework\HTTP\RouteMapper;
 use Stradow\Order\Controller\OrderController;
-use Stradow\Stock\Controller\StockController;
-use Stradow\Stock\Controller\ProviderController;
 use Stradow\Product\Controller\ProductController;
+use Stradow\Stock\Controller\ProviderController;
+use Stradow\Stock\Controller\StockController;
+use Stradow\User\Controller\AuthController;
 
 /**
  * Route System configuration - config/routes.php
-*/
-
+ */
 $Router = new Router(ControllerMapper: RouteMapper::class);
-$Router->get('/', fn()=> '-Stradow says: ✋ Hello world!');
+$Router->get('/', fn () => '-Stradow says: ✋ Hello world!');
 $Router->post('/api/v1/product', [ProductController::class, 'create']);
 $Router->get('/api/v1/product', [ProductController::class, 'list']);
 $Router->get('/api/v1/product/:id', [ProductController::class, 'getById']);
@@ -55,7 +54,6 @@ $Router->get('/api/v1/route-list', function () use ($Router) {
 $Router->get('/:path', [ContentController::class, 'get'])->ignoreParamSlash();
 
 return $Router;
-
 
 /*
 v2/content

@@ -1,4 +1,5 @@
 <?php
+
 namespace Stradow\Content\Render\Interface;
 
 interface NodeContextInterface

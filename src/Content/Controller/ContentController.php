@@ -1,18 +1,21 @@
 <?php
+
 namespace Stradow\Content\Controller;
 
+use Neuralpin\HTTPRouter\Response;
 use PDO;
 use Stradow\Content\Data\ContentRepo;
-use Neuralpin\HTTPRouter\Response;
-use Stradow\Content\Render\HyperNode;
 use Stradow\Content\Render\HyperItemsRender;
+use Stradow\Content\Render\HyperNode;
 use Stradow\Framework\Database\DataBaseAccess;
 use Stradow\Framework\DependencyResolver\Container;
 
 class ContentController
 {
     private PDO $PDOLite;
+
     private DataBaseAccess $DataBaseAccess;
+
     private ContentRepo $ContentRepo;
 
     public function __construct()
@@ -30,11 +33,11 @@ class ContentController
             return Response::template(PUBLIC_DIR.'/404.html', 404);
         }
 
-        $HyperRender = new HyperItemsRender();
+        $HyperRender = new HyperItemsRender;
 
         foreach ($Content->nodes as $item) {
             $HyperRender->addNode(
-                id: $item->id, 
+                id: $item->id,
                 node: new HyperNode(
                     id: $item->id,
                     value: $item->value,
@@ -51,12 +54,11 @@ class ContentController
         }
 
         return Response::template(
-            content: CONTENT_DIR."/templates/page.template.php",
+            content: CONTENT_DIR.'/templates/page.template.php',
             context: [
                 'Content' => $Content,
                 'render' => $HyperRender->render(),
             ]
         );
     }
-
 }

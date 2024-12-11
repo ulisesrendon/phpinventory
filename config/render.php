@@ -1,6 +1,5 @@
 <?php
 
-use Stradow\Content\Render\Block\CollectionBlock;
 use Stradow\Content\Render\Block\ImgBlock;
 use Stradow\Content\Render\Block\ItemBlock;
 use Stradow\Content\Render\Block\ListBlock;
@@ -10,6 +9,7 @@ use Stradow\Content\Render\Block\DefaultBlock;
 use Stradow\Content\Render\Block\HeadingBlock;
 use Stradow\Content\Render\Block\ContainerBlock;
 use Stradow\Content\Render\Block\PlainCodeBlock;
+use Stradow\Content\Render\Block\CollectionBlock;
 
 return [
     'default' => DefaultBlock::class,

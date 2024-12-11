@@ -31,7 +31,6 @@ $DataBaseAccess->command('CREATE table if not exists orderstates(
     created_at timestamp null default CURRENT_TIMESTAMP
 )');
 
-
 $DataBaseAccess->command('CREATE table if not exists paymentmethods(
     id integer not null auto_increment primary key,
     name varchar(255) not null unique

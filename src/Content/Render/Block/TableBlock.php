@@ -1,4 +1,5 @@
 <?php
+
 namespace Stradow\Content\Render\Block;
 
 use Stradow\Content\Render\Interface\NodeContextInterface;
@@ -17,15 +18,15 @@ class TableBlock implements RendereableInterface
             foreach ($Context->getChildren() as $row) {
                 $content .= $row;
             }
-        } else if ($type == 'row') {
+        } elseif ($type == 'row') {
             $tag = 'tr';
             foreach ($Context->getChildren() as $cell) {
                 $content .= $cell;
             }
-        } else if ($type == 'cell') {
+        } elseif ($type == 'cell') {
             $tag = 'td';
             $content = $Context->getValue();
-        } else if ($type == 'table-heading') {
+        } elseif ($type == 'table-heading') {
             $tag = 'th';
             $content = $Context->getValue();
         }

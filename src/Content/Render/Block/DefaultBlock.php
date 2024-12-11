@@ -1,16 +1,17 @@
 <?php
+
 namespace Stradow\Content\Render\Block;
 
-use Stradow\Content\Render\Interface\RendereableInterface;
 use Stradow\Content\Render\Interface\NodeContextInterface;
+use Stradow\Content\Render\Interface\RendereableInterface;
 
 class DefaultBlock implements RendereableInterface
 {
-
     public function render(NodeContextInterface $Context): string
     {
+
         $children = [];
-        foreach($Context->getChildren() as $item){
+        foreach ($Context->getChildren() as $item) {
             $children[] = [
                 'type' => htmlspecialchars($item->getProperties()['type']),
                 'value' => htmlspecialchars($item->getValue()),

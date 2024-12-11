@@ -1,10 +1,8 @@
 <?php
+
 namespace Stradow\Content\Render\Block;
 
-use Stradow\Framework\Validator;
-use Stradow\Framework\Database\DataBaseAccess;
 use Neuralpin\HTTPRouter\Helper\TemplateRender;
-use Stradow\Framework\DependencyResolver\Container;
 use Stradow\Content\Render\Interface\NodeContextInterface;
 use Stradow\Content\Render\Interface\RendereableInterface;
 
@@ -17,9 +15,11 @@ class CollectionBlock implements RendereableInterface
          */
         $ContentRepo = $Context->getExtra('repo');
 
-        $Collection = $ContentRepo->getCollectionByTitle($Context->getValue());
+        $Collection = $ContentRepo?->getCollectionByTitle($Context->getValue());
 
-        return (string) new TemplateRender(CONTENT_DIR."/{$Collection->properties->template}", [
+        $template = $Context->getProperties()['template'] ?? $Collection?->properties?->template ?? 'templates/collection.template.php';
+
+        return (string) new TemplateRender(CONTENT_DIR."/$template", [
             'Collection' => $Collection,
         ]);
     }

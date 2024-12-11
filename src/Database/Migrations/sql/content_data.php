@@ -1,6 +1,6 @@
 <?php
 
-return <<<SQL
+return <<<'SQL'
 
 INSERT INTO contentnodes (id,content,parent,value,properties,type,weigth) VALUES
 	 ('1bccc7b7-94bb-4384-ab97-24093bb71a01','df056abc-dca6-41b1-9662-6b3b47e583ca',NULL,'Hello world!','{}','h1',100),

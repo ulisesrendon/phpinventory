@@ -1,13 +1,12 @@
 <?php
 
-
 use PHPUnit\Framework\TestCase;
-use Stradow\Framework\Event\StoppableEvent;
 use Stradow\Framework\Event\ListenerProvider;
+use Stradow\Framework\Event\StoppableEvent;
 
 class ListenerProviderTest extends TestCase
 {
-    public function testGetListenersForEvent()
+    public function test_get_listeners_for_event()
     {
         // Create some mock listeners
         $listener1 = function () {};
@@ -30,13 +29,13 @@ class ListenerProviderTest extends TestCase
         $this->assertCount(2, $result);
     }
 
-    public function testGetListenersForEventWithNoListeners()
+    public function test_get_listeners_for_event_with_no_listeners()
     {
         // Create a mock event
         $event = $this->createMock(StoppableEvent::class);
 
         // Create the ListenerProvider with no listeners
-        $provider = new ListenerProvider();
+        $provider = new ListenerProvider;
 
         // Get the listeners for the event
         $result = $provider->getListenersForEvent($event);

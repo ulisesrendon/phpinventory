@@ -1,4 +1,5 @@
 <?php
+
 namespace Stradow\Content\Render\Block;
 
 use Stradow\Content\Render\Interface\NodeContextInterface;
@@ -10,13 +11,13 @@ class ListBlock implements RendereableInterface
     {
         $blockProperties = $Context->getProperties();
 
-        $content = array_reduce($Context->getChildren(), fn($carry, $item) => $carry . "<li>$item</li>");
+        $content = array_reduce($Context->getChildren(), fn ($carry, $item) => $carry."<li>$item</li>");
 
         $tag = $blockProperties['type'];
 
         $properties = '';
 
-        if(isset($blockProperties['listType'])){
+        if (isset($blockProperties['listType'])) {
             $properties = " type=\"{$blockProperties['listType']}\"";
         }
 

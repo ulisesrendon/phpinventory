@@ -1,19 +1,19 @@
 <?php
+
 namespace Stradow\User\Controller;
 
-use Stradow\User\Data\UserQuery;
-use Neuralpin\HTTPRouter\Response;
-use Stradow\User\Data\UserCommand;
 use Neuralpin\HTTPRouter\RequestData;
+use Neuralpin\HTTPRouter\Response;
 use Stradow\Framework\Database\DataBaseAccess;
 use Stradow\Framework\DependencyResolver\Container;
+use Stradow\User\Data\UserCommand;
+use Stradow\User\Data\UserQuery;
 
-#[Attribute(Attribute::TARGET_CLASS_CONSTANT|Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_CLASS_CONSTANT | Attribute::TARGET_PROPERTY)]
 class AuthController
 {
-
     private readonly UserQuery $OrderLineQuery;
-    
+
     private readonly UserCommand $OrderCommand;
 
     protected readonly DataBaseAccess $DataBaseAccess;
@@ -28,7 +28,7 @@ class AuthController
     public function register(RequestData $Request)
     {
         return Response::json([
-            'status' => 'si'
+            'status' => 'si',
         ]);
     }
 }

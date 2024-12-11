@@ -1,10 +1,10 @@
 <?php
 
-$DataBaseAccess->command("CREATE TABLE config (
+$DataBaseAccess->command('CREATE TABLE config (
 	name varchar(100) NOT NULL,
 	value TEXT NULL,
 	CONSTRAINT config_name_unique UNIQUE KEY (name)
-)");
+)');
 
 $DataBaseAccess->command("INSERT INTO config (name,value) VALUES ('site_url','http://phpinventory.localhost')");
 
@@ -28,13 +28,13 @@ $DataBaseAccess->command("CREATE TABLE contents (
     CONSTRAINT contents_path_unique UNIQUE (path)
 )");
 
-$DataBaseAccess->command("CREATE TABLE collections_contents (
+$DataBaseAccess->command('CREATE TABLE collections_contents (
 	content_id varchar(255) not null,
 	collection_id varchar(255) not null,
 	weigth INTEGER DEFAULT (100),
     PRIMARY KEY (content_id, collection_id),
     CONSTRAINT collections_contents_content_id_collection_id_unique UNIQUE (content_id, collection_id)
-)");
+)');
 
 $DataBaseAccess->command("CREATE TABLE collections (
 	id varchar(255) NOT NULL PRIMARY KEY,
@@ -58,7 +58,7 @@ $DataBaseAccess->command("INSERT INTO collections_contents (content_id,collectio
     ('6eee6539-7743-4b18-b70a-b9121d801783','8287c329-7873-4b4d-b6a8-08dd457b747c',100)
 ");
 
-$DataBaseAccess->command(<<<SQL
+$DataBaseAccess->command(<<<'SQL'
     INSERT INTO collections (id,title,properties,type,weigth) VALUES
         ('f596b3c9-a1fa-4d3d-be13-fd7d0ef29d11','main-nav','{
         "template": "templates/nav.template.php"
@@ -67,4 +67,4 @@ $DataBaseAccess->command(<<<SQL
         ('fd56200e-0a28-40d9-9877-39cf33b31b92','cat1','{}','2',100)
 SQL);
 
-$DataBaseAccess->command(require __DIR__ . '/sql/content_data.php');
+$DataBaseAccess->command(require __DIR__.'/sql/content_data.php');
