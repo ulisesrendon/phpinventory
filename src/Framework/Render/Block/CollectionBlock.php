@@ -1,10 +1,10 @@
 <?php
 
-namespace Stradow\Content\Render\Block;
+namespace Stradow\Framework\Render\Block;
 
 use Neuralpin\HTTPRouter\Helper\TemplateRender;
-use Stradow\Content\Render\Interface\NodeContextInterface;
-use Stradow\Content\Render\Interface\RendereableInterface;
+use Stradow\Framework\Render\Interface\NodeContextInterface;
+use Stradow\Framework\Render\Interface\RendereableInterface;
 
 class CollectionBlock implements RendereableInterface
 {

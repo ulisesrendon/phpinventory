@@ -1,6 +1,6 @@
 <?php
 
-namespace Stradow\Content\Render\Interface;
+namespace Stradow\Framework\Render\Interface;
 
 interface NestableInterface
 {

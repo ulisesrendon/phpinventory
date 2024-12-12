@@ -1,16 +1,16 @@
 <?php
 
-use Stradow\Content\Render\Block\CollectionBlock;
-use Stradow\Content\Render\Block\ContainerBlock;
-use Stradow\Content\Render\Block\ContentBlock;
-use Stradow\Content\Render\Block\DefaultBlock;
-use Stradow\Content\Render\Block\HeadingBlock;
-use Stradow\Content\Render\Block\ImgBlock;
-use Stradow\Content\Render\Block\ItemBlock;
-use Stradow\Content\Render\Block\ListBlock;
-use Stradow\Content\Render\Block\PlainCodeBlock;
-use Stradow\Content\Render\Block\TableBlock;
-use Stradow\Content\Render\Block\TextBlock;
+use Stradow\Framework\Render\Block\CollectionBlock;
+use Stradow\Framework\Render\Block\ContainerBlock;
+use Stradow\Framework\Render\Block\ContentBlock;
+use Stradow\Framework\Render\Block\DefaultBlock;
+use Stradow\Framework\Render\Block\HeadingBlock;
+use Stradow\Framework\Render\Block\ImgBlock;
+use Stradow\Framework\Render\Block\ItemBlock;
+use Stradow\Framework\Render\Block\ListBlock;
+use Stradow\Framework\Render\Block\PlainCodeBlock;
+use Stradow\Framework\Render\Block\TableBlock;
+use Stradow\Framework\Render\Block\TextBlock;
 
 return [
     'default' => DefaultBlock::class,

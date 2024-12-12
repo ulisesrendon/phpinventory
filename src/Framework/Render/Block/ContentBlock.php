@@ -1,11 +1,11 @@
 <?php
 
-namespace Stradow\Content\Render\Block;
+namespace Stradow\Framework\Render\Block;
 
-use Stradow\Content\Render\HyperItemsRender;
-use Stradow\Content\Render\HyperNode;
-use Stradow\Content\Render\Interface\NodeContextInterface;
-use Stradow\Content\Render\Interface\RendereableInterface;
+use Stradow\Framework\Render\HyperNode;
+use Stradow\Framework\Render\HyperItemsRender;
+use Stradow\Framework\Render\Interface\NodeContextInterface;
+use Stradow\Framework\Render\Interface\RendereableInterface;
 
 class ContentBlock implements RendereableInterface
 {

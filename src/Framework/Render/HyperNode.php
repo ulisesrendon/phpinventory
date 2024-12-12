@@ -1,10 +1,10 @@
 <?php
 
-namespace Stradow\Content\Render;
+namespace Stradow\Framework\Render;
 
-use Stradow\Content\Render\Interface\NestableInterface;
-use Stradow\Content\Render\Interface\NodeContextInterface;
-use Stradow\Content\Render\Interface\RendereableInterface;
+use Stradow\Framework\Render\Interface\NestableInterface;
+use Stradow\Framework\Render\Interface\NodeContextInterface;
+use Stradow\Framework\Render\Interface\RendereableInterface;
 
 class HyperNode implements NestableInterface, NodeContextInterface
 {
