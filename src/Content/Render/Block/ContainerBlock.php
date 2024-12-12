@@ -11,6 +11,8 @@ class ContainerBlock implements RendereableInterface
     {
         $content = array_reduce($Context->getChildren(), fn ($carry, $item) => $carry.$item);
 
-        return "<div>$content</div>";
+        $tag = $Context->getProperties()['tag'] ?? 'div';
+
+        return "<$tag>$content</$tag>";
     }
 }

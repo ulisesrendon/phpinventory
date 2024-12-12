@@ -5,6 +5,7 @@ use Stradow\Content\Render\Block\ItemBlock;
 use Stradow\Content\Render\Block\ListBlock;
 use Stradow\Content\Render\Block\TextBlock;
 use Stradow\Content\Render\Block\TableBlock;
+use Stradow\Content\Render\Block\ContentBlock;
 use Stradow\Content\Render\Block\DefaultBlock;
 use Stradow\Content\Render\Block\HeadingBlock;
 use Stradow\Content\Render\Block\ContainerBlock;
@@ -31,4 +32,5 @@ return [
     'table-heading' => TableBlock::class,
     'cell' => TableBlock::class,
     'collection' => CollectionBlock::class,
+    'content' => ContentBlock::class,
 ];

@@ -34,15 +34,30 @@ class ContentRepo
         ";
     }
 
-    public function getContentById(string $id): ?array
+    public function getContentNodes(string $content): array|null
     {
-        $items = $this->DataBaseAccess->query($this->getContentQuery('where content = :id'), ['id' => $id]);
+        $items = $this->DataBaseAccess->query($this->getContentQuery('where content = :id'), ['id' => $content]);
 
         foreach ($items as $item) {
             $item->properties = json_decode($item->properties, true);
         }
 
         return $items;
+    }
+
+    public function getContentById(string $id): ?object
+    {
+        $Content = $this->DataBaseAccess->select('SELECT id, path, title, properties, active, type from contents where id = :id ', ['id' => $id]);
+
+        if (is_null($Content)) {
+            return null;
+        }
+
+        $Content->properties = json_decode($Content->properties);
+
+        $Content->nodes = $this->getContentNodes($Content->id);
+
+        return $Content;
     }
 
     public function getContentByPath(string $path): ?object
@@ -53,14 +68,9 @@ class ContentRepo
             return null;
         }
 
-        $items = $this->DataBaseAccess->query($this->getContentQuery('where content = :id'), ['id' => $Content->id]);
-
-        foreach ($items as $item) {
-            $item->properties = json_decode($item->properties, true);
-        }
-
         $Content->properties = json_decode($Content->properties);
-        $Content->nodes = $items;
+        
+        $Content->nodes = $this->getContentNodes($Content->id);
 
         return $Content;
     }

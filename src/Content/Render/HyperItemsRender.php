@@ -71,7 +71,8 @@ class HyperItemsRender
             callback: fn (?string $carry, \Stringable $item): string => $carry.$item
         ) ?? '';
 
-        return self::class::prettify($renderOutput);
+        $renderOutput = self::class::prettify($renderOutput);
+        return $renderOutput;
     }
 
     public static function prettify($html): string
