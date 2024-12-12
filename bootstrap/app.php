@@ -33,3 +33,4 @@ define('RENDER_CONFIG', require __DIR__.'/../config/render.php');
 
 define('PUBLIC_DIR', realpath(__DIR__.'/../public'));
 define('CONTENT_DIR', __DIR__.'/../content');
+define('BASE_DIR', __DIR__.'/..');

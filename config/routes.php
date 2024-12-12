@@ -51,6 +51,7 @@ $Router->get('/api/v1/route-list', function () use ($Router) {
     return Response::json($list);
 });
 
+$Router->get('/static-render', [ContentController::class, 'static']);
 $Router->get('/:path', [ContentController::class, 'get'])->ignoreParamSlash();
 
 return $Router;
