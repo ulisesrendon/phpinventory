@@ -11,7 +11,7 @@ class ListBlock implements RendereableInterface
     {
         $blockProperties = $Context->getProperties();
 
-        $content = array_reduce($Context->getChildren(), fn ($carry, $item) => $carry."<li>$item</li>");
+        $content = array_reduce($Context->getChildren(), fn ($carry, $item) => "$carry<li>$item</li>");
 
         $tag = $blockProperties['type'];
 

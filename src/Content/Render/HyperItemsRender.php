@@ -66,9 +66,29 @@ class HyperItemsRender
         // Generate tree structure
         $nodeTree = $this->treeGenerator($this->nodes);
 
-        return array_reduce(
+        $renderOutput = array_reduce(
             array: $nodeTree,
             callback: fn (?string $carry, \Stringable $item): string => $carry.$item
         ) ?? '';
+
+        return self::class::prettify($renderOutput);
+    }
+
+    public static function prettify($html): string
+    {
+        $config = [
+            'show-body-only' => true,
+            'indent' => true,
+            'drop-empty-elements' => 0,
+            'new-blocklevel-tags' => 'article aside audio bdi canvas details dialog figcaption figure footer header hgroup main menu menuitem nav section source summary template track video',
+            'new-empty-tags' => 'command embed keygen source track wbr',
+            'new-inline-tags' => 'audio command datalist embed keygen mark menuitem meter output progress source time video wbr',
+            'tidy-mark' => 0,
+            'indent-spaces' => 4,
+        ];
+        $html = tidy_parse_string($html, $config, 'utf8');
+        tidy_clean_repair($html);
+
+        return (string) $html;
     }
 }
