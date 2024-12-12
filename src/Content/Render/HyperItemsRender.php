@@ -72,6 +72,7 @@ class HyperItemsRender
         ) ?? '';
 
         $renderOutput = self::class::prettify($renderOutput);
+
         return $renderOutput;
     }
 

@@ -34,7 +34,7 @@ class ContentRepo
         ";
     }
 
-    public function getContentNodes(string $content): array|null
+    public function getContentNodes(string $content): ?array
     {
         $items = $this->DataBaseAccess->query($this->getContentQuery('where content = :id'), ['id' => $content]);
 
@@ -45,7 +45,7 @@ class ContentRepo
         return $items;
     }
 
-    public function getContentById(string $id): ?object
+    public function getContent(string $id): ?object
     {
         $Content = $this->DataBaseAccess->select('SELECT id, path, title, properties, active, type from contents where id = :id ', ['id' => $id]);
 
@@ -69,26 +69,26 @@ class ContentRepo
         }
 
         $Content->properties = json_decode($Content->properties);
-        
+
         $Content->nodes = $this->getContentNodes($Content->id);
 
         return $Content;
     }
 
-    public function getCollectionByTitle(string $title): ?object
+    public function getCollection(string $id): ?object
     {
         $Collection = $this->DataBaseAccess->select('SELECT 
-                collections.id,
-                collections.title,
-                collections.properties,
-                collections.type
+                id,
+                title,
+                properties,
+                type
                 from collections
                 where 
-                    collections.title = :collection_title
+                    id = :id
                 limit 1
             ',
             [
-                'collection_title' => $title,
+                'id' => $id,
             ]
         );
 
@@ -118,7 +118,7 @@ class ContentRepo
 
         foreach ($Contents as $Content) {
             $Content->properties = json_decode($Content->properties);
-            $Content->url = (new Validator($Content->path))->url()->isCorrect() ? $Content->path : "http://phpinventory.test/{$Content->path}";
+            $Content->url = (new Validator($Content->path))->url()->isCorrect() ? $Content->path : "http://phpinventory.localhost/{$Content->path}";
         }
 
         $Collection->Contents = $Contents;

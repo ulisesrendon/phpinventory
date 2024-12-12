@@ -2,8 +2,8 @@
 
 namespace Stradow\Content\Render\Block;
 
-use Stradow\Content\Render\HyperNode;
 use Stradow\Content\Render\HyperItemsRender;
+use Stradow\Content\Render\HyperNode;
 use Stradow\Content\Render\Interface\NodeContextInterface;
 use Stradow\Content\Render\Interface\RendereableInterface;
 
@@ -16,7 +16,7 @@ class ContentBlock implements RendereableInterface
          */
         $ContentRepo = $Context->getExtra('repo');
 
-        $Content = $ContentRepo?->getContentById($Context->getValue());
+        $Content = $ContentRepo?->getContent($Context->getValue());
 
         $HyperRender = new HyperItemsRender;
 

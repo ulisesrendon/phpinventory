@@ -15,9 +15,9 @@ class CollectionBlock implements RendereableInterface
          */
         $ContentRepo = $Context->getExtra('repo');
 
-        $Collection = $ContentRepo?->getCollectionByTitle($Context->getValue());
+        $Collection = $ContentRepo?->getCollection($Context->getValue());
 
-        if(is_null($Collection)){
+        if (is_null($Collection)) {
             $Collection = new \stdClass;
             $Collection->Contents = [];
         }

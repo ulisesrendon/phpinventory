@@ -2,7 +2,6 @@
 
 use Neuralpin\HTTPRouter\Response;
 
-
 require __DIR__.'/../bootstrap/app.php';
 
 try {
@@ -12,12 +11,12 @@ try {
      */
     $Response = $Controller->getResponse();
 } catch (\Throwable|\Exception $Error) {
-    if (1 == $_ENV['APP_DEBUG']) {
+    if ($_ENV['APP_DEBUG'] == 1) {
         $Response = "<pre>{$Error}</pre>";
     } else {
-        $Response = Response::template(__DIR__ . '/500.html', 500);
+        $Response = Response::template(__DIR__.'/500.html', 500);
     }
-    
+
 }
 
 echo $Response;
