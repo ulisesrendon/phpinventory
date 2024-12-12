@@ -14,7 +14,7 @@ class ContentBlock implements RendereableInterface
         /**
          * @var \Stradow\Content\Data\ContentRepo $ContentRepo
          */
-        $ContentRepo = $Context->getExtra('repo');
+        $ContentRepo = $Context->getExtra('Repo');
 
         $Content = $ContentRepo?->getContent($Context->getValue());
 
@@ -31,8 +31,8 @@ class ContentBlock implements RendereableInterface
                     parent: $item->parent,
                     RenderEngine: new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']),
                     context: [
-                        'tree' => $HyperRender,
-                        'repo' => $ContentRepo,
+                        'Tree' => $HyperRender,
+                        'Repo' => $ContentRepo,
                     ],
                 )
             );

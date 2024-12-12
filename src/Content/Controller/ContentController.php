@@ -2,11 +2,13 @@
 
 namespace Stradow\Content\Controller;
 
-use Neuralpin\HTTPRouter\Response;
 use PDO;
+use Stradow\Framework\Config;
+use Neuralpin\HTTPRouter\Response;
 use Stradow\Content\Data\ContentRepo;
-use Stradow\Content\Render\HyperItemsRender;
 use Stradow\Content\Render\HyperNode;
+use Stradow\Content\Render\HyperItemsRender;
+use Stradow\Framework\Config\Data\ConfigRepo;
 use Stradow\Framework\Database\DataBaseAccess;
 use Stradow\Framework\DependencyResolver\Container;
 
@@ -33,6 +35,12 @@ class ContentController
             return Response::template(PUBLIC_DIR.'/404.html', 404);
         }
 
+        $ConfigRepo = (new ConfigRepo($this->DataBaseAccess))->getConfigAll();
+        $SiteConfig = new Config;
+        foreach($ConfigRepo as $Config){
+            $SiteConfig->set($Config->name, $Config->value);
+        }
+
         $HyperRender = new HyperItemsRender;
 
         foreach ($Content->nodes as $item) {
@@ -46,17 +54,21 @@ class ContentController
                     parent: $item->parent,
                     RenderEngine: new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']),
                     context: [
-                        'tree' => $HyperRender,
-                        'repo' => $this->ContentRepo,
+                        'Tree' => $HyperRender,
+                        'Repo' => $this->ContentRepo,
+                        'Config' => $SiteConfig,
                     ],
                 )
             );
         }
 
+        $template = $Content?->properties?->template ?? 'templates/page.template.php';
+
         return Response::template(
-            content: CONTENT_DIR.'/templates/page.template.php',
+            content: CONTENT_DIR."/$template",
             context: [
                 'Content' => $Content,
+                'Config' => $SiteConfig,
                 'render' => $HyperRender->render(),
             ]
         );

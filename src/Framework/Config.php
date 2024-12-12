@@ -4,15 +4,22 @@ namespace Stradow\Framework;
 
 class Config
 {
-    private static array $config = [];
+    private array $config = [];
 
-    public static function get(string $key): mixed
+    public function get(string $name): mixed
     {
-        return self::$config[$key] ?? null;
+        return $this->config[$name] ?? null;
     }
 
-    public static function set(string $key, mixed $value): void
+    public function set(string $name, mixed $value): void
     {
-        self::$config[$key] = $value;
+        $this->config[$name] = $value;
+    }
+
+    public function delete(string $name)
+    {
+        if (isset($this->config[$name])){
+            unset($this->config[$name]);
+        }
     }
 }

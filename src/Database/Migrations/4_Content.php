@@ -3,10 +3,15 @@
 $DataBaseAccess->command('CREATE TABLE config (
 	name varchar(100) NOT NULL,
 	value TEXT NULL,
+	autoload boolean NOT NULL default true,
 	CONSTRAINT config_name_unique UNIQUE KEY (name)
 )');
 
-$DataBaseAccess->command("INSERT INTO config (name,value) VALUES ('site_url','http://phpinventory.localhost')");
+$DataBaseAccess->command("INSERT INTO config (name,value) VALUES
+	('site_url','http://phpinventory.localhost'),
+	('site_name','Stradow'),
+	('site_description','Lorem ipsum dolor sit amet')
+");
 
 $DataBaseAccess->command("CREATE TABLE contentnodes (
 	id varchar(255) NOT NULL PRIMARY KEY,

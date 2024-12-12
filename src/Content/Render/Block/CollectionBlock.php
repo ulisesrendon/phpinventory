@@ -13,7 +13,7 @@ class CollectionBlock implements RendereableInterface
         /**
          * @var \Stradow\Content\Data\ContentRepo $ContentRepo
          */
-        $ContentRepo = $Context->getExtra('repo');
+        $ContentRepo = $Context->getExtra('Repo');
 
         $Collection = $ContentRepo?->getCollection($Context->getValue());
 
