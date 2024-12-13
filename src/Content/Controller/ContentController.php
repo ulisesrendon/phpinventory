@@ -231,14 +231,22 @@ class ContentController
         $fields = [];
         $errors = [];
 
-        $fields['id'] = $id;
-
-        if (! (new Validator($id))->uuid()->isCorrect()) {
+        if ((new Validator($id))->uuid()->isCorrect()) {
+            $fields['id'] = $id;
+        }else{
             $errors[] = 'Invalid collection Id';
         }
 
-        if (! empty($Request->getInput('title'))) {
+        if ((new Validator($Request->getInput('title')))->populated()->string()->isCorrect()) {
             $fields['title'] = $Request->getInput('title');
+        }else{
+            $errors[] = 'Type cannot be an empty value';
+        }
+
+        if ((new Validator($Request->getInput('type')))->populated()->string()->isCorrect()) {
+            $fields['type'] = $Request->getInput('type');
+        }else{
+            $errors[] = 'Type cannot be an empty value';
         }
 
         if (! empty($errors)) {
@@ -247,12 +255,14 @@ class ContentController
             ], 400);
         }
 
-        $UpsertHelper = new UpsertHelper($fields, ['id']);
+        if(count($fields)>1){
+            $UpsertHelper = new UpsertHelper($fields, ['id']);
+            $this->DataBaseAccess->command("INSERT INTO collections({$UpsertHelper->columnNames}) values 
+                ({$UpsertHelper->allPlaceholders}) 
+                ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
+            ", $UpsertHelper->parameters);
+        }
 
-        $this->DataBaseAccess->command("INSERT INTO collections({$UpsertHelper->columnNames}) values 
-            ({$UpsertHelper->allPlaceholders}) 
-            ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
-        ", $UpsertHelper->parameters);
 
         return Response::json([
             'updated' => $fields,

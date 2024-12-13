@@ -40,6 +40,7 @@ class DataBaseBasicAccess implements DatabaseFetchQuery, DatabaseSendCommand, Da
      */
     public function command(string $query, array $params = []): bool
     {
+        dd($query, $params);
         $PDOStatement = $this->PDO->prepare($query);
 
         return $PDOStatement->execute($params);
