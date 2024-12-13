@@ -9,7 +9,7 @@ class DataBaseAccess extends DataBaseBasicAccess
     /**
      * Execute a database insert command and return last inserted id
      */
-    public function insert(string $table, array $fields): null|bool|int|string
+    public function create(string $table, array $fields): null|bool|int|string
     {
         if (empty($fields)) {
             return null;
@@ -26,7 +26,7 @@ class DataBaseAccess extends DataBaseBasicAccess
     /**
      * Execute a single database insert command with multiple values
      */
-    public function multiInsert(string $table, array $data): ?bool
+    public function insert(string $table, array $data): ?bool
     {
         if (empty($data)) {
             return null;
@@ -41,7 +41,7 @@ class DataBaseAccess extends DataBaseBasicAccess
             $fieldMakers = [];
 
             if (count(array_diff_key($dataFields, array_keys($row))) > 0) {
-                throw new InvalidArgumentException('Not all product lines have the same fields');
+                throw new InvalidArgumentException('Not all rows have the same fields');
             }
 
             foreach ($row as $name => $value) {

@@ -16,10 +16,10 @@ $DataBaseAccess->command("INSERT INTO config (name,value) VALUES
 $DataBaseAccess->command("CREATE TABLE contentnodes (
 	id varchar(255) NOT NULL PRIMARY KEY,
 	content varchar(255) null default null,
-	parent varchar(255) NULL default null,
 	value TEXT null default null,
 	properties TEXT NOT NULL DEFAULT ('{}'),
 	type varchar(150),
+	parent varchar(255) NULL default null,
 	weight INTEGER DEFAULT (100)
 )");
 
@@ -30,6 +30,8 @@ $DataBaseAccess->command("CREATE TABLE contents (
 	properties TEXT NOT NULL DEFAULT ('{}'),
 	active boolean NOT NULL DEFAULT false,
 	type varchar(150) not null default 'page',
+	parent varchar(255) NULL default null,
+	weight INTEGER DEFAULT (100)
     CONSTRAINT contents_path_unique UNIQUE (path)
 )");
 
@@ -37,6 +39,7 @@ $DataBaseAccess->command('CREATE TABLE collections_contents (
 	content_id varchar(255) not null,
 	collection_id varchar(255) not null,
 	weight INTEGER DEFAULT (100),
+	parent varchar(255) NULL default null,
     PRIMARY KEY (content_id, collection_id),
     CONSTRAINT collections_contents_content_id_collection_id_unique UNIQUE (content_id, collection_id)
 )');
@@ -46,6 +49,7 @@ $DataBaseAccess->command("CREATE TABLE collections (
 	title varchar(255) NULL default null,
 	properties TEXT NOT NULL DEFAULT ('{}'),
 	type varchar(150),
+	parent varchar(255) NULL default null,
 	weight INTEGER DEFAULT (100)
 )");
 

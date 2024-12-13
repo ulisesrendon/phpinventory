@@ -23,7 +23,7 @@ class UserCommand
         $this->DataBaseAccess->beginTransaction();
 
         try {
-            $orderId = $this->DataBaseAccess->insert(
+            $orderId = $this->DataBaseAccess->create(
                 table: 'orders',
                 fields: [
                     'amount_total' => $amount,
@@ -37,7 +37,7 @@ class UserCommand
                 $lines[$k]['order_id'] = $orderId;
             }
 
-            $this->DataBaseAccess->multiInsert(
+            $this->DataBaseAccess->insert(
                 table: 'orderlines',
                 data: $lines,
             );

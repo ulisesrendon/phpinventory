@@ -197,4 +197,19 @@ class Validator
 
         return $this;
     }
+
+    public function uuid(?string $errorName = null): static
+    {
+        if (! is_string($this->field)
+            || ! preg_match(
+                '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/',
+                $this->field
+            )
+        ) {
+            $this->isCorrect = false;
+            $this->errors[] = $errorName ? $errorName : 'uuid';
+        }
+
+        return $this;
+    }
 }

@@ -2,16 +2,19 @@
 
 namespace Stradow\Content\Controller;
 
-use PDO;
-use Stradow\Framework\Config;
+use Neuralpin\HTTPRouter\Helper\TemplateRender;
+use Neuralpin\HTTPRouter\RequestData as Request;
 use Neuralpin\HTTPRouter\Response;
+use PDO;
 use Stradow\Content\Data\ContentRepo;
-use Stradow\Framework\Render\HyperNode;
+use Stradow\Framework\Config;
 use Stradow\Framework\Config\Data\ConfigRepo;
 use Stradow\Framework\Database\DataBaseAccess;
-use Stradow\Framework\Render\HyperItemsRender;
-use Neuralpin\HTTPRouter\Helper\TemplateRender;
+use Stradow\Framework\Database\UpsertHelper;
 use Stradow\Framework\DependencyResolver\Container;
+use Stradow\Framework\Render\HyperItemsRender;
+use Stradow\Framework\Render\HyperNode;
+use Stradow\Framework\Validator;
 
 class ContentController
 {
@@ -38,7 +41,7 @@ class ContentController
 
         $ConfigRepo = (new ConfigRepo($this->DataBaseAccess))->getConfigAll();
         $SiteConfig = new Config;
-        foreach($ConfigRepo as $Config){
+        foreach ($ConfigRepo as $Config) {
             $SiteConfig->set($Config->name, $Config->value);
         }
 
@@ -99,7 +102,7 @@ class ContentController
         function force_file_put_contents(string $filePath, mixed $data, int $flags = 0)
         {
             $dirPathOnly = dirname($filePath);
-            if (!is_dir($dirPathOnly)) {
+            if (! is_dir($dirPathOnly)) {
                 mkdir($dirPathOnly, 0775, true);
             }
             file_put_contents($filePath, $data, $flags);
@@ -107,7 +110,7 @@ class ContentController
 
         $created = [];
 
-        foreach($Contents as $Page){
+        foreach ($Contents as $Page) {
 
             $Content = $this->ContentRepo->getContentByPath($Page->path);
 
@@ -135,7 +138,7 @@ class ContentController
             $template = $Content?->properties?->template ?? 'templates/page.template.php';
 
             $Render = new TemplateRender(
-                filepath: CONTENT_DIR . "/$template",
+                filepath: CONTENT_DIR."/$template",
                 context: [
                     'Content' => $Content,
                     'Config' => $SiteConfig,
@@ -154,4 +157,119 @@ class ContentController
             'contents' => $created,
         ]);
     }
+
+    public function listContents()
+    {
+        $Contents = $this->DataBaseAccess->query('SELECT 
+                contents.id,
+                contents.path,
+                contents.title,
+                contents.active,
+                contents.type,
+                contents.parent,
+                contents.weight
+            from contents 
+        ');
+
+        return Response::json([
+            'count' => count($Contents),
+            'list' => $Contents,
+        ]);
+    }
+
+    public function getContent(string $id)
+    {
+        $Content = $this->ContentRepo->getContent($id);
+
+        if (empty($Content)) {
+            return Response::json((object) [], 404);
+        }
+
+        return Response::json($Content);
+    }
+
+    public function updateContent()
+    {
+        return Response::json([]);
+    }
+
+    public function deleteContent()
+    {
+        return Response::json([]);
+    }
+
+    public function listCollections()
+    {
+        $Collections = $this->DataBaseAccess->query('SELECT 
+                collections.id,
+                collections.title,
+                collections.type,
+                collections.parent,
+                collections.weight
+            from collections 
+        ');
+
+        return Response::json([
+            'count' => count($Collections),
+            'list' => $Collections,
+        ]);
+    }
+
+    public function getCollection(string $id)
+    {
+        $Collection = $this->ContentRepo->getCollection($id);
+
+        if (empty($Collection)) {
+            return Response::json((object) [], 404);
+        }
+
+        return Response::json($Collection);
+    }
+
+    public function updateCollection(Request $Request, string $id)
+    {
+        $fields = [];
+        $errors = [];
+
+        $fields['id'] = $id;
+
+        if (! (new Validator($id))->uuid()->isCorrect()) {
+            $errors[] = 'Invalid collection Id';
+        }
+
+        if (! empty($Request->getInput('title'))) {
+            $fields['title'] = $Request->getInput('title');
+        }
+
+        if (! empty($errors)) {
+            return Response::json([
+                'error' => $errors,
+            ], 400);
+        }
+
+        $UpsertHelper = new UpsertHelper($fields, ['id']);
+
+        $this->DataBaseAccess->command("INSERT INTO collections({$UpsertHelper->columnNames}) values 
+            ({$UpsertHelper->allPlaceholders}) 
+            ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
+        ", $UpsertHelper->parameters);
+
+        return Response::json([
+            'updated' => $fields,
+        ]);
+    }
+
+    public function addContentToCollection()
+    {
+        return Response::json([]);
+    }
+
+    public function removeContentFromCollection()
+    {
+        return Response::json([]);
+    }
+
+    public function saveContentData() {}
+
+    public function renderContentNode() {}
 }

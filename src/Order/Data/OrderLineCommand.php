@@ -21,7 +21,7 @@ class OrderLineCommand
         int|float $amountByPiece = 0,
     ): ?int {
 
-        $id = $this->DataBaseAccess->insert(
+        $id = $this->DataBaseAccess->create(
             table: 'orderlines',
             fields: [
                 'order_id' => $order,

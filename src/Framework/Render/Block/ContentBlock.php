@@ -2,8 +2,8 @@
 
 namespace Stradow\Framework\Render\Block;
 
-use Stradow\Framework\Render\HyperNode;
 use Stradow\Framework\Render\HyperItemsRender;
+use Stradow\Framework\Render\HyperNode;
 use Stradow\Framework\Render\Interface\NodeContextInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 

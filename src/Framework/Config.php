@@ -18,7 +18,7 @@ class Config
 
     public function delete(string $name)
     {
-        if (isset($this->config[$name])){
+        if (isset($this->config[$name])) {
             unset($this->config[$name]);
         }
     }

@@ -17,7 +17,7 @@ class ProviderCommand
         string $title,
         string $description = '',
     ): bool|string|null {
-        return $this->DataBaseAccess->insert('providers', [
+        return $this->DataBaseAccess->create('providers', [
             'title' => $title,
             'description' => $description,
         ]);

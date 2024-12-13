@@ -52,6 +52,19 @@ $Router->get('/api/v1/route-list', function () use ($Router) {
 });
 
 $Router->get('/static-render', [ContentController::class, 'static']);
+
+$Router->get('/api/v1/content', [ContentController::class, 'listContents']);
+$Router->get('/api/v1/content/:id', [ContentController::class, 'getContent']);
+$Router->patch('/api/v1/content/:id', [ContentController::class, 'updateContent']);
+$Router->delete('/api/v1/content/:id', [ContentController::class, 'deleteContent']);
+
+$Router->get('/api/v1/collection', [ContentController::class, 'listCollections']);
+$Router->get('/api/v1/collection/:id', [ContentController::class, 'getCollection']);
+$Router->patch('/api/v1/collection/:id', [ContentController::class, 'updateCollection']);
+
+$Router->post('/api/v1/collection', [ContentController::class, 'addContentToCollection']);
+$Router->delete('/api/v1/collection', [ContentController::class, 'removeContentFromCollection']);
+
 $Router->get('/:path', [ContentController::class, 'get'])->ignoreParamSlash();
 
 return $Router;

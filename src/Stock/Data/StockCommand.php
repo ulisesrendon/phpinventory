@@ -22,7 +22,7 @@ class StockCommand
         ?string $expiration_date = null,
     ): bool|string|null {
 
-        return $this->DataBaseAccess->insert('entrylines', [
+        return $this->DataBaseAccess->create('entrylines', [
             'product_id' => $product_id,
             'pieces' => $pieces,
             'provider_id' => $provider_id,

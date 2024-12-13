@@ -25,7 +25,7 @@ class ProductCommand
         float $price = 0,
     ): null|bool|int|string {
 
-        return $this->DataBaseAccess->insert('products', [
+        return $this->DataBaseAccess->create('products', [
             'code' => $code,
             'title' => $title,
             'description' => $description,
