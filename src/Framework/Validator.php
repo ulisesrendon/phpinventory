@@ -148,9 +148,9 @@ class Validator
         return $this;
     }
 
-    public function array(array $value, ?string $errorName = null): static
+    public function array(?string $errorName = null): static
     {
-        if (! is_array($value)) {
+        if (! is_array($this->field)) {
             $this->isCorrect = false;
             $this->errors[] = $errorName ? $errorName : 'array';
         }

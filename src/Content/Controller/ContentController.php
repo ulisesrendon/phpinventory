@@ -237,16 +237,44 @@ class ContentController
             $errors[] = 'Invalid collection Id';
         }
 
-        if ((new Validator($Request->getInput('title')))->populated()->string()->isCorrect()) {
-            $fields['title'] = $Request->getInput('title');
-        }else{
-            $errors[] = 'Title cannot be an empty value';
+        if(!is_null($Request->getInput('title'))){
+            if ((new Validator($Request->getInput('title')))->populated()->string()->isCorrect()) {
+                $fields['title'] = $Request->getInput('title');
+            }else{
+                $errors[] = 'Title cannot be an empty value';
+            }
         }
 
-        if ((new Validator($Request->getInput('type')))->populated()->string()->isCorrect()) {
-            $fields['type'] = $Request->getInput('type');
-        }else{
-            $errors[] = 'Type cannot be an empty value';
+        if(!is_null($Request->getInput('type'))){
+            if ((new Validator($Request->getInput('type')))->populated()->string()->isCorrect()) {
+                $fields['type'] = $Request->getInput('type');
+            }else{
+                $errors[] = 'Type cannot be an empty value';
+            }
+        }
+
+        if(!is_null($Request->getInput('weight'))){
+            if ((new Validator($Request->getInput('weight')))->int()->min(0)->isCorrect()) {
+                $fields['weight'] = json_encode($Request->getInput('weight'));
+            }else{
+                $errors[] = 'weight cannot be an empty value';
+            }
+        }
+
+        if(!is_null($Request->getInput('properties'))){
+            if ((new Validator($Request->getInput('properties')))->array()->isCorrect()) {
+                $fields['properties'] = json_encode($Request->getInput('properties'));
+            }else{
+                $errors[] = 'properties cannot be an empty value';
+            }
+        }
+
+        if(!is_null($Request->getInput('parent'))){
+            if ((new Validator($Request->getInput('parent')))->uuid()->isCorrect()) {
+                $fields['parent'] = $Request->getInput('parent');
+            } else {
+                $errors[] = 'Invalid parent Id';
+            }
         }
 
         if (! empty($errors)) {
@@ -255,18 +283,25 @@ class ContentController
             ], 400);
         }
 
+        $result = false;
         if(count($fields)>1){
             $UpsertHelper = new UpsertHelper($fields, ['id']);
-            $this->DataBaseAccess->command("INSERT INTO collections({$UpsertHelper->columnNames}) values 
+            $result = $this->DataBaseAccess->command("INSERT INTO collections({$UpsertHelper->columnNames}) values 
                 ({$UpsertHelper->allPlaceholders}) 
                 ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
             ", $UpsertHelper->parameters);
         }
 
+        if($result){
+            return Response::json([
+                'updated' => $fields,
+            ]);
+        }else{
+            return Response::json([
+                'error' => 'No data provided',
+            ], 400);
+        }
 
-        return Response::json([
-            'updated' => $fields,
-        ]);
     }
 
     public function addContentToCollection()

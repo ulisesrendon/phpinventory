@@ -31,7 +31,7 @@ $DataBaseAccess->command("CREATE TABLE contents (
 	active boolean NOT NULL DEFAULT false,
 	type varchar(150) not null default 'page',
 	parent varchar(255) NULL default null,
-	weight INTEGER DEFAULT (100)
+	weight INTEGER DEFAULT (100),
     CONSTRAINT contents_path_unique UNIQUE (path)
 )");
 
