@@ -240,7 +240,7 @@ class ContentController
         if ((new Validator($Request->getInput('title')))->populated()->string()->isCorrect()) {
             $fields['title'] = $Request->getInput('title');
         }else{
-            $errors[] = 'Type cannot be an empty value';
+            $errors[] = 'Title cannot be an empty value';
         }
 
         if ((new Validator($Request->getInput('type')))->populated()->string()->isCorrect()) {
