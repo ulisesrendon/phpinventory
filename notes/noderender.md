@@ -31,7 +31,7 @@
     &lt;div class="text"&gt;
         &lt;p&gt;lorem ipsum dolor&lt;/p&gt;
         &lt;p&gt;sit amet consectetur&lt;/p&gt;
-        &lt;p&gt;&lt;img src="https://picsum.photos/200/300"&gt;&lt;/p&gt;
+        &lt;p&gt;&lt;img src="https://picsum.photos/1280/720"&gt;&lt;/p&gt;
     &lt;/div&gt; 
     &lt;ul&gt;
         &lt;li&gt;lorem ipsum dolor&lt;/li&gt;
@@ -86,7 +86,7 @@
     <tr>
         <td>10</td>
         <td>4</td>
-        <td>https://picsum.photos/200/300</td>
+        <td>https://picsum.photos/1280/720</td>
         <td>img</td>
         <td>100</td>
     </tr>
@@ -233,7 +233,7 @@ $items = [
     <div class="text">
         <p>lorem ipsum dolor</p>
         <p>sit amet consectetur</p>
-        <p><img src="https://picsum.photos/200/300"></p>
+        <p><img src="https://picsum.photos/1280/720"></p>
     </div> 
     <ul>
         <li>lorem ipsum dolor</li>
@@ -295,7 +295,7 @@ $items = [
     [
         "id" => "10",
         "parent" => "4",
-        "value" => "https://picsum.photos/200/300",
+        "value" => "https://picsum.photos/1280/720",
         "weight" => 100,
         "type" => "img",
         "children" => [],
@@ -348,7 +348,7 @@ echo $HTMLrender;
     &lt;div&gt;
         &lt;p&gt;lorem ipsum dolor&lt;/p&gt;
         &lt;p&gt;sit amet consectetur&lt;/p&gt;
-        &lt;p&gt;&lt;img src=&quot;https://picsum.photos/200/300&quot; /&gt;&lt;/p&gt;
+        &lt;p&gt;&lt;img src=&quot;https://picsum.photos/1280/720&quot; /&gt;&lt;/p&gt;
     &lt;/div&gt;
     &lt;ul&gt;
         &lt;li&gt;lorem ipsum dolor&lt;/li&gt;
@@ -360,7 +360,7 @@ echo $HTMLrender;
     &amp;lt;div class=&quot;text&quot;&amp;gt;
         &amp;lt;p&amp;gt;lorem ipsum dolor&amp;lt;/p&amp;gt;
         &amp;lt;p&amp;gt;sit amet consectetur&amp;lt;/p&amp;gt;
-        &amp;lt;p&amp;gt;&amp;lt;img src=&quot;https://picsum.photos/200/300&quot;&amp;gt;&amp;lt;/p&amp;gt;
+        &amp;lt;p&amp;gt;&amp;lt;img src=&quot;https://picsum.photos/1280/720&quot;&amp;gt;&amp;lt;/p&amp;gt;
     &amp;lt;/div&amp;gt; 
     &amp;lt;ul&amp;gt;
         &amp;lt;li&amp;gt;lorem ipsum dolor&amp;lt;/li&amp;gt;
@@ -374,7 +374,7 @@ echo $HTMLrender;
     <div>
         <p>lorem ipsum dolor</p>
         <p>sit amet consectetur</p>
-        <p><img src="https://picsum.photos/200/300" /></p>
+        <p><img src="https://picsum.photos/1280/720" /></p>
     </div>
     <ul>
         <li>lorem ipsum dolor</li>
@@ -386,7 +386,7 @@ echo $HTMLrender;
     &lt;div class="text"&gt;
         &lt;p&gt;lorem ipsum dolor&lt;/p&gt;
         &lt;p&gt;sit amet consectetur&lt;/p&gt;
-        &lt;p&gt;&lt;img src="https://picsum.photos/200/300"&gt;&lt;/p&gt;
+        &lt;p&gt;&lt;img src="https://picsum.photos/1280/720"&gt;&lt;/p&gt;
     &lt;/div&gt; 
     &lt;ul&gt;
         &lt;li&gt;lorem ipsum dolor&lt;/li&gt;
