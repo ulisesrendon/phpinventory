@@ -51,7 +51,7 @@ $Router->get('/api/v1/route-list', function () use ($Router) {
     return Response::json($list);
 });
 
-$Router->get('/static-render', [ContentController::class, 'static']);
+$Router->get('/api/v1/static-render', [ContentController::class, 'static']);
 
 $Router->get('/api/v1/content', [ContentController::class, 'listContents']);
 $Router->get('/api/v1/content/:id', [ContentController::class, 'getContent']);

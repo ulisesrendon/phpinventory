@@ -3,3 +3,4 @@
 /logs/*
 !/logs/.gitkeep
 composer.lock
+/public/static/*

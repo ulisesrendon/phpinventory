@@ -2,19 +2,21 @@
 
 namespace Stradow\Content\Controller;
 
-use Neuralpin\HTTPRouter\Helper\TemplateRender;
-use Neuralpin\HTTPRouter\RequestData as Request;
-use Neuralpin\HTTPRouter\Response;
 use PDO;
-use Stradow\Content\Data\ContentRepo;
 use Stradow\Framework\Config;
+use Stradow\Framework\Validator;
+use Neuralpin\HTTPRouter\Response;
+use Stradow\Framework\Event\Event;
+use Stradow\Content\Data\ContentRepo;
+use Stradow\Framework\Render\HyperNode;
+use Stradow\Content\Event\ContentUpdated;
+use Stradow\Framework\Database\UpsertHelper;
 use Stradow\Framework\Config\Data\ConfigRepo;
 use Stradow\Framework\Database\DataBaseAccess;
-use Stradow\Framework\Database\UpsertHelper;
-use Stradow\Framework\DependencyResolver\Container;
 use Stradow\Framework\Render\HyperItemsRender;
-use Stradow\Framework\Render\HyperNode;
-use Stradow\Framework\Validator;
+use Neuralpin\HTTPRouter\Helper\TemplateRender;
+use Neuralpin\HTTPRouter\RequestData as Request;
+use Stradow\Framework\DependencyResolver\Container;
 
 class ContentController
 {
@@ -84,11 +86,9 @@ class ContentController
         $Contents = $this->DataBaseAccess->query("SELECT 
             contents.path
             from contents 
-            join collections_contents on collections_contents.content_id = contents.id
-            join collections on collections.id = collections_contents.collection_id 
             where 
             contents.active is true
-            and collections.title = 'main-content'
+            and type != 'link'
         ");
 
         $ConfigRepo = (new ConfigRepo($this->DataBaseAccess))->getConfigAll();
@@ -97,7 +97,8 @@ class ContentController
             $SiteConfig->set($Config->name, $Config->value);
         }
 
-        $cacheDir = BASE_DIR.'/../static';
+        $staticPath = $SiteConfig->get('staticpath') ?? 'public/static';
+        $staticDir = realpath(BASE_DIR . "/$staticPath");
 
         function force_file_put_contents(string $filePath, mixed $data, int $flags = 0)
         {
@@ -146,11 +147,15 @@ class ContentController
                 ]
             );
 
-            force_file_put_contents($cacheDir."/{$Page->path}", (string) $Render);
+            $extension = pathinfo($Page->path)['extension'] ?? '';
 
-            // $pathinfo = pathinfo('/www/htdocs/inc/lib.inc.php');
+            if(empty($extension)){
+                $Page->path .= '.html';
+            }
 
-            $created[] = $cacheDir."/{$Page->path}";
+            force_file_put_contents($staticDir."/{$Page->path}", (string) $Render);
+
+            $created[] = $staticDir."/{$Page->path}";
         }
 
         return Response::json([
@@ -186,11 +191,6 @@ class ContentController
         }
 
         return Response::json($Content);
-    }
-
-    public function updateContent()
-    {
-        return Response::json([]);
     }
 
     public function deleteContent()
@@ -293,6 +293,116 @@ class ContentController
         }
 
         if($result){
+            return Response::json([
+                'updated' => $fields,
+            ]);
+        }else{
+            return Response::json([
+                'error' => 'No data provided',
+            ], 400);
+        }
+
+    }
+    public function updateContent(Request $Request, string $id)
+    {
+        $fields = [];
+        $errors = [];
+
+        if ((new Validator($id))->uuid()->isCorrect()) {
+            $fields['id'] = $id;
+        }else{
+            $errors[] = 'Invalid collection Id';
+        }
+
+        if(!is_null($Request->getInput('path'))){
+            if ((new Validator($Request->getInput('path')))->populated()->string()->isCorrect()) {
+                $fields['path'] = $Request->getInput('path');
+            }else{
+                $errors[] = 'Path cannot be an empty value';
+            }
+        }
+
+        if(!is_null($Request->getInput('title'))){
+            if ((new Validator($Request->getInput('title')))->populated()->string()->isCorrect()) {
+                $fields['title'] = $Request->getInput('title');
+            }else{
+                $errors[] = 'Title cannot be an empty value';
+            }
+        }
+
+        if(!is_null($Request->getInput('properties'))){
+            if ((new Validator($Request->getInput('properties')))->array()->isCorrect()) {
+                $fields['properties'] = json_encode($Request->getInput('properties'));
+            }else{
+                $errors[] = 'properties cannot be an empty value';
+            }
+        }
+
+        if(!is_null($Request->getInput('active'))){
+            if ((new Validator($Request->getInput('active')))->bool()->isCorrect()) {
+                $fields['active'] = $Request->getInput('active');
+            }else{
+                $errors[] = 'active must be a boolean value';
+            }
+        }
+
+        if(!is_null($Request->getInput('type'))){
+            if ((new Validator($Request->getInput('type')))->populated()->string()->isCorrect()) {
+                $fields['type'] = $Request->getInput('type');
+            }else{
+                $errors[] = 'Type cannot be an empty value';
+            }
+        }
+
+        if(!is_null($Request->getInput('parent'))){
+            if ((new Validator($Request->getInput('parent')))->uuid()->isCorrect()) {
+                $fields['parent'] = $Request->getInput('parent');
+            } else {
+                $errors[] = 'Invalid parent Id';
+            }
+        }
+
+        if (!is_null($Request->getInput('weight'))) {
+            if ((new Validator($Request->getInput('weight')))->int()->min(0)->isCorrect()) {
+                $fields['weight'] = json_encode($Request->getInput('weight'));
+            } else {
+                $errors[] = 'weight cannot be an empty value';
+            }
+        }
+
+        $nodesToAdd = [];
+        if (!is_null($Request->getInput('nodes'))) {
+            if ((new Validator($Request->getInput('nodes')))->array()->isCorrect()) {
+                $nodesToAdd = $Request->getInput('nodes');
+            } else {
+                $errors[] = 'nodes must be an array';
+            }
+        }
+
+        if (! empty($errors)) {
+            return Response::json([
+                'error' => $errors,
+            ], 400);
+        }
+
+        $result = true;
+        if(count($fields)>1){
+            $UpsertHelper = new UpsertHelper($fields, ['id']);
+            $result = $this->DataBaseAccess->command("INSERT INTO contents({$UpsertHelper->columnNames}) values 
+                ({$UpsertHelper->allPlaceholders}) 
+                ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
+            ", $UpsertHelper->parameters);
+        }
+
+        if(!empty($nodesToAdd)){
+            $fields['nodes'] = $nodesToAdd;
+        }
+
+        if($result || !empty($nodesToAdd)){
+            Event::dispatch(new ContentUpdated([
+                'id' => $id,
+            ]));
+            
             return Response::json([
                 'updated' => $fields,
             ]);

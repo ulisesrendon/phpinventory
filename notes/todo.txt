@@ -1,0 +1,11 @@
+-Collection 
+    -[api] add order by property
+    -[api] add limit property
+    -[api] allow patch properties partially
+-Content
+    -[block] add free html block
+    -[block] add limit and order properties to collection block setting
+-Static render
+    -Render multiple numbered pages
+-Other
+    -Add sitemap xml template
