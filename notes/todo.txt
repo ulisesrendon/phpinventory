@@ -6,7 +6,6 @@
     -[api] adding nodes system
     -[api] updating nodes system
     -[api] removing nodes system
-    -[block] create free html block
     -[block] create after-before block
     -[block] create multi-collection block
 -Static render
