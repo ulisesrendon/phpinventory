@@ -15,6 +15,6 @@ class ConfigRepo
 
     public function getConfigAll(): ?array
     {
-        return $this->DataBaseAccess->query('SELECT name, value from config');
+        return $this->DataBaseAccess->query('SELECT name, value from config where autoload is true');
     }
 }

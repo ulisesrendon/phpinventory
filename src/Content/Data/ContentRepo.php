@@ -135,6 +135,7 @@ class ContentRepo
 
     public function getCollectionContents(
         string $collectionId, 
+        string $siteUrl,
         ?int $limit = null, 
         ?int $offset = null, 
         ?string $orderBy = null,
@@ -148,6 +149,8 @@ class ContentRepo
 
         if(!is_null($limit) && !is_null($offset)){
             $pagination = "limit $limit offset $offset";
+        }else if(!is_null($limit) && is_null($offset)){
+            $pagination = "limit $limit";
         }
 
         $Contents = $this->DataBaseAccess->query("SELECT 
@@ -160,9 +163,10 @@ class ContentRepo
                 join collections_contents on collections_contents.content_id = contents.id
                 where 
                     collections_contents.collection_id = :collection_id
-                $pagination
+                    and contents.active is true
                 order by
                     $orderBy $orderDirection
+                $pagination
             ",
             [
                 'collection_id' => $collectionId,
@@ -171,7 +175,9 @@ class ContentRepo
 
         foreach ($Contents as $Content) {
             $Content->properties = json_decode($Content->properties);
-            $Content->url = (new Validator($Content->path))->url()->isCorrect() ? $Content->path : "http://phpinventory.localhost/{$Content->path}";
+            $Content->path = trim($Content->path, '/');
+            $isPathAbsolute = (new Validator($Content->path))->url()->isCorrect();
+            $Content->url = $isPathAbsolute ? $Content->path : implode('/', [$siteUrl, $Content->path]);
         }
 
         return $Contents;

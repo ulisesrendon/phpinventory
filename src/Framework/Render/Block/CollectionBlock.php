@@ -15,13 +15,27 @@ class CollectionBlock implements RendereableInterface
          */
         $ContentRepo = $Context->getExtra('Repo');
 
-        $Collection = $ContentRepo?->getCollection($Context->getValue());
+        /**
+         * @var \Stradow\Framework\Config $Config
+         */
+        $Config = $Context->getExtra('Config');
+
+        $CollectionId = $Context->getValue();
+
+        $Collection = $ContentRepo?->getCollection($CollectionId);
 
         if (is_null($Collection)) {
             $Collection = new \stdClass;
             $Collection->Contents = [];
         }else{
-            $Collection->Contents = $ContentRepo->getCollectionContents($Collection->id);
+            $Collection->Contents = $ContentRepo->getCollectionContents(
+                collectionId: $CollectionId, 
+                limit: $Context->getProperties('limit'),
+                offset: $Context->getProperties('offset'),
+                orderBy: $Context->getProperties('orderBy'),
+                orderDirection: $Context->getProperties('orderDirection'),
+                siteUrl: $Config->get('site_url'),
+            );
         }
 
         $template = $Context->getProperties('template') ?? $Collection?->properties?->template ?? 'templates/collection.template.php';

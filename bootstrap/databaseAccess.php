@@ -1,5 +1,7 @@
 <?php
 
+use Stradow\Framework\Config;
+use Stradow\Framework\Config\Data\ConfigRepo;
 use Stradow\Framework\Database\DataBaseAccess;
 use Stradow\Framework\DependencyResolver\Container;
 
@@ -24,12 +26,24 @@ function instancePDO(
 
 Container::add(
     className: DataBaseAccess::class,
-    instance: new DataBaseAccess(instancePDO(
-        drive: DB_CONFIG['mainrdb']['drive'],
-        host: DB_CONFIG['mainrdb']['host'],
-        port: DB_CONFIG['mainrdb']['port'],
-        name: DB_CONFIG['mainrdb']['name'],
-        user: DB_CONFIG['mainrdb']['user'],
-        password: DB_CONFIG['mainrdb']['password'],
+    instance: new DataBaseAccess(
+        instancePDO(
+            drive: DB_CONFIG['mainrdb']['drive'],
+            host: DB_CONFIG['mainrdb']['host'],
+            port: DB_CONFIG['mainrdb']['port'],
+            name: DB_CONFIG['mainrdb']['name'],
+            user: DB_CONFIG['mainrdb']['user'],
+            password: DB_CONFIG['mainrdb']['password'],
+        )
     )
-    ));
+);
+
+$ConfigRepo = (new ConfigRepo(Container::get(DataBaseAccess::class)))->getConfigAll();
+$SiteConfig = new Config;
+foreach ($ConfigRepo as $Config) {
+    $SiteConfig->set($Config->name, $Config->value);
+}
+Container::add(
+    className: Config::class,
+    instance: $SiteConfig
+);

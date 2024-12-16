@@ -41,11 +41,7 @@ class ContentController
             return Response::template(PUBLIC_DIR.'/404.html', 404);
         }
 
-        $ConfigRepo = (new ConfigRepo($this->DataBaseAccess))->getConfigAll();
-        $SiteConfig = new Config;
-        foreach ($ConfigRepo as $Config) {
-            $SiteConfig->set($Config->name, $Config->value);
-        }
+        $SiteConfig = Container::get(Config::class);
 
         $HyperRender = new HyperItemsRender;
 
@@ -91,11 +87,7 @@ class ContentController
             and type != 'link'
         ");
 
-        $ConfigRepo = (new ConfigRepo($this->DataBaseAccess))->getConfigAll();
-        $SiteConfig = new Config;
-        foreach ($ConfigRepo as $Config) {
-            $SiteConfig->set($Config->name, $Config->value);
-        }
+        $SiteConfig = Container::get(Config::class);
 
         $staticPath = $SiteConfig->get('staticpath') ?? 'public/static';
         $staticDir = realpath(BASE_DIR . "/$staticPath");
@@ -223,7 +215,9 @@ class ContentController
             return Response::json((object) [], 404);
         }
 
-        $Collection->Contents = $this->ContentRepo->getCollectionContents($id);
+        $SiteConfig = Container::get(Config::class)->get('site_url');
+
+        $Collection->Contents = $this->ContentRepo->getCollectionContents(collectionId: $id, siteUrl: $SiteConfig);
 
         return Response::json($Collection);
     }

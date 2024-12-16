@@ -6,9 +6,9 @@ class Config
 {
     private array $config = [];
 
-    public function get(string $name): mixed
+    public function get(?string $name = null): mixed
     {
-        return $this->config[$name] ?? null;
+        return is_null($name) ? $this->config : $this->config[$name] ?? null;
     }
 
     public function set(string $name, mixed $value): void
