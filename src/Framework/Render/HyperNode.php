@@ -114,8 +114,8 @@ class HyperNode implements NestableInterface, NodeContextInterface
         return is_null($key) ? $this->properties : $this->properties[$key] ?? null;
     }
 
-    public function getExtra(string $key): mixed
+    public function getExtra(?string $key = null): mixed
     {
-        return $this->context[$key] ?? null;
+        return is_null($key) ? $this->context : $this->context[$key] ?? null;
     }
 }
