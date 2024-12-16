@@ -20,6 +20,8 @@ class CollectionBlock implements RendereableInterface
         if (is_null($Collection)) {
             $Collection = new \stdClass;
             $Collection->Contents = [];
+        }else{
+            $Collection->Contents = $ContentRepo->getCollectionContents($Collection->id);
         }
 
         $template = $Context->getProperties()['template'] ?? $Collection?->properties?->template ?? 'templates/collection.template.php';

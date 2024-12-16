@@ -223,6 +223,8 @@ class ContentController
             return Response::json((object) [], 404);
         }
 
+        $Collection->Contents = $this->ContentRepo->getCollectionContents($id);
+
         return Response::json($Collection);
     }
 

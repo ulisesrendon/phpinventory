@@ -18,7 +18,7 @@ $DataBaseAccess->command("CREATE TABLE contentnodes (
 	id varchar(255) NOT NULL PRIMARY KEY,
 	content varchar(255) null default null,
 	value TEXT null default null,
-	properties TEXT NOT NULL DEFAULT ('{}'),
+	properties json NOT NULL DEFAULT ('{}'),
 	type varchar(150),
 	parent varchar(255) NULL default null,
 	weight INTEGER DEFAULT (100)
@@ -28,7 +28,7 @@ $DataBaseAccess->command("CREATE TABLE contents (
 	id varchar(255) NOT NULL PRIMARY KEY,
 	path varchar(255) NULL default null,
     title varchar(255) NULL default null,
-	properties TEXT NOT NULL DEFAULT ('{}'),
+	properties json NOT NULL DEFAULT ('{}'),
 	active boolean NOT NULL DEFAULT false,
 	type varchar(150) not null default 'page',
 	parent varchar(255) NULL default null,
@@ -48,7 +48,7 @@ $DataBaseAccess->command('CREATE TABLE collections_contents (
 $DataBaseAccess->command("CREATE TABLE collections (
 	id varchar(255) NOT NULL PRIMARY KEY,
 	title varchar(255) NULL default null,
-	properties TEXT NOT NULL DEFAULT ('{}'),
+	properties json NOT NULL DEFAULT ('{}'),
 	type varchar(150),
 	parent varchar(255) NULL default null,
 	weight INTEGER DEFAULT (100)

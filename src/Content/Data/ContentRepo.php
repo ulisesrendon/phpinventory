@@ -130,7 +130,27 @@ class ContentRepo
 
         $Collection->properties = json_decode($Collection->properties);
 
-        $Contents = $this->DataBaseAccess->query('SELECT 
+        return $Collection;
+    }
+
+    public function getCollectionContents(
+        string $collectionId, 
+        ?int $limit = null, 
+        ?int $offset = null, 
+        ?string $orderBy = null,
+        ?string $orderDirection = null,
+    ): array
+    {
+        $orderBy ??= 'collections_contents.weight';
+        $orderDirection ??= 'asc';
+
+        $pagination = '';
+
+        if(!is_null($limit) && !is_null($offset)){
+            $pagination = "limit $limit offset $offset";
+        }
+
+        $Contents = $this->DataBaseAccess->query("SELECT 
                 contents.id,
                 contents.path,
                 contents.type,
@@ -140,11 +160,12 @@ class ContentRepo
                 join collections_contents on collections_contents.content_id = contents.id
                 where 
                     collections_contents.collection_id = :collection_id
+                $pagination
                 order by
-                    collections_contents.weight
-            ',
+                    $orderBy $orderDirection
+            ",
             [
-                'collection_id' => $Collection->id,
+                'collection_id' => $collectionId,
             ]
         );
 
@@ -153,8 +174,6 @@ class ContentRepo
             $Content->url = (new Validator($Content->path))->url()->isCorrect() ? $Content->path : "http://phpinventory.localhost/{$Content->path}";
         }
 
-        $Collection->Contents = $Contents;
-
-        return $Collection;
+        return $Contents;
     }
 }
