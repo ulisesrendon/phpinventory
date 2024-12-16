@@ -304,17 +304,33 @@ class ContentController
 
     }
 
-    public function addContentToCollection()
+    public function addContentToCollection(Request $Request, string $collection, string $content)
     {
-        return Response::json([]);
+
+        $ContentExists = $this->ContentRepo->getContentExists($content);
+        $CollectionExists = $this->ContentRepo->getCollectionExists($collection);
+
+        if(!$ContentExists || !$CollectionExists){
+            return Response::json([
+                'error' => 'content cannot be added to desired collection'
+            ], 401);
+        }
+
+        $result = $this->ContentRepo->addContentToCollection(collection: $collection, content: $content);
+
+        return Response::json([
+            'status' => $result,
+        ]);
     }
 
-    public function removeContentFromCollection()
+    public function removeContentFromCollection(string $collection, string $content)
     {
-        return Response::json([]);
-    }
+        $result = $this->ContentRepo->removeContentFromCollection(collection: $collection, content: $content);
 
-    public function saveContentData() {}
+        return Response::json([
+            'status' => $result,
+        ]);
+    }
 
     public function renderContentNode() {}
 }

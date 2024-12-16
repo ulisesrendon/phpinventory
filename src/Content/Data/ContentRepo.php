@@ -60,6 +60,38 @@ class ContentRepo
         return $Content;
     }
 
+    public function getContentExists(string $id): bool
+    {
+        $ContentExists = $this->DataBaseAccess->scalar('SELECT exists(SELECT id from contents where id = :id)', ['id' => $id]);
+
+        return (bool) $ContentExists;
+    }
+
+    public function getCollectionExists(string $id): bool
+    {
+        $ContentExists = $this->DataBaseAccess->scalar('SELECT exists(SELECT id from collections where id = :id)', ['id' => $id]);
+
+        return (bool) $ContentExists;
+    }
+
+    public function addContentToCollection(string $collection, string $content): bool
+    {
+        return $this->DataBaseAccess->command("INSERT IGNORE INTO collections_contents(collection_id, content_id) values 
+                (:collection_id, :content_id) 
+            ", [
+            'collection_id' => $collection,
+            'content_id' => $content,
+        ]);
+    }
+
+    public function removeContentFromCollection(string $collection, string $content): bool
+    {
+        return $this->DataBaseAccess->command("DELETE FROM collections_contents WHERE collection_id = :collection_id AND content_id = :content_id", [
+            'collection_id' => $collection,
+            'content_id' => $content,
+        ]);
+    }
+
     public function getContentByPath(string $path): ?object
     {
         $Content = $this->DataBaseAccess->select('SELECT id, path, title, properties, active, type from contents where path = :path ', ['path' => $path]);

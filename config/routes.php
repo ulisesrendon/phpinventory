@@ -62,8 +62,8 @@ $Router->get('/api/v1/collection', [ContentController::class, 'listCollections']
 $Router->get('/api/v1/collection/:id', [ContentController::class, 'getCollection']);
 $Router->patch('/api/v1/collection/:id', [ContentController::class, 'updateCollection']);
 
-$Router->post('/api/v1/collection', [ContentController::class, 'addContentToCollection']);
-$Router->delete('/api/v1/collection', [ContentController::class, 'removeContentFromCollection']);
+$Router->post('/api/v1/collection/:collection/content/:content', [ContentController::class, 'addContentToCollection']);
+$Router->delete('/api/v1/collection/:collection/content/:content', [ContentController::class, 'removeContentFromCollection']);
 
 $Router->get('/:path', [ContentController::class, 'get'])->ignoreParamSlash();
 
