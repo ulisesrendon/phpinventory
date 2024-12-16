@@ -24,7 +24,7 @@ class CollectionBlock implements RendereableInterface
             $Collection->Contents = $ContentRepo->getCollectionContents($Collection->id);
         }
 
-        $template = $Context->getProperties()['template'] ?? $Collection?->properties?->template ?? 'templates/collection.template.php';
+        $template = $Context->getProperties('template') ?? $Collection?->properties?->template ?? 'templates/collection.template.php';
 
         return (string) new TemplateRender(CONTENT_DIR."/$template", [
             'Collection' => $Collection,

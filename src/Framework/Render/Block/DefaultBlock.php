@@ -13,7 +13,7 @@ class DefaultBlock implements RendereableInterface
         $children = [];
         foreach ($Context->getChildren() as $item) {
             $children[] = [
-                'type' => htmlspecialchars($item->getProperties()['type']),
+                'type' => htmlspecialchars($item->getProperties('type')),
                 'value' => htmlspecialchars($item->getValue()),
                 'children' => $item->getChildren(),
             ];
@@ -21,7 +21,7 @@ class DefaultBlock implements RendereableInterface
 
         return '<pre><code>'.json_encode([
             // 'id' => htmlspecialchars($context->getId()),
-            'type' => htmlspecialchars($Context->getProperties()['type']),
+            'type' => htmlspecialchars($Context->getProperties('type')),
             'value' => htmlspecialchars($Context->getValue()),
             'children' => $children,
         ]).'</code></pre>';

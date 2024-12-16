@@ -109,9 +109,9 @@ class HyperNode implements NestableInterface, NodeContextInterface
     //     $this->properties[] = $property;
     // }
 
-    public function getProperties(): array
+    public function getProperties(?string $key = null): mixed
     {
-        return $this->properties;
+        return is_null($key) ? $this->properties : $this->properties[$key] ?? null;
     }
 
     public function getExtra(string $key): mixed

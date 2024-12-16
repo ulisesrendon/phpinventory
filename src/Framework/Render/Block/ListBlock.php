@@ -9,17 +9,12 @@ class ListBlock implements RendereableInterface
 {
     public function render(NodeContextInterface $Context): string
     {
-        $blockProperties = $Context->getProperties();
-
         $content = array_reduce($Context->getChildren(), fn ($carry, $item) => "$carry<li>$item</li>");
 
-        $tag = $blockProperties['type'];
+        $tag = $Context->getProperties('type') ?? 'ul';
+        $listType = $Context->getProperties('listType');
 
-        $properties = '';
-
-        if (isset($blockProperties['listType'])) {
-            $properties = " type=\"{$blockProperties['listType']}\"";
-        }
+        $properties = is_null($listType) ? '' : " type=\"$listType\"";
 
         return "<{$tag}{$properties}>{$content}</{$tag}>";
     }

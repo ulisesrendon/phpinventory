@@ -9,7 +9,7 @@ class TableBlock implements RendereableInterface
 {
     public function render(NodeContextInterface $Context): string
     {
-        $type = $Context->getProperties()['type'];
+        $type = $Context->getProperties('type');
 
         $content = '';
 
