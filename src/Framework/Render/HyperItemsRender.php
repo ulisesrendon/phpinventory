@@ -60,9 +60,8 @@ class HyperItemsRender
         return $nodeTree;
     }
 
-    public function render(): string
+    public function render(bool $prettify = true): string
     {
-
         // Generate tree structure
         $nodeTree = $this->treeGenerator($this->nodes);
 
@@ -71,7 +70,9 @@ class HyperItemsRender
             callback: fn (?string $carry, \Stringable $item): string => $carry.$item
         ) ?? '';
 
-        $renderOutput = self::class::prettify($renderOutput);
+        if( $prettify ){
+            $renderOutput = self::class::prettify($renderOutput);
+        }
 
         return $renderOutput;
     }

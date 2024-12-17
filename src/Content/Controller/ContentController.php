@@ -71,7 +71,7 @@ class ContentController
             context: [
                 'Content' => $Content,
                 'Config' => $SiteConfig,
-                'render' => $HyperRender->render(),
+                'render' => $HyperRender->render($Content->properties->prettify ?? true),
             ]
         );
     }
