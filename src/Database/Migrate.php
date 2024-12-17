@@ -21,9 +21,9 @@ class Migrate
             require __DIR__.'/Migrations/3_Orders.php';
             require __DIR__.'/Migrations/4_Content.php';
 
-            file_put_contents('php://output', 'Migration Complete!');
+            file_put_contents('php://output', 'Migration Complete!'.PHP_EOL);
         } catch (\Exception $e) {
-            file_put_contents('php://output', 'Migration Failed! - Data may be corrupt');
+            file_put_contents('php://output', 'Migration Failed! - Data may be corrupt'.PHP_EOL);
         }
 
     }

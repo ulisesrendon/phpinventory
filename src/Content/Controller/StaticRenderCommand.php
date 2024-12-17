@@ -14,7 +14,7 @@ require __DIR__ . '/../../../bootstrap/app.php';
 
 class StaticRenderCommand
 {
-    static function forceFilePutContents(string $filePath, mixed $data, int $flags = 0)
+    public static function forceFilePutContents(string $filePath, mixed $data, int $flags = 0)
     {
         $dirPathOnly = dirname($filePath);
         if (!is_dir($dirPathOnly)) {
@@ -37,10 +37,8 @@ class StaticRenderCommand
         ");
 
         $SiteConfig = Container::get(Config::class);
-
         $staticPath = $SiteConfig->get('staticpath') ?? 'public/static';
         $staticDir = realpath(BASE_DIR . "/$staticPath");
-
         
 
         $created = [];
@@ -49,7 +47,6 @@ class StaticRenderCommand
             $Content = $ContentRepo->getContentByPath($Page->path);
 
             $HyperRender = new HyperItemsRender;
-
             foreach ($Content->nodes as $item) {
                 $HyperRender->addNode(
                     id: $item->id,
@@ -91,9 +88,10 @@ class StaticRenderCommand
             $created[] = $staticDir . "/{$Page->path}";
         }
 
-        $dateTimeString = date('YmdHis');
-        self::forceFilePutContents(BASE_DIR."/logs/render_list_$dateTimeString.json", json_encode($created));
+        $dateTimeString = date('YmdHi');
+        $logFilePath = BASE_DIR . "/logs/render_list_$dateTimeString.json";
+        self::forceFilePutContents($logFilePath, json_encode($created, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
-        file_put_contents('php://output', 'Static Render Complete');
+        file_put_contents('php://output', "Static Render Complete: ".realpath($logFilePath).PHP_EOL);
     }
 }
