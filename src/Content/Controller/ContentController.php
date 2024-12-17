@@ -445,6 +445,15 @@ class ContentController
             }
         }
 
+        $removeNodes = null;
+        if (!is_null($Request->getInput('removeNodes'))) {
+            if ((new Validator($Request->getInput('removeNodes')))->array()->isCorrect()) {
+                $removeNodes = $Request->getInput('removeNodes');
+            } else {
+                $errors[] = 'removeNodes must be an array';
+            }
+        }
+
         $nodesToAdd = [];
         if (!is_null($Request->getInput('nodes'))) {
             if ((new Validator($Request->getInput('nodes')))->array()->isCorrect()) {
@@ -482,7 +491,6 @@ class ContentController
                 }
             }
 
-
             foreach ($nodesToAdd as $node) {
                 $UpsertHelper = new UpsertHelper($node, ['id']);
                 $this->DataBaseAccess->command(
@@ -495,8 +503,15 @@ class ContentController
             }
         }
 
+        if ($result && !empty($removeNodes)) {
+            $this->ContentRepo->deleteNodes($removeNodes);
+        }
+
         if (!empty($nodesToAdd)) {
             $fields['nodes'] = $nodesToAdd;
+        }
+        if (!empty($removeNodes)) {
+            $fields['removeNodes'] = $removeNodes;
         }
 
         if ($result || !empty($nodesToAdd)) {

@@ -187,4 +187,18 @@ class ContentRepo
 
         return $Contents;
     }
+
+    public function deleteNodes(array $list): bool
+    {
+        $params = [];
+        foreach ($list as $k => $id) {
+            $params["id_$k"] = $id;
+        }
+        $markers = implode(', :', array_keys($params));
+
+        return $this->DataBaseAccess->command(
+            query: "DELETE FROM contentnodes WHERE id in(:$markers)",
+            params: $params
+        );
+    }
 }
