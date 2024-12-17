@@ -1,18 +1,17 @@
 <?php
+
 namespace Stradow\Content\Event;
 
 class CollectionContentRemoved
 {
-
     private string $collectionId;
-    private string $contentId;
 
+    private string $contentId;
 
     public function __construct(
         string $collectionId,
         string $contentId,
-    )
-    {
+    ) {
         $this->collectionId = $collectionId;
         $this->contentId = $contentId;
     }

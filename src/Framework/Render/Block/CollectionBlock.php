@@ -27,9 +27,9 @@ class CollectionBlock implements RendereableInterface
         if (is_null($Collection)) {
             $Collection = new \stdClass;
             $Collection->Contents = [];
-        }else{
+        } else {
             $Collection->Contents = $ContentRepo->getCollectionContents(
-                collectionId: $CollectionId, 
+                collectionId: $CollectionId,
                 limit: $Context->getProperties('limit'),
                 offset: $Context->getProperties('offset'),
                 orderBy: $Context->getProperties('orderBy'),

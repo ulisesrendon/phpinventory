@@ -1,4 +1,5 @@
 <?php
+
 namespace Stradow\Content\Event;
 
 class CollectionUpdated

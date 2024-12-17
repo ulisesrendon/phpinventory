@@ -1,11 +1,11 @@
 <?php
 
-use Stradow\Order\Event\OrderCreated;
-use Stradow\Content\Event\ContentUpdated;
-use Stradow\Content\Event\CollectionUpdated;
-use Stradow\Stock\Event\StockUpdatedListener;
 use Stradow\Content\Event\CollectionContentAdded;
 use Stradow\Content\Event\CollectionContentRemoved;
+use Stradow\Content\Event\CollectionUpdated;
+use Stradow\Content\Event\ContentUpdated;
+use Stradow\Order\Event\OrderCreated;
+use Stradow\Stock\Event\StockUpdatedListener;
 
 return [
     OrderCreated::class => [

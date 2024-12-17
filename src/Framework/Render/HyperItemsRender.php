@@ -70,7 +70,7 @@ class HyperItemsRender
             callback: fn (?string $carry, \Stringable $item): string => $carry.$item
         ) ?? '';
 
-        if( $prettify ){
+        if ($prettify) {
             $renderOutput = self::class::prettify($renderOutput);
         }
 

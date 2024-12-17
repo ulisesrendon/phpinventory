@@ -3,6 +3,8 @@
     -[api] add limit property
     -[api] allow partially patch for properties
 -Content
+    -[api] add order by property
+    -[api] add limit property
     -[api] adding nodes system
     -[api] updating nodes system
     -[api] removing nodes system
@@ -10,5 +12,3 @@
     -[block] create multi-collection block
 -Static render
     -Render multiple numbered pages
--Other
-    -Create sitemap xml template

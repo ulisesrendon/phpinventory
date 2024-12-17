@@ -10,6 +10,7 @@ interface NodeContextInterface
 
     /**
      * Summary of getChildren
+     *
      * @return NodeContextInterface[]
      */
     public function getChildren(): array;

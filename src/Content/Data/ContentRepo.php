@@ -76,9 +76,9 @@ class ContentRepo
 
     public function addContentToCollection(string $collection, string $content): bool
     {
-        return $this->DataBaseAccess->command("INSERT IGNORE INTO collections_contents(collection_id, content_id) values 
+        return $this->DataBaseAccess->command('INSERT IGNORE INTO collections_contents(collection_id, content_id) values 
                 (:collection_id, :content_id) 
-            ", [
+            ', [
             'collection_id' => $collection,
             'content_id' => $content,
         ]);
@@ -86,7 +86,7 @@ class ContentRepo
 
     public function removeContentFromCollection(string $collection, string $content): bool
     {
-        return $this->DataBaseAccess->command("DELETE FROM collections_contents WHERE collection_id = :collection_id AND content_id = :content_id", [
+        return $this->DataBaseAccess->command('DELETE FROM collections_contents WHERE collection_id = :collection_id AND content_id = :content_id', [
             'collection_id' => $collection,
             'content_id' => $content,
         ]);
@@ -134,22 +134,21 @@ class ContentRepo
     }
 
     public function getCollectionContents(
-        string $collectionId, 
+        string $collectionId,
         string $siteUrl,
-        ?int $limit = null, 
-        ?int $offset = null, 
+        ?int $limit = null,
+        ?int $offset = null,
         ?string $orderBy = null,
         ?string $orderDirection = null,
-    ): array
-    {
+    ): array {
         $orderBy ??= 'collections_contents.weight';
         $orderDirection ??= 'asc';
 
         $pagination = '';
 
-        if(!is_null($limit) && !is_null($offset)){
+        if (! is_null($limit) && ! is_null($offset)) {
             $pagination = "limit $limit offset $offset";
-        }else if(!is_null($limit) && is_null($offset)){
+        } elseif (! is_null($limit) && is_null($offset)) {
             $pagination = "limit $limit";
         }
 
