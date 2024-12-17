@@ -2,7 +2,6 @@
 
 namespace Stradow\Content\Controller;
 
-use Neuralpin\HTTPRouter\Helper\TemplateRender;
 use Neuralpin\HTTPRouter\RequestData as Request;
 use Neuralpin\HTTPRouter\Response;
 use PDO;
@@ -33,7 +32,7 @@ class ContentController
 
     /**
      * Retrieves a content by path
-     * @param string $path
+     *
      * @return \Neuralpin\HTTPRouter\Interface\ResponseState
      */
     public function get(string $path)
@@ -82,6 +81,7 @@ class ContentController
 
     /**
      * Retrieves a list of contents
+     *
      * @return \Neuralpin\HTTPRouter\Interface\ResponseState
      */
     public function listContents()
@@ -105,7 +105,7 @@ class ContentController
 
     /**
      * Shows content data by id
-     * @param string $id
+     *
      * @return \Neuralpin\HTTPRouter\Interface\ResponseState
      */
     public function getContent(string $id)
@@ -121,6 +121,7 @@ class ContentController
 
     /**
      * Retrieves a list of collections
+     *
      * @return \Neuralpin\HTTPRouter\Interface\ResponseState
      */
     public function listCollections()
@@ -142,14 +143,13 @@ class ContentController
 
     /**
      * Retrieves collection data by id
-     * @param string $id
-     * @param \Neuralpin\HTTPRouter\RequestData $Request
+     *
      * @return \Neuralpin\HTTPRouter\Interface\ResponseState
      */
     public function getCollection(string $id, Request $Request)
     {
         $Collection = $this->ContentRepo->getCollection($id);
-    
+
         if (empty($Collection)) {
             return Response::json((object) [], 404);
         }
@@ -160,15 +160,15 @@ class ContentController
         $orderDirection = $Request->getParam('orderdirection');
         $orderBy = $Request->getParam('orderby');
 
-        if(!is_null($page) || !is_null($perPage)){
+        if (! is_null($page) || ! is_null($perPage)) {
             $page = is_null($page) ? 1 : (int) $page;
             $page = $page < 1 ? 1 : $page;
-            $perPage = is_null($perPage) ? 20: (int) $perPage;
+            $perPage = is_null($perPage) ? 20 : (int) $perPage;
             $perPage = $perPage < 1 ? 1 : $perPage;
             $offset = ($page - 1) * $perPage;
         }
 
-        if(!is_null($orderDirection)){
+        if (! is_null($orderDirection)) {
             $orderDirection = strtolower($orderDirection);
             if ($orderDirection != 'asc' && $orderDirection != 'desc') {
                 $orderDirection = 'asc';
@@ -176,7 +176,7 @@ class ContentController
         }
 
         $Collection->Contents = $this->ContentRepo->getCollectionContents(
-            collectionId: $Collection->id, 
+            collectionId: $Collection->id,
             siteUrl: Container::get(Config::class)->get('site_url'),
             limit: $perPage,
             offset: $offset,
@@ -189,8 +189,7 @@ class ContentController
 
     /**
      * Update and creation of collection
-     * @param \Neuralpin\HTTPRouter\RequestData $Request
-     * @param string $id
+     *
      * @return \Neuralpin\HTTPRouter\Interface\ResponseState
      */
     public function updateCollection(Request $Request, string $id)
@@ -310,7 +309,7 @@ class ContentController
             $errors[] = 'Invalid collection Id';
         }
 
-        if (!is_null($Request->getInput('path'))) {
+        if (! is_null($Request->getInput('path'))) {
             if ((new Validator($Request->getInput('path')))->populated()->string()->isCorrect()) {
                 $fields['path'] = $Request->getInput('path');
             } else {
@@ -318,7 +317,7 @@ class ContentController
             }
         }
 
-        if (!is_null($Request->getInput('title'))) {
+        if (! is_null($Request->getInput('title'))) {
             if ((new Validator($Request->getInput('title')))->populated()->string()->isCorrect()) {
                 $fields['title'] = $Request->getInput('title');
             } else {
@@ -326,7 +325,7 @@ class ContentController
             }
         }
 
-        if (!is_null($Request->getInput('properties'))) {
+        if (! is_null($Request->getInput('properties'))) {
             if ((new Validator($Request->getInput('properties')))->array()->isCorrect()) {
                 $fields['properties'] = json_encode((object) $Request->getInput('properties'));
             } else {
@@ -334,7 +333,7 @@ class ContentController
             }
         }
 
-        if (!is_null($Request->getInput('active'))) {
+        if (! is_null($Request->getInput('active'))) {
             if ((new Validator($Request->getInput('active')))->bool()->isCorrect()) {
                 $fields['active'] = $Request->getInput('active');
             } else {
@@ -342,7 +341,7 @@ class ContentController
             }
         }
 
-        if (!is_null($Request->getInput('type'))) {
+        if (! is_null($Request->getInput('type'))) {
             if ((new Validator($Request->getInput('type')))->populated()->string()->isCorrect()) {
                 $fields['type'] = $Request->getInput('type');
             } else {
@@ -350,7 +349,7 @@ class ContentController
             }
         }
 
-        if (!is_null($Request->getInput('parent'))) {
+        if (! is_null($Request->getInput('parent'))) {
             if ((new Validator($Request->getInput('parent')))->uuid()->isCorrect()) {
                 $fields['parent'] = $Request->getInput('parent');
             } else {
@@ -358,7 +357,7 @@ class ContentController
             }
         }
 
-        if (!is_null($Request->getInput('weight'))) {
+        if (! is_null($Request->getInput('weight'))) {
             if ((new Validator($Request->getInput('weight')))->int()->min(0)->isCorrect()) {
                 $fields['weight'] = $Request->getInput('weight');
             } else {
@@ -367,7 +366,7 @@ class ContentController
         }
 
         $removeNodes = null;
-        if (!is_null($Request->getInput('removeNodes'))) {
+        if (! is_null($Request->getInput('removeNodes'))) {
             if ((new Validator($Request->getInput('removeNodes')))->array()->isCorrect()) {
                 $removeNodes = $Request->getInput('removeNodes');
             } else {
@@ -376,7 +375,7 @@ class ContentController
         }
 
         $nodesToAdd = [];
-        if (!is_null($Request->getInput('nodes'))) {
+        if (! is_null($Request->getInput('nodes'))) {
             if ((new Validator($Request->getInput('nodes')))->array()->isCorrect()) {
                 $nodesToAdd = $Request->getInput('nodes');
             } else {
@@ -384,7 +383,7 @@ class ContentController
             }
         }
 
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             return Response::json([
                 'error' => $errors,
             ], 400);
@@ -402,12 +401,12 @@ class ContentController
             );
         }
 
-        if ($result && !empty($nodesToAdd)) {
+        if ($result && ! empty($nodesToAdd)) {
             $nodeErrors = [];
             foreach ($nodesToAdd as $k => $node) {
                 $nodesToAdd[$k]['content'] = $fields['id'];
 
-                if(isset($node['properties'])){
+                if (isset($node['properties'])) {
                     $nodesToAdd[$k]['properties'] = json_encode((object) $node['properties']);
                 }
             }
@@ -424,18 +423,18 @@ class ContentController
             }
         }
 
-        if ($result && !empty($removeNodes)) {
+        if ($result && ! empty($removeNodes)) {
             $this->ContentRepo->deleteNodes($removeNodes);
         }
 
-        if (!empty($nodesToAdd)) {
+        if (! empty($nodesToAdd)) {
             $fields['nodes'] = $nodesToAdd;
         }
-        if (!empty($removeNodes)) {
+        if (! empty($removeNodes)) {
             $fields['removeNodes'] = $removeNodes;
         }
 
-        if ($result || !empty($nodesToAdd)) {
+        if ($result || ! empty($nodesToAdd)) {
             Event::dispatch(new ContentUpdated([
                 'id' => $id,
             ]));

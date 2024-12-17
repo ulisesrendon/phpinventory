@@ -149,10 +149,10 @@ class ContentRepo
         }
 
         $orderBy ??= 'collections_contents.weight';
-        if ('weight' === $orderBy) {
+        if ($orderBy === 'weight') {
             $orderBy = "collections_contents.$orderBy";
-        } else if ('url' === $orderBy) {
-            $orderBy = "contents.path";
+        } elseif ($orderBy === 'url') {
+            $orderBy = 'contents.path';
         }
 
         $orderDirection ??= 'asc';
