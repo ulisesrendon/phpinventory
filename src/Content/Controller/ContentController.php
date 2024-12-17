@@ -206,17 +206,44 @@ class ContentController
         ]);
     }
 
-    public function getCollection(string $id)
+    public function getCollection(string $id, Request $Request)
     {
         $Collection = $this->ContentRepo->getCollection($id);
+    
 
         if (empty($Collection)) {
             return Response::json((object) [], 404);
         }
 
-        $SiteConfig = Container::get(Config::class)->get('site_url');
+        $page = $Request->getParam('page');
+        $perPage = $Request->getParam('perpage');
+        $offset = null;
+        $orderDirection = $Request->getParam('orderdirection');
+        $orderBy = $Request->getParam('orderby');
 
-        $Collection->Contents = $this->ContentRepo->getCollectionContents(collectionId: $id, siteUrl: $SiteConfig);
+        if(!is_null($page) || !is_null($perPage)){
+            $page = is_null($page) ? 1 : (int) $page;
+            $page = $page < 1 ? 1 : $page;
+            $perPage = is_null($perPage) ? 20: (int) $perPage;
+            $perPage = $perPage < 1 ? 1 : $perPage;
+            $offset = ($page - 1) * $perPage;
+        }
+
+        if(!is_null($orderDirection)){
+            $orderDirection = strtolower($orderDirection);
+            if ($orderDirection != 'asc' && $orderDirection != 'desc') {
+                $orderDirection = 'asc';
+            }
+        }
+
+        $Collection->Contents = $this->ContentRepo->getCollectionContents(
+            collectionId: $Collection->id, 
+            siteUrl: Container::get(Config::class)->get('site_url'),
+            limit: $perPage,
+            offset: $offset,
+            orderDirection: $orderDirection,
+            orderBy: $orderBy,
+        );
 
         return Response::json($Collection);
     }

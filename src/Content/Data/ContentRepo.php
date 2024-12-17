@@ -141,16 +141,21 @@ class ContentRepo
         ?string $orderBy = null,
         ?string $orderDirection = null,
     ): array {
-        $orderBy ??= 'collections_contents.weight';
-        $orderDirection ??= 'asc';
-
         $pagination = '';
-
         if (! is_null($limit) && ! is_null($offset)) {
             $pagination = "limit $limit offset $offset";
         } elseif (! is_null($limit) && is_null($offset)) {
             $pagination = "limit $limit";
         }
+
+        $orderBy ??= 'collections_contents.weight';
+        if ('weight' === $orderBy) {
+            $orderBy = "collections_contents.$orderBy";
+        } else if ('url' === $orderBy) {
+            $orderBy = "contents.path";
+        }
+
+        $orderDirection ??= 'asc';
 
         $Contents = $this->DataBaseAccess->query("SELECT 
                 contents.id,

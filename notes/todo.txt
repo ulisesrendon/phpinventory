@@ -1,7 +1,6 @@
 -Collection 
-    -[api] add order by property
-    -[api] add limit property
     -[api] allow partially patch for properties
+    -[api]&[reepo] add order by enum for security reasons
 -Content
     -[api] add order by property
     -[api] add limit property
