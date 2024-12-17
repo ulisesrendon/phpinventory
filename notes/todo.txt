@@ -13,9 +13,10 @@
     -[api] optimize node system upsert query
     -[block] create block: after-before links 
     -[block] create block: automatic breadcrumbs 
-    -[block] create block: multi-collection 
-    -[block] create block: multidimensional-content listing
     -[block] create block: table of contents 
     -[block] update block: heading -> set automatic name attribute for internal links
+    
+    -[block] create block: multi-collection 
+    -[block] create block: multidimensional-content listing
 -Static render
     -Render multiple numbered pages

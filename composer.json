@@ -38,6 +38,7 @@
     },
     "scripts": {
         "stradow-test": "vendor/bin/phpunit --bootstrap vendor/autoload.php tests",
-        "stradow-migrate": "Stradow\\Database\\Migrate::start"
+        "stradow-migrate": "Stradow\\Database\\Migrate::start",
+        "stradow-render": "Stradow\\Content\\Controller\\StaticRenderCommand::start"
     }
 }

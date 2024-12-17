@@ -5,10 +5,7 @@ namespace Stradow\Database;
 use Stradow\Framework\Database\DataBaseAccess;
 use Stradow\Framework\DependencyResolver\Container;
 
-require __DIR__.'/../../vendor/autoload.php';
-require __DIR__.'/../../bootstrap/environment.php';
-define('DB_CONFIG', require __DIR__.'/../../config/database.php');
-require __DIR__.'/../../bootstrap/databaseAccess.php';
+require __DIR__.'/../../bootstrap/app.php';
 
 class Migrate
 {

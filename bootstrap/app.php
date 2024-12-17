@@ -30,7 +30,6 @@ $Router = require __DIR__.'/../config/routes.php';
 $Controller = require __DIR__.'/http.php';
 
 define('RENDER_CONFIG', require __DIR__.'/../config/render.php');
-
 define('PUBLIC_DIR', realpath(__DIR__.'/../public'));
 define('CONTENT_DIR', __DIR__.'/../content');
 define('BASE_DIR', __DIR__.'/..');
