@@ -50,7 +50,7 @@ class HyperItemsRender
     {
         $nodeTree = [];
         foreach ($items as $k => $item) {
-            if (! is_null($item->getParent())) {
+            if (! is_null($item->getParent()) && isset($items[$item->getParent()])) {
                 $items[$item->getParent()]->addChild($items[$k]);
             } else {
                 $nodeTree[] = &$items[$k];

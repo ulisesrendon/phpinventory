@@ -1,11 +1,10 @@
 -Collection 
     -[api] allow partially patch for properties
-    -[api]&[reepo] add order by enum for security reasons
+    -[api]&[repo] add order by enum for security reasons
 -Content
-    -[api] add order by property
-    -[api] add limit property
-    -[api] adding nodes system
-    -[api] updating nodes system
+    -[api] add pagination to content list
+    -[api] validation for node system
+    -[api] optimize node system upsert query
     -[api] removing nodes system
     -[block] create after-before block
     -[block] create multi-collection block

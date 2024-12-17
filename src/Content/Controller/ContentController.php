@@ -31,6 +31,11 @@ class ContentController
         $this->ContentRepo = new ContentRepo($this->DataBaseAccess);
     }
 
+    /**
+     * Retrieves a content by path
+     * @param string $path
+     * @return \Neuralpin\HTTPRouter\Interface\ResponseState
+     */
     public function get(string $path)
     {
 
@@ -51,7 +56,7 @@ class ContentController
                     id: $item->id,
                     value: $item->value,
                     properties: $item->properties,
-                    type: $item->type,
+                    type: $item->type ?? 'default',
                     parent: $item->parent,
                     RenderEngine: new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']),
                     context: [
@@ -154,6 +159,10 @@ class ContentController
         ]);
     }
 
+    /**
+     * Retrieves a list of contents
+     * @return \Neuralpin\HTTPRouter\Interface\ResponseState
+     */
     public function listContents()
     {
         $Contents = $this->DataBaseAccess->query('SELECT 
@@ -173,6 +182,11 @@ class ContentController
         ]);
     }
 
+    /**
+     * Shows content data by id
+     * @param string $id
+     * @return \Neuralpin\HTTPRouter\Interface\ResponseState
+     */
     public function getContent(string $id)
     {
         $Content = $this->ContentRepo->getContent($id);
@@ -184,11 +198,10 @@ class ContentController
         return Response::json($Content);
     }
 
-    public function deleteContent()
-    {
-        return Response::json([]);
-    }
-
+    /**
+     * Retrieves a list of collections
+     * @return \Neuralpin\HTTPRouter\Interface\ResponseState
+     */
     public function listCollections()
     {
         $Collections = $this->DataBaseAccess->query('SELECT 
@@ -206,11 +219,16 @@ class ContentController
         ]);
     }
 
+    /**
+     * Retrieves collection data by id
+     * @param string $id
+     * @param \Neuralpin\HTTPRouter\RequestData $Request
+     * @return \Neuralpin\HTTPRouter\Interface\ResponseState
+     */
     public function getCollection(string $id, Request $Request)
     {
         $Collection = $this->ContentRepo->getCollection($id);
     
-
         if (empty($Collection)) {
             return Response::json((object) [], 404);
         }
@@ -248,6 +266,12 @@ class ContentController
         return Response::json($Collection);
     }
 
+    /**
+     * Update and creation of collection
+     * @param \Neuralpin\HTTPRouter\RequestData $Request
+     * @param string $id
+     * @return \Neuralpin\HTTPRouter\Interface\ResponseState
+     */
     public function updateCollection(Request $Request, string $id)
     {
         $fields = [];
@@ -326,117 +350,6 @@ class ContentController
 
     }
 
-    public function updateContent(Request $Request, string $id)
-    {
-        $fields = [];
-        $errors = [];
-
-        if ((new Validator($id))->uuid()->isCorrect()) {
-            $fields['id'] = $id;
-        } else {
-            $errors[] = 'Invalid collection Id';
-        }
-
-        if (! is_null($Request->getInput('path'))) {
-            if ((new Validator($Request->getInput('path')))->populated()->string()->isCorrect()) {
-                $fields['path'] = $Request->getInput('path');
-            } else {
-                $errors[] = 'Path cannot be an empty value';
-            }
-        }
-
-        if (! is_null($Request->getInput('title'))) {
-            if ((new Validator($Request->getInput('title')))->populated()->string()->isCorrect()) {
-                $fields['title'] = $Request->getInput('title');
-            } else {
-                $errors[] = 'Title cannot be an empty value';
-            }
-        }
-
-        if (! is_null($Request->getInput('properties'))) {
-            if ((new Validator($Request->getInput('properties')))->array()->isCorrect()) {
-                $fields['properties'] = json_encode($Request->getInput('properties'));
-            } else {
-                $errors[] = 'properties cannot be an empty value';
-            }
-        }
-
-        if (! is_null($Request->getInput('active'))) {
-            if ((new Validator($Request->getInput('active')))->bool()->isCorrect()) {
-                $fields['active'] = $Request->getInput('active');
-            } else {
-                $errors[] = 'active must be a boolean value';
-            }
-        }
-
-        if (! is_null($Request->getInput('type'))) {
-            if ((new Validator($Request->getInput('type')))->populated()->string()->isCorrect()) {
-                $fields['type'] = $Request->getInput('type');
-            } else {
-                $errors[] = 'Type cannot be an empty value';
-            }
-        }
-
-        if (! is_null($Request->getInput('parent'))) {
-            if ((new Validator($Request->getInput('parent')))->uuid()->isCorrect()) {
-                $fields['parent'] = $Request->getInput('parent');
-            } else {
-                $errors[] = 'Invalid parent Id';
-            }
-        }
-
-        if (! is_null($Request->getInput('weight'))) {
-            if ((new Validator($Request->getInput('weight')))->int()->min(0)->isCorrect()) {
-                $fields['weight'] = json_encode($Request->getInput('weight'));
-            } else {
-                $errors[] = 'weight cannot be an empty value';
-            }
-        }
-
-        $nodesToAdd = [];
-        if (! is_null($Request->getInput('nodes'))) {
-            if ((new Validator($Request->getInput('nodes')))->array()->isCorrect()) {
-                $nodesToAdd = $Request->getInput('nodes');
-            } else {
-                $errors[] = 'nodes must be an array';
-            }
-        }
-
-        if (! empty($errors)) {
-            return Response::json([
-                'error' => $errors,
-            ], 400);
-        }
-
-        $result = true;
-        if (count($fields) > 1) {
-            $UpsertHelper = new UpsertHelper($fields, ['id']);
-            $result = $this->DataBaseAccess->command("INSERT INTO contents({$UpsertHelper->columnNames}) values 
-                ({$UpsertHelper->allPlaceholders}) 
-                ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
-            ", $UpsertHelper->parameters);
-        }
-
-        if (! empty($nodesToAdd)) {
-            $fields['nodes'] = $nodesToAdd;
-        }
-
-        if ($result || ! empty($nodesToAdd)) {
-            Event::dispatch(new ContentUpdated([
-                'id' => $id,
-            ]));
-
-            return Response::json([
-                'updated' => $fields,
-            ]);
-        } else {
-            return Response::json([
-                'error' => 'No data provided',
-            ], 400);
-        }
-
-    }
-
     public function addContentToCollection(Request $Request, string $collection, string $content)
     {
 
@@ -465,5 +378,145 @@ class ContentController
         ]);
     }
 
-    public function renderContentNode() {}
+    public function updateContent(Request $Request, string $id)
+    {
+        $fields = [];
+        $errors = [];
+
+        if ((new Validator($id))->uuid()->isCorrect()) {
+            $fields['id'] = $id;
+        } else {
+            $errors[] = 'Invalid collection Id';
+        }
+
+        if (!is_null($Request->getInput('path'))) {
+            if ((new Validator($Request->getInput('path')))->populated()->string()->isCorrect()) {
+                $fields['path'] = $Request->getInput('path');
+            } else {
+                $errors[] = 'Path cannot be an empty value';
+            }
+        }
+
+        if (!is_null($Request->getInput('title'))) {
+            if ((new Validator($Request->getInput('title')))->populated()->string()->isCorrect()) {
+                $fields['title'] = $Request->getInput('title');
+            } else {
+                $errors[] = 'Title cannot be an empty value';
+            }
+        }
+
+        if (!is_null($Request->getInput('properties'))) {
+            if ((new Validator($Request->getInput('properties')))->array()->isCorrect()) {
+                $fields['properties'] = json_encode((object) $Request->getInput('properties'));
+            } else {
+                $errors[] = 'properties cannot be an empty value';
+            }
+        }
+
+        if (!is_null($Request->getInput('active'))) {
+            if ((new Validator($Request->getInput('active')))->bool()->isCorrect()) {
+                $fields['active'] = $Request->getInput('active');
+            } else {
+                $errors[] = 'active must be a boolean value';
+            }
+        }
+
+        if (!is_null($Request->getInput('type'))) {
+            if ((new Validator($Request->getInput('type')))->populated()->string()->isCorrect()) {
+                $fields['type'] = $Request->getInput('type');
+            } else {
+                $errors[] = 'Type cannot be an empty value';
+            }
+        }
+
+        if (!is_null($Request->getInput('parent'))) {
+            if ((new Validator($Request->getInput('parent')))->uuid()->isCorrect()) {
+                $fields['parent'] = $Request->getInput('parent');
+            } else {
+                $errors[] = 'Invalid parent Id';
+            }
+        }
+
+        if (!is_null($Request->getInput('weight'))) {
+            if ((new Validator($Request->getInput('weight')))->int()->min(0)->isCorrect()) {
+                $fields['weight'] = $Request->getInput('weight');
+            } else {
+                $errors[] = 'weight cannot be an empty value';
+            }
+        }
+
+        $nodesToAdd = [];
+        if (!is_null($Request->getInput('nodes'))) {
+            if ((new Validator($Request->getInput('nodes')))->array()->isCorrect()) {
+                $nodesToAdd = $Request->getInput('nodes');
+            } else {
+                $errors[] = 'nodes must be an array';
+            }
+        }
+
+        if (!empty($errors)) {
+            return Response::json([
+                'error' => $errors,
+            ], 400);
+        }
+
+        $result = true;
+        if (count($fields) > 1) {
+            $UpsertHelper = new UpsertHelper($fields, ['id']);
+            $result = $this->DataBaseAccess->command(
+                query: "INSERT INTO contents({$UpsertHelper->columnNames}) 
+                        values ({$UpsertHelper->allPlaceholders}) 
+                        ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
+                    ",
+                params: $UpsertHelper->parameters
+            );
+        }
+
+        if ($result && !empty($nodesToAdd)) {
+            $nodeErrors = [];
+            foreach ($nodesToAdd as $k => $node) {
+                $nodesToAdd[$k]['content'] = $fields['id'];
+
+                if(isset($node['properties'])){
+                    $nodesToAdd[$k]['properties'] = json_encode((object) $node['properties']);
+                }
+            }
+
+
+            foreach ($nodesToAdd as $node) {
+                $UpsertHelper = new UpsertHelper($node, ['id']);
+                $this->DataBaseAccess->command(
+                    query: "INSERT INTO contentnodes({$UpsertHelper->columnNames}) 
+                        values ({$UpsertHelper->allPlaceholders}) 
+                        ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
+                    ",
+                    params: $UpsertHelper->parameters
+                );
+            }
+        }
+
+        if (!empty($nodesToAdd)) {
+            $fields['nodes'] = $nodesToAdd;
+        }
+
+        if ($result || !empty($nodesToAdd)) {
+            Event::dispatch(new ContentUpdated([
+                'id' => $id,
+            ]));
+
+            return Response::json([
+                'updated' => $fields,
+            ]);
+        } else {
+            return Response::json([
+                'error' => 'No data provided',
+            ], 400);
+        }
+
+    }
+
+    public function deleteContent()
+    {
+        return Response::json([]);
+    }
 }
