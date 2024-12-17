@@ -9,5 +9,8 @@
     -[api] removing nodes system
     -[block] create after-before block
     -[block] create multi-collection block
+    -[api] add tree view endpoint
+    -[api] add map view endpoint
+    -[api] add render view endpoint
 -Static render
     -Render multiple numbered pages

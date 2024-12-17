@@ -54,17 +54,18 @@ $DataBaseAccess->command("CREATE TABLE collections (
 	weight INTEGER DEFAULT (100)
 )");
 
-$DataBaseAccess->command("INSERT INTO contents (id,path,title,properties,active,type) VALUES
-    ('cd101622-dedd-4f79-9607-8d15254b4106','index','Inicio','{}',true,'page'),
-    ('4949f55d-7162-432e-8962-1597696ef4ec','acercade','Página acerca de','{}',true,'page'),
-    ('6eee6539-7743-4b18-b70a-b9121d801783','contacto','Página de contacto','{}',true,'page'),
-    ('d495aefe-2d01-4b8d-995d-af5a377f3f4b','sitemap.xml','Sitemap XML','{}',true,'xml'),
-    ('56b4405d-0a99-4c61-8ce1-56bb94705ee3','blog/index','Blog','{}',true,'blog'),
-    ('df056abc-dca6-41b1-9662-6b3b47e583ca','blog/article-1','Lorem ipsum','{}',true,'blog'),
-    ('ee9c86f2-8e07-4168-9ab2-e04f3d3ebf09','blog/article-2','Lorem ipsum','{}',true,'blog'),
-    ('6886548b-a022-4aa0-ab36-6cc43f248a7b','https://facebook.com','Página en Facebook','{}',true,'link'),
-    ('e5cd836e-3150-4252-b815-587458767dc7','https://x.com','Página en X','{}',true,'link')
-");
+$DataBaseAccess->command(<<<'SQL'
+    INSERT INTO contents (id,path,title,properties,active,type) VALUES
+        ('cd101622-dedd-4f79-9607-8d15254b4106','index','Inicio','{}',true,'page'),
+        ('4949f55d-7162-432e-8962-1597696ef4ec','acercade','Página acerca de','{}',true,'page'),
+        ('6eee6539-7743-4b18-b70a-b9121d801783','contacto','Página de contacto','{}',true,'page'),
+        ('d495aefe-2d01-4b8d-995d-af5a377f3f4b','sitemap.xml','Sitemap XML','{"template": "templates/sitemap.template.xml","prettify": false}',true,'xml'),
+        ('56b4405d-0a99-4c61-8ce1-56bb94705ee3','blog/index','Blog','{}',true,'blog'),
+        ('df056abc-dca6-41b1-9662-6b3b47e583ca','blog/article-1','Lorem ipsum','{}',true,'blog'),
+        ('ee9c86f2-8e07-4168-9ab2-e04f3d3ebf09','blog/article-2','Lorem ipsum','{}',true,'blog'),
+        ('6886548b-a022-4aa0-ab36-6cc43f248a7b','https://facebook.com','Página en Facebook','{}',true,'link'),
+        ('e5cd836e-3150-4252-b815-587458767dc7','https://x.com','Página en X','{}',true,'link')
+SQL);
 
 $DataBaseAccess->command("INSERT INTO collections_contents(content_id,collection_id,weight) VALUES
     ('cd101622-dedd-4f79-9607-8d15254b4106','f596b3c9-a1fa-4d3d-be13-fd7d0ef29d11',100),
@@ -88,7 +89,7 @@ $DataBaseAccess->command("INSERT INTO collections_contents(content_id,collection
 
 $DataBaseAccess->command(<<<'SQL'
     INSERT INTO collections (id,title,properties,type,weight) VALUES
-        ('66d1708c-2e67-4a87-8754-383104f7bb17','sitemap','{}','category',100),
+        ('66d1708c-2e67-4a87-8754-383104f7bb17','sitemap','{"template": "templates/sitemap-collection.template.php"}','category',100),
         ('ac7beaa3-5388-4a83-b24a-4540579761a8','blog','{}','category',100),
         ('f596b3c9-a1fa-4d3d-be13-fd7d0ef29d11','main-nav','{"template": "templates/nav.template.php"}','nav',100),
         ('174f184d-edc2-46d8-a3f6-6e757554900a','comunity-nav','{}','nav',100),

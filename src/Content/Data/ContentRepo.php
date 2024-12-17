@@ -162,7 +162,8 @@ class ContentRepo
                 contents.path,
                 contents.type,
                 contents.title,
-                contents.properties
+                contents.properties,
+                collections_contents.weight
                 from contents
                 join collections_contents on collections_contents.content_id = contents.id
                 where 
