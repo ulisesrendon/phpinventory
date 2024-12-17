@@ -3,6 +3,7 @@
 namespace Stradow\Content\Data;
 
 use Stradow\Framework\Database\DataBaseAccess;
+use Stradow\Framework\Database\UpsertHelper;
 use Stradow\Framework\Validator;
 
 class ContentRepo
@@ -19,7 +20,23 @@ class ContentRepo
         return $this->DataBaseAccess;
     }
 
-    public function getContentQuery(string $extraParts = ''): string
+    public function getContentsQuery(string $extraParts = ''): string
+    {
+        return "SELECT 
+                contents.id,
+                contents.path,
+                contents.title,
+                contents.active,
+                contents.type,
+                contents.parent,
+                contents.weight
+            from contents
+            $extraParts
+            order by parent, weight
+        ";
+    }
+
+    public function getContentNodesQuery(string $extraParts = ''): string
     {
         return "SELECT 
                 id,
@@ -36,7 +53,18 @@ class ContentRepo
 
     public function getContentNodes(string $content): ?array
     {
-        $items = $this->DataBaseAccess->query($this->getContentQuery('where content = :id'), ['id' => $content]);
+        $items = $this->DataBaseAccess->query($this->getContentNodesQuery('where content = :id'), ['id' => $content]);
+
+        foreach ($items as $item) {
+            $item->properties = json_decode($item->properties, true);
+        }
+
+        return $items;
+    }
+
+    public function getContentList(): ?array
+    {
+        $items = $this->DataBaseAccess->query($this->getContentsQuery());
 
         foreach ($items as $item) {
             $item->properties = json_decode($item->properties, true);
@@ -54,8 +82,6 @@ class ContentRepo
         }
 
         $Content->properties = json_decode($Content->properties);
-
-        $Content->nodes = $this->getContentNodes($Content->id);
 
         return $Content;
     }
@@ -102,9 +128,30 @@ class ContentRepo
 
         $Content->properties = json_decode($Content->properties);
 
-        $Content->nodes = $this->getContentNodes($Content->id);
-
         return $Content;
+    }
+
+    public function getCollectionList(string $extra = ''): array
+    {
+        $Collections = $this->DataBaseAccess->query("SELECT 
+            collections.id,
+            collections.title,
+            collections.type,
+            collections.parent,
+            collections.weight
+            from collections
+            $extra
+        ");
+
+        if (empty($Collections)) {
+            return [];
+        }
+
+        foreach ($Collections as $Collection) {
+            $Collection->properties = json_decode($Collection->properties);
+        }
+
+        return $Collections;
     }
 
     public function getCollection(string $id): ?object
@@ -200,5 +247,48 @@ class ContentRepo
             query: "DELETE FROM contentnodes WHERE id in(:$markers)",
             params: $params
         );
+    }
+
+    public function saveCollection(array $fields): bool
+    {
+        $UpsertHelper = new UpsertHelper($fields, ['id']);
+
+        return $this->DataBaseAccess->command(
+            query: "INSERT INTO collections({$UpsertHelper->columnNames}) values 
+                ({$UpsertHelper->allPlaceholders}) 
+                ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
+            ",
+            params: $UpsertHelper->parameters,
+        );
+    }
+
+    public function saveContent(array $fields): bool
+    {
+        $UpsertHelper = new UpsertHelper($fields, ['id']);
+
+        return $this->DataBaseAccess->command(
+            query: "INSERT INTO contents({$UpsertHelper->columnNames}) 
+                        values ({$UpsertHelper->allPlaceholders}) 
+                        ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
+                    ",
+            params: $UpsertHelper->parameters,
+        );
+    }
+
+    public function saveContentNodes(array $nodes): bool
+    {
+        $result = true;
+        foreach ($nodes as $node) {
+            $UpsertHelper = new UpsertHelper($node, ['id']);
+            $result &= $this->DataBaseAccess->command(
+                query: "INSERT INTO contentnodes({$UpsertHelper->columnNames}) 
+                        values ({$UpsertHelper->allPlaceholders}) 
+                        ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
+                    ",
+                params: $UpsertHelper->parameters,
+            );
+        }
+
+        return (bool) $result;
     }
 }

@@ -44,6 +44,7 @@ class StaticRenderCommand
         foreach ($Contents as $Page) {
 
             $Content = $ContentRepo->getContentByPath($Page->path);
+            $Content->nodes = $ContentRepo->getContentNodes($Content->id);
 
             $HyperRender = new HyperItemsRender;
             foreach ($Content->nodes as $item) {

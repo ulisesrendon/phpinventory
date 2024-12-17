@@ -2,6 +2,7 @@
 
 namespace Stradow\Content\Controller;
 
+use Neuralpin\HTTPRouter\Interface\ResponseState;
 use Neuralpin\HTTPRouter\RequestData as Request;
 use Neuralpin\HTTPRouter\Response;
 use PDO;
@@ -9,7 +10,6 @@ use Stradow\Content\Data\ContentRepo;
 use Stradow\Content\Event\ContentUpdated;
 use Stradow\Framework\Config;
 use Stradow\Framework\Database\DataBaseAccess;
-use Stradow\Framework\Database\UpsertHelper;
 use Stradow\Framework\DependencyResolver\Container;
 use Stradow\Framework\Event\Event;
 use Stradow\Framework\Render\HyperItemsRender;
@@ -31,11 +31,9 @@ class ContentController
     }
 
     /**
-     * Retrieves a content by path
-     *
-     * @return \Neuralpin\HTTPRouter\Interface\ResponseState
+     * Retrieves content by path
      */
-    public function get(string $path)
+    public function get(string $path): ResponseState
     {
 
         $Content = $this->ContentRepo->getContentByPath($path);
@@ -43,6 +41,8 @@ class ContentController
         if (empty($Content)) {
             return Response::template(PUBLIC_DIR.'/404.html', 404);
         }
+
+        $Content->nodes = $this->ContentRepo->getContentNodes($Content->id);
 
         $SiteConfig = Container::get(Config::class);
 
@@ -81,21 +81,10 @@ class ContentController
 
     /**
      * Retrieves a list of contents
-     *
-     * @return \Neuralpin\HTTPRouter\Interface\ResponseState
      */
-    public function listContents()
+    public function listContents(): ResponseState
     {
-        $Contents = $this->DataBaseAccess->query('SELECT 
-                contents.id,
-                contents.path,
-                contents.title,
-                contents.active,
-                contents.type,
-                contents.parent,
-                contents.weight
-            from contents 
-        ');
+        $Contents = $this->ContentRepo->getContentList();
 
         return Response::json([
             'count' => count($Contents),
@@ -105,10 +94,8 @@ class ContentController
 
     /**
      * Shows content data by id
-     *
-     * @return \Neuralpin\HTTPRouter\Interface\ResponseState
      */
-    public function getContent(string $id)
+    public function getContent(string $id): ResponseState
     {
         $Content = $this->ContentRepo->getContent($id);
 
@@ -116,24 +103,17 @@ class ContentController
             return Response::json((object) [], 404);
         }
 
+        $Content->nodes = $this->ContentRepo->getContentNodes($Content->id);
+
         return Response::json($Content);
     }
 
     /**
      * Retrieves a list of collections
-     *
-     * @return \Neuralpin\HTTPRouter\Interface\ResponseState
      */
-    public function listCollections()
+    public function listCollections(): ResponseState
     {
-        $Collections = $this->DataBaseAccess->query('SELECT 
-                collections.id,
-                collections.title,
-                collections.type,
-                collections.parent,
-                collections.weight
-            from collections 
-        ');
+        $Collections = $this->ContentRepo->getCollectionList();
 
         return Response::json([
             'count' => count($Collections),
@@ -143,10 +123,8 @@ class ContentController
 
     /**
      * Retrieves collection data by id
-     *
-     * @return \Neuralpin\HTTPRouter\Interface\ResponseState
      */
-    public function getCollection(string $id, Request $Request)
+    public function getCollection(string $id, Request $Request): ResponseState
     {
         $Collection = $this->ContentRepo->getCollection($id);
 
@@ -189,10 +167,8 @@ class ContentController
 
     /**
      * Update and creation of collection
-     *
-     * @return \Neuralpin\HTTPRouter\Interface\ResponseState
      */
-    public function updateCollection(Request $Request, string $id)
+    public function updateCollection(Request $Request, string $id): ResponseState
     {
         $fields = [];
         $errors = [];
@@ -251,11 +227,7 @@ class ContentController
 
         $result = false;
         if (count($fields) > 1) {
-            $UpsertHelper = new UpsertHelper($fields, ['id']);
-            $result = $this->DataBaseAccess->command("INSERT INTO collections({$UpsertHelper->columnNames}) values 
-                ({$UpsertHelper->allPlaceholders}) 
-                ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
-            ", $UpsertHelper->parameters);
+            $result = $this->ContentRepo->saveCollection($fields);
         }
 
         if ($result) {
@@ -270,7 +242,7 @@ class ContentController
 
     }
 
-    public function addContentToCollection(Request $Request, string $collection, string $content)
+    public function addContentToCollection(Request $Request, string $collection, string $content): ResponseState
     {
 
         $ContentExists = $this->ContentRepo->getContentExists($content);
@@ -289,7 +261,7 @@ class ContentController
         ]);
     }
 
-    public function removeContentFromCollection(string $collection, string $content)
+    public function removeContentFromCollection(string $collection, string $content): ResponseState
     {
         $result = $this->ContentRepo->removeContentFromCollection(collection: $collection, content: $content);
 
@@ -298,7 +270,7 @@ class ContentController
         ]);
     }
 
-    public function updateContent(Request $Request, string $id)
+    public function updateContent(Request $Request, string $id): ResponseState
     {
         $fields = [];
         $errors = [];
@@ -391,14 +363,7 @@ class ContentController
 
         $result = true;
         if (count($fields) > 1) {
-            $UpsertHelper = new UpsertHelper($fields, ['id']);
-            $result = $this->DataBaseAccess->command(
-                query: "INSERT INTO contents({$UpsertHelper->columnNames}) 
-                        values ({$UpsertHelper->allPlaceholders}) 
-                        ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
-                    ",
-                params: $UpsertHelper->parameters
-            );
+            $result = $this->ContentRepo->saveContent($fields);
         }
 
         if ($result && ! empty($nodesToAdd)) {
@@ -411,16 +376,7 @@ class ContentController
                 }
             }
 
-            foreach ($nodesToAdd as $node) {
-                $UpsertHelper = new UpsertHelper($node, ['id']);
-                $this->DataBaseAccess->command(
-                    query: "INSERT INTO contentnodes({$UpsertHelper->columnNames}) 
-                        values ({$UpsertHelper->allPlaceholders}) 
-                        ON DUPLICATE KEY UPDATE {$UpsertHelper->noUniquePlaceHolders}
-                    ",
-                    params: $UpsertHelper->parameters
-                );
-            }
+            $this->ContentRepo->saveContentNodes($nodesToAdd);
         }
 
         if ($result && ! empty($removeNodes)) {
@@ -450,7 +406,7 @@ class ContentController
 
     }
 
-    public function deleteContent()
+    public function deleteContent(): ResponseState
     {
         return Response::json([]);
     }

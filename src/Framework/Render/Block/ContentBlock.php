@@ -18,6 +18,8 @@ class ContentBlock implements RendereableInterface
 
         $Content = $ContentRepo?->getContent($Context->getValue());
 
+        $Content->nodes = $ContentRepo->getContentNodes($Content->id);
+
         $HyperRender = new HyperItemsRender;
 
         foreach ($Content->nodes as $item) {
