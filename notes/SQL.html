@@ -95,7 +95,7 @@
 	</tbody>
 </table>
 
-<h2>Definición de datos DDL</h2>
+<h2>Definición de datos</h2>
 
 <p>En las bases de datos SQL existe el Lenguaje de Definición de Datos (DDL), con el cual podemos crear y modificar la estructura de nuestra base de datos, y lo usaremos para crear o eliminar las tablas y columnas donde vivirá nuestra información.</p>
 
@@ -145,6 +145,13 @@ DROP TABLE inventory;
 -- Eliminar una base de datos
 DROP DATABASE nombre_base_datos;</code></pre>
 
+<h3>Vaciar datos de una tabla</h3>
+
+<p>Para eliminar todos los datos de una tabla y dejarla vacía se usa la instrucción <strong>Truncate</strong>, ejemploL:</p>
+
+<pre><code>TRUNCATE TABLE inventory;</code></pre>
+
+
 <h2>Lectura y Escritura de Datos en Postgres con SQL</h2>
 
 <h3>Operación de Escritura</h3>
@@ -153,6 +160,7 @@ DROP DATABASE nombre_base_datos;</code></pre>
 
 <pre><code>INSERT INTO inventory (name, stock, active)
 VALUES ('Pasta dental', 3, true);</code></pre>
+
 
 <h3>Operaciones de Lectura</h3>
 
@@ -175,3 +183,170 @@ WHERE name = 'Pasta dental';</code></pre>
 
 <pre><code>DELETE FROM inventory
 WHERE name = 'Pasta dental';</code></pre>
+
+<h2>Normalización de datos</h2>
+
+<p>Antes de almacenar datos en una base de datos relacional, la información de cada registro único se separa y se manda a diferentes tablas con el objetivo de no tener datos duplicados, a este proceso se le llama <strong>normalización</strong>.</p>
+
+<p>Separar la información por columnas y luego mandar esas columnas a diferentes tablas ayuda a que el almacenamiento sea mas eficiente y hace que la lectura de datos sea más fácil al operar con unidades de datos mas pequeñas.</p>
+
+<p>Existen multiples reglas de diseño de bases de datos para la normalización y se les conoce como <strong>Forma Normal</strong>, dependiendo de los objetivos de la base de datos se pueden aplicar unas u otras reglas y aunque no siempre es necesario aplicarlas todas (ya  que muchas veces convendrá tener campos sin normalizar) se recomienda estudiar estas reglas para poder aplicarlas en lo posible.</p>
+
+<h2>Relacionando tablas</h2>
+
+<p>Las bases de datos relacionales nos permiten realizar consultas sobre mas de una tabla al mismo tiempo, juntando varias de ellas como si se tratase de una sola, permitiendo en una sola operación de lectura obtener registros con campos que proceden de diferentes tablas.</p>
+
+<p>Operar sobre conjuntos de multiples tablas relacionadas entre si es lo que le da el nombre a las bases de datos relacionales, y es el mecanismo inverso a la <strong>normalización</strong>.</p>
+
+<p>Postgres tiene varias formas de relacionar tablas, y a continuación veremos las principales, pero para ello partiremos de un conjunto de datos de prueba:</p>
+
+<table>
+	<caption>Tabla de productos</caption>
+	<tr>
+		<th>Productos</th>
+		<th>Atributos</th>
+	</tr>
+	<tr>
+		<td>Camisa</td>
+		<td>
+			<table>
+				<tr>
+					<th>Colores:</th>
+					<td>Rojo, Verde, Azul</td>
+				</tr>
+				<tr>
+					<th>Tamaños</th>
+					<td>S, M, L, XL</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>Short</td>
+		<td>
+			<table>
+				<tr>
+					<th>Colores:</th>
+					<td>Gris, Negro, Azul</td>
+				</tr>
+				<tr>
+					<th>Tamaños</th>
+					<td>M, L, XL</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+<p>Partiendo de esta lista de productos y sus atributos se construyen las siguientes tablas de base de datos:</p>
+
+<table>
+	<tr>
+		<th>#</th>
+		<th>Productos</th>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>Playera</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>Suéter</td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<th>#</th>
+		<th>Colores</th>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>Rojo</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>Verde</td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td>Azul</td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>Gris</td>
+	</tr>
+	<tr>
+		<td>5</td>
+		<td>Negro</td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<th>#</th>
+		<th>Tamaños</th>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>S</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>M</td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td>L</td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>XL</td>
+	</tr>
+</table>
+
+<pre><code>--Tabla para productos
+create table products(
+	product_id serial,
+	product_name varchar(100) not null
+);
+
+-Tabla para colores
+create table colors(
+	color_id serial,
+	color_name varchar(100) not null
+);
+
+-Tabla para tamaños
+create table sizes(
+	size_id serial,
+	size_name varchar(100) not null
+);</code></pre>
+
+<p>Usando estas tablas SQL vamos a explicar las relaciones.</p>
+
+<h3>Cross Join</h3>
+
+<p>Relacionar dos tablas cualquiera mediante <strong>CROSS JOIN</strong> nos permite obtener una combinación de ellas, dando como resultado una operación matemática llamada producto cartesiano, las tablas ni siquiera tienen que estar directamente relacionadas.</p>
+
+<pre><code>select color_name, size_name 
+from colors
+cross join sizes</code></pre>
+
+<h3>Inner Join</h3>
+
+<p>Relacionar tablas mediante INNER JOIN permite devolver solo las filas que tienen coincidencias en ambas tablas.</p>
+
+<h3>Left Join</h3>
+
+<p>Usando la relación de tablas tipo <strong>LEFT JOIN</strong> nos devuelve todas las filas de la tabla de la izquierda, y las filas coincidentes de la tabla de la derecha y si no hay coincidencia, las filas de la tabla de la derecha tendrán valores NULL.</p>
+
+<h3>Right Join</h3>
+
+<p>usar <strong>RIGHT JOIN</strong> para juntar tablas devuelve todas las filas de la tabla de la derecha, y las filas coincidentes de la tabla de la izquierda, si no hay coincidencia, las filas de la tabla de la izquierda tendrán valores NULL.</p>
+
+<h3>Full Join</h3>
+
+<p>Relacionar tablas mediante <strong>FULL JOIN</strong> devuelve todas las filas del conjunto de tablas con el que se esta operando.</p>
+
+<p>Las filas que no tienen coincidencias en cualquiera de las tablas también se verán con valores NULL.</p>
