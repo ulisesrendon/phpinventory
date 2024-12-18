@@ -147,9 +147,9 @@ DROP DATABASE nombre_base_datos;</code></pre>
 
 <h2>Lectura y Escritura de Datos en Postgres con SQL</h2>
 
-<h3>Operaciones de Escritura</h3>
+<h3>Operación de Escritura</h3>
 
-<p>Para insertar datos en una tabla de PostgreSQL, se utiliza la instrucción <strong>INSERT INTO</strong>. Esta instrucción permite agregar una nueva fila a una tabla específica, ejemplo:</p>
+<p>Para insertar y almacenar datos en una tabla de PostgreSQL, se utiliza la instrucción <strong>INSERT INTO</strong>. Esta instrucción permite agregar una nueva fila a una tabla específica, ejemplo:</p>
 
 <pre><code>INSERT INTO inventory (name, stock, active)
 VALUES ('Pasta dental', 3, true);</code></pre>
@@ -159,5 +159,19 @@ VALUES ('Pasta dental', 3, true);</code></pre>
 <p>Para recuperar datos de una tabla de PostgreSQL, se utiliza la instrucción <strong>SELECT</strong>. Esta instrucción permite seleccionar una o más columnas de una o más filas en una tabla específica.</p>
 
 <pre><code>SELECT id, name, stock
-FROM inventory
-</code></pre>
+FROM inventory</code></pre>
+
+<h3>Operaciones de actualización</h3>
+
+<p>Para actualizar datos en una tabla de PostgreSQL, se utiliza la instrucción <strong>UPDATE</strong>. Esta instrucción permite modificar los valores de una o más columnas de una o más filas en una tabla específica, ejemplo:</p>
+
+<pre><code>UPDATE inventory
+SET stock = 9
+WHERE name = 'Pasta dental';</code></pre>
+
+<h3>Operaciones de Borrado</h3>
+
+<p>Para borrar datos de una tabla de PostgreSQL, se utiliza la instrucción <strong>DELETE</strong>. Esta instrucción permite eliminar una o más filas de una tabla específica, ejemplo: </p>
+
+<pre><code>DELETE FROM inventory
+WHERE name = 'Pasta dental';</code></pre>
