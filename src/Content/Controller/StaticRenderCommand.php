@@ -44,20 +44,21 @@ class StaticRenderCommand
         foreach ($Contents as $Page) {
 
             $Content = $ContentRepo->getContentByPath($Page->path);
-            $Content->nodes = $ContentRepo->getContentNodes($Content->id);
 
+            $ContentNodes = $ContentRepo->getContentNodes($Content->id);
             $HyperRender = new HyperItemsRender;
-            foreach ($Content->nodes as $item) {
+            foreach ($ContentNodes as $item) {
                 $HyperRender->addNode(
                     id: $item->id,
                     node: new HyperNode(
                         id: $item->id,
                         value: $item->value,
                         properties: $item->properties,
-                        type: $item->type,
+                        type: $item->type ?? 'default',
                         parent: $item->parent,
                         RenderEngine: new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']),
                         context: [
+                            'Content' => $Content,
                             'Tree' => $HyperRender,
                             'Repo' => $ContentRepo,
                             'Config' => $SiteConfig,

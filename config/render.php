@@ -1,17 +1,18 @@
 <?php
 
-use Stradow\Framework\Render\Block\CollectionBlock;
-use Stradow\Framework\Render\Block\ContainerBlock;
+use Stradow\Framework\Render\Block\ImgBlock;
+use Stradow\Framework\Render\Block\HtmlBlock;
+use Stradow\Framework\Render\Block\ItemBlock;
+use Stradow\Framework\Render\Block\ListBlock;
+use Stradow\Framework\Render\Block\TextBlock;
+use Stradow\Framework\Render\Block\TableBlock;
 use Stradow\Framework\Render\Block\ContentBlock;
 use Stradow\Framework\Render\Block\DefaultBlock;
 use Stradow\Framework\Render\Block\HeadingBlock;
-use Stradow\Framework\Render\Block\HtmlBlock;
-use Stradow\Framework\Render\Block\ImgBlock;
-use Stradow\Framework\Render\Block\ItemBlock;
-use Stradow\Framework\Render\Block\ListBlock;
+use Stradow\Framework\Render\Block\ContainerBlock;
 use Stradow\Framework\Render\Block\PlainCodeBlock;
-use Stradow\Framework\Render\Block\TableBlock;
-use Stradow\Framework\Render\Block\TextBlock;
+use Stradow\Framework\Render\Block\CollectionBlock;
+use Stradow\Framework\Render\Block\ArticlePrevNextBlock;
 
 return [
     'default' => DefaultBlock::class,
@@ -35,4 +36,5 @@ return [
     'collection' => CollectionBlock::class,
     'content' => ContentBlock::class,
     'html' => HtmlBlock::class,
+    'prev-next-links' => ArticlePrevNextBlock::class,
 ];

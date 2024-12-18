@@ -1,0 +1,163 @@
+<h1>Postgres SQL</h1>
+
+<p>PostgreSQL, comúnmente conocido como Postgres, es uno de los sistemas de gestión de bases de datos relacionales más potentes y populares del mundo.</p>
+
+<p>Este sistema de código abierto combina la robustez de SQL con características avanzadas que lo hacen ideal tanto para aplicaciones pequeñas como para sistemas empresariales de gran escala.</p>
+
+<h2>Tipos de datos</h2>
+
+<p>Para poder almacenar y recuperar datos de forma ordenada y eficiente en una base de datos relacional como Postgres los datos se organizan en tablas, donde cada fila es un registro diferente y las columnas separan cada campo de ese registro.</p>
+
+<p>A cada campo se le asigna un tipo de dato en concreto para poder realizar operaciones de forma eficiente con ese dato, y esas operaciones varían dependiendo de si se tienen datos de tipo texto, de tipo numérico, de tipo fecha, etc.</p>
+
+<p>Con datos numéricos podemos hacer todo tipo de operaciones aritméticas e incluso las bases de datos nos proporcionan funcionalidades como las de poder calcular potencias, promedios, medias, redondeos, múltiplos, etc.</p>
+
+<p>Con textos podemos hacer comparaciones, búsquedas, ordenar de forma alfabética, etc.</p>
+
+<p>Con fechas podemos seleccionar datos por rangos, organizarlos por antigüedad, etc.</p>
+
+<h4>Tipos de datos en Postgres</h4>
+
+<table>
+	<tbody>
+		<tr>
+			<th>Tipo</th>
+			<th>Descripción</th>
+			<th>Ejemplo</th>
+		</tr>
+		<tr>
+			<td>INTEGER</td>
+			<td>Número entero de 4 bytes</td>
+			<td>42</td>
+		</tr>
+		<tr>
+			<td>BIGINT</td>
+			<td>Número entero de 8 bytes</td>
+			<td>9223372036854775807</td>
+		</tr>
+		<tr>
+			<td>SERIAL</td>
+			<td>Valor numérico autoincremental</td>
+			<td>Empieza en 1 y va sumando 1 por cada registro nuevo</td>
+		</tr>
+		<tr>
+			<td>NUMERIC/DECIMAL</td>
+			<td>Número decimal con dígitos fijos después del punto</td>
+			<td>123.45</td>
+		</tr>
+		<tr>
+			<td>VARCHAR(n)</td>
+			<td>Cadena de caracteres corta</td>
+			<td>texto corto</td>
+		</tr>
+		<tr>
+			<td>TEXT</td>
+			<td>Campo para textos extensos</td>
+			<td>Texto Largo: En un lugar de la mancha, de cuyo nombre no quiero
+				acordarme…</td>
+		</tr>
+		<tr>
+			<td>ENUM</td>
+			<td>Lista de valores para poder seleccionar</td>
+			<td>Pagado, No pagado, Pago rechazado</td>
+		</tr>
+		<tr>
+			<td>TIME</td>
+			<td>Hora</td>
+			<td>13:45:30</td>
+		</tr>
+		<tr>
+			<td>DATE</td>
+			<td>Fecha sin hora</td>
+			<td>2024-12-18</td>
+		</tr>
+		<tr>
+			<td>TIMESTAMP</td>
+			<td>Fecha y hora</td>
+			<td>2024-12-18 08:48:00</td>
+		</tr>
+		<tr>
+			<td>BOOLEAN</td>
+			<td>Valor verdadero/falso</td>
+			<td>true, false</td>
+		</tr>
+		<tr>
+			<td>BYTEA</td>
+			<td>Almacena datos en binario</td>
+			<td>Puede almacenar imágenes, video, o el contenido de cualquier archivo en
+				binario.</td>
+		</tr>
+		<tr>
+			<td>JSON</td>
+			<td>Datos en formato JSON</td>
+			<td>{&#x27;clave&#x27;: &#x27;valor&#x27;}</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2>Definición de datos DDL</h2>
+
+<p>En las bases de datos SQL existe el Lenguaje de Definición de Datos (DDL), con el cual podemos crear y modificar la estructura de nuestra base de datos, y lo usaremos para crear o eliminar las tablas y columnas donde vivirá nuestra información.</p>
+
+<h3>Crear una Base de Datos</h3>
+
+<p>Para crear una nueva base de datos en nuestro servidor Postgres usaremos el siguiente comando:</p>
+
+<pre><code>CREATE DATABASE nombre_base_datos;</code></pre>
+
+<h3>Crear una Tabla</h3>
+
+<p>Para crear una nueva tabla con sus columnas y tipos de datos también se usa el comando <strong>CREATE</strong>, y se indican los nombres de las estructuras, los tipos de datos y algunas propiedades extras para la tabla o campos.</p>
+
+<pre><code>CREATE TABLE inventory (
+	id SERIAL,
+	name VARCHAR(100) NOT NULL,
+	stock INTEGER NOT NULL DEFAULT 0,
+	weight DECIMAL(8,2) NOT NULL DEFAULT 0,
+	active BOOLEAN NOT NULL DEFAULT false,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+
+<p>Entre las propiedades extra que pueden ser asignadas a campos están las propiedades <strong>NOT NULL</strong> para indicar que el campo no se puede quedar sin ser llenado al agregar o modificar registros, la base de datos notificara de error y no permitirá guardar el registro hasta que se asigne un valor valido.</p>
+	
+<p>También tenemos la propiedad <strong>DEFAULT</strong> que nos permite indicarle un valor que la base de datos guardara por defecto si no se proporciona un valor al agregar nuevos registros.</p>
+
+<h3>Modificar una Tabla</h3>
+
+<p>Para agregar, modificar o eliminar columnas de una tabla existente se usa el comando <strong>ALTER</strong>.</p>
+
+<pre><code>-- Agregar una columna
+ALTER TABLE inventory ADD COLUMN description TEXT;
+
+-- Modificar una columna
+ALTER TABLE inventory ALTER COLUMN name TYPE VARCHAR(150);
+
+-- Eliminar una columna
+ALTER TABLE inventory DROP COLUMN weight;</code></pre>
+
+<h3>Eliminar objectos</h3>
+
+<p>Para eliminar tablas o bases de datos se usa el comando <strong>DROP</strong></p>
+
+<pre><code>-- Eliminar una tabla
+DROP TABLE inventory;
+
+-- Eliminar una base de datos
+DROP DATABASE nombre_base_datos;</code></pre>
+
+<h2>Lectura y Escritura de Datos en Postgres con SQL</h2>
+
+<h3>Operaciones de Escritura</h3>
+
+<p>Para insertar datos en una tabla de PostgreSQL, se utiliza la instrucción <strong>INSERT INTO</strong>. Esta instrucción permite agregar una nueva fila a una tabla específica, ejemplo:</p>
+
+<pre><code>INSERT INTO inventory (name, stock, active)
+VALUES ('Pasta dental', 3, true);</code></pre>
+
+<h3>Operaciones de Lectura</h3>
+
+<p>Para recuperar datos de una tabla de PostgreSQL, se utiliza la instrucción <strong>SELECT</strong>. Esta instrucción permite seleccionar una o más columnas de una o más filas en una tabla específica.</p>
+
+<pre><code>SELECT id, name, stock
+FROM inventory
+</code></pre>

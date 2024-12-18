@@ -42,13 +42,11 @@ class ContentController
             return Response::template(PUBLIC_DIR.'/404.html', 404);
         }
 
-        $Content->nodes = $this->ContentRepo->getContentNodes($Content->id);
-
         $SiteConfig = Container::get(Config::class);
-
+        
+        $ContentNodes = $this->ContentRepo->getContentNodes($Content->id);
         $HyperRender = new HyperItemsRender;
-
-        foreach ($Content->nodes as $item) {
+        foreach ($ContentNodes as $item) {
             $HyperRender->addNode(
                 id: $item->id,
                 node: new HyperNode(
@@ -59,6 +57,7 @@ class ContentController
                     parent: $item->parent,
                     RenderEngine: new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']),
                     context: [
+                        'Content' => $Content,
                         'Tree' => $HyperRender,
                         'Repo' => $this->ContentRepo,
                         'Config' => $SiteConfig,
