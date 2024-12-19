@@ -13,6 +13,7 @@
     -[api] optimize node system upsert query
     -[block] create block: automatic breadcrumbs 
     -[block] create block: table of contents 
+    -[block] create block: article tags/categories
     
     -[block] create block: multi-collection 
     -[block] create block: multidimensional-content listing

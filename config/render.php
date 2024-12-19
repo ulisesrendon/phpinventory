@@ -11,6 +11,7 @@ use Stradow\Framework\Render\Block\DefaultBlock;
 use Stradow\Framework\Render\Block\HeadingBlock;
 use Stradow\Framework\Render\Block\ContainerBlock;
 use Stradow\Framework\Render\Block\PlainCodeBlock;
+use Stradow\Framework\Render\Block\BreadCrumbBlock;
 use Stradow\Framework\Render\Block\CollectionBlock;
 use Stradow\Framework\Render\Block\ArticlePrevNextBlock;
 
@@ -37,4 +38,5 @@ return [
     'content' => ContentBlock::class,
     'html' => HtmlBlock::class,
     'prev-next-links' => ArticlePrevNextBlock::class,
+    'breadcrumb' => BreadCrumbBlock::class,
 ];
