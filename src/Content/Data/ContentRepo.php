@@ -291,4 +291,30 @@ class ContentRepo
 
         return (bool) $result;
     }
+
+    public function getContentBranchRelatedNodes(string $id, string $direction = 'asc'): array
+    {
+        $directions = [
+            'asc' => 'b.id = a.parent',
+            'desc' => 'b.parent = a.id',
+        ];
+
+        $selectedDIrection = $directions[strtolower($direction)] ?? $directions['asc'];
+
+        return $this->DataBaseAccess->query(
+            query: "WITH RECURSIVE related 
+                AS (
+                    SELECT id, parent, path, title, properties, type, weight
+                    FROM contents
+                    WHERE id = :id and active is true
+                    UNION ALL
+                    SELECT b.id, b.parent, b.path, b.title, b.properties, b.type, b.weight
+                    FROM contents b
+                    INNER JOIN related a ON $selectedDIrection
+                )
+                SELECT * FROM related order by weight;
+            ",
+            params: ['id' => $id],
+        );
+    }
 }

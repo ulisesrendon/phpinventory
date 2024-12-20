@@ -30,15 +30,15 @@ class ArticlePrevNextBlock implements RendereableInterface
         $ContentId = $Context->getExtra('Content')?->id;
 
         $actualIndex = null;
-        foreach($Contents as $k => $Content){
-            if($Content->id == $ContentId){
+        foreach ($Contents as $k => $Content) {
+            if ($Content->id == $ContentId) {
                 $actualIndex = $k;
                 break;
             }
         }
 
-        $PrevContent = $Contents[$actualIndex-1] ?? null;
-        $NextContent = $Contents[$actualIndex+1] ?? null;
+        $PrevContent = $Contents[$actualIndex - 1] ?? null;
+        $NextContent = $Contents[$actualIndex + 1] ?? null;
         $ActualContent = $Contents[$actualIndex] ?? null;
 
         $template = $Context->getProperties('template') ?? 'templates/ArticlePrevNextBlock.template.php';

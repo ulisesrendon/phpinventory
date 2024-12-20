@@ -20,20 +20,50 @@ class BreadCrumbBlock implements RendereableInterface
          */
         $Config = $Context->getExtra('Config');
 
-        $CollectionPath = [
-            "<a href=\"{$Config->get('site_url')}/{$Context->getExtra('Content')->path}\">Collection 1</a>",
-            "<a href=\"{$Config->get('site_url')}/{$Context->getExtra('Content')->path}\">Collection 2</a>",
-        ];
+        $AncestorNodes = $ContentRepo->getContentBranchRelatedNodes($Context->getExtra('Content')->id);
+
+        $nodeMap = [];
+        foreach ($AncestorNodes as $k => $Node) {
+            $nodeMap[$Node->id] = $Node;
+        }
+
+        $NodeList = [];
+        foreach ($nodeMap as $k => $Node) {
+            $nodeMap[$k]->next ??= null;
+            if (isset($nodeMap[$Node->parent])) {
+                $nodeMap[$Node->parent]->next = $Node;
+            } else {
+                $NodeList = $Node;
+            }
+        }
 
         $BreadCrumb = [
-            "<a href=\"{$Config->get('site_url')}/{$Context->getExtra('Content')->path}\">Inicio</a>",
-            ...$CollectionPath,
-            "<span>{$Context->getExtra('Content')->title}</span>",
+            (object) [
+                'url' => $Config->get('site_url'),
+                'anchor' => $Context->getValue() ?? 'Index',
+                'isLast' => false,
+            ],
         ];
 
-        dd($BreadCrumb);
+        $actualNode = $NodeList;
+        while (true) {
+            $Item = (object) [
+                'url' => "{$Config->get('site_url')}/{$actualNode->path}",
+                'anchor' => $actualNode->title,
+                'isLast' => false,
+            ];
 
-        $template = $Context->getProperties('template') ?? 'templates/ArticlePrevNextBlock.template.php';
+            $BreadCrumb[] = $Item;
+
+            if (is_null($actualNode->next)) {
+                $Item->isLast = true;
+                break;
+            }
+
+            $actualNode = $actualNode->next;
+        }
+
+        $template = $Context->getProperties('template') ?? 'templates/breadcrumb.template.php';
 
         return (string) new TemplateRender(CONTENT_DIR."/$template", [
             'BreadCrumb' => $BreadCrumb,

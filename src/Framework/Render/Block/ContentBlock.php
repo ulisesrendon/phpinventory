@@ -3,9 +3,9 @@
 namespace Stradow\Framework\Render\Block;
 
 use Stradow\Framework\Config;
-use Stradow\Framework\Render\HyperNode;
-use Stradow\Framework\Render\HyperItemsRender;
 use Stradow\Framework\DependencyResolver\Container;
+use Stradow\Framework\Render\HyperItemsRender;
+use Stradow\Framework\Render\HyperNode;
 use Stradow\Framework\Render\Interface\NodeContextInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 

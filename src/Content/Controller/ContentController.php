@@ -43,7 +43,7 @@ class ContentController
         }
 
         $SiteConfig = Container::get(Config::class);
-        
+
         $ContentNodes = $this->ContentRepo->getContentNodes($Content->id);
         $HyperRender = new HyperItemsRender;
         foreach ($ContentNodes as $item) {
