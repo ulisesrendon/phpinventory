@@ -11,13 +11,13 @@ class HeadingBlock implements RendereableInterface
     {
         $tag = $Context->getProperties('type');
 
-        $heading = $Context->getValue();
+        $heading = $Context->getValue() ?? '';
         $IdFragment = explode('-', $Context->getId())[0] ?? '';
 
         return "<$tag name=\"{$this->getSlug($heading)}-$IdFragment\">{$heading}</$tag>";
     }
 
-    public static function getSlug($string)
+    public static function getSlug(string $string): string
     {
         $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $string);
 

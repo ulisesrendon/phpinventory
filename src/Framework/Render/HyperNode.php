@@ -20,6 +20,8 @@ class HyperNode implements NestableInterface, NodeContextInterface
 
     private array $properties = [];
 
+    private HyperItemsRender $Root;
+
     private readonly array $context;
 
     public function __construct(
@@ -118,4 +120,15 @@ class HyperNode implements NestableInterface, NodeContextInterface
     {
         return is_null($key) ? $this->context : $this->context[$key] ?? null;
     }
+
+    public function getRoot(): HyperItemsRender
+    {
+        return $this->Root;
+    }
+
+    public function setRoot(HyperItemsRender $Root)
+    {
+        $this->Root = $Root;
+    }
+
 }

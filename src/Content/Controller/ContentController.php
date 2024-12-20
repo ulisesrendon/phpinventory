@@ -47,6 +47,20 @@ class ContentController
         $ContentNodes = $this->ContentRepo->getContentNodes($Content->id);
         $HyperRender = new HyperItemsRender;
         foreach ($ContentNodes as $item) {
+            $Node = new HyperNode(
+                id: $item->id,
+                value: $item->value,
+                properties: $item->properties,
+                type: $item->type ?? 'default',
+                parent: $item->parent,
+                RenderEngine: new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']),
+                context: [
+                    'Content' => $Content,
+                    'Repo' => $this->ContentRepo,
+                    'Config' => $SiteConfig,
+                ],
+            );
+            $Node->setRoot($HyperRender);
             $HyperRender->addNode(
                 id: $item->id,
                 node: new HyperNode(

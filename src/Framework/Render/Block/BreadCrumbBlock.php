@@ -22,6 +22,14 @@ class BreadCrumbBlock implements RendereableInterface
 
         $AncestorNodes = $ContentRepo->getContentBranchRelatedNodes($Context->getExtra('Content')->id);
 
+        $BreadCrumb = [
+            (object) [
+                'url' => $Config->get('site_url'),
+                'anchor' => $Context->getValue() ?? 'Index',
+                'isLast' => false,
+            ],
+        ];
+
         $nodeMap = [];
         foreach ($AncestorNodes as $k => $Node) {
             $nodeMap[$Node->id] = $Node;
@@ -36,14 +44,6 @@ class BreadCrumbBlock implements RendereableInterface
                 $NodeList = $Node;
             }
         }
-
-        $BreadCrumb = [
-            (object) [
-                'url' => $Config->get('site_url'),
-                'anchor' => $Context->getValue() ?? 'Index',
-                'isLast' => false,
-            ],
-        ];
 
         $actualNode = $NodeList;
         while (true) {

@@ -2,6 +2,8 @@
 
 namespace Stradow\Framework\Render\Interface;
 
+use Stradow\Framework\Render\HyperItemsRender;
+
 interface NodeContextInterface
 {
     public function getValue();
@@ -18,4 +20,8 @@ interface NodeContextInterface
     public function getProperties(?string $key = null): mixed;
 
     public function getExtra(?string $key = null): mixed;
+
+    public function setRoot(HyperItemsRender $Root);
+    
+    public function getRoot(): HyperItemsRender;
 }
