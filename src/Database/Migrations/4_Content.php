@@ -59,7 +59,7 @@ $DataBaseAccess->command(<<<'SQL'
         ('cd101622-dedd-4f79-9607-8d15254b4106','index','Inicio','{}',true,'page'),
         ('4949f55d-7162-432e-8962-1597696ef4ec','acercade','Página acerca de','{}',true,'page'),
         ('6eee6539-7743-4b18-b70a-b9121d801783','contacto','Página de contacto','{}',true,'page'),
-        ('d495aefe-2d01-4b8d-995d-af5a377f3f4b','sitemap.xml','Sitemap XML','{"template": "templates/sitemap.template.xml","prettify": false}',true,'xml'),
+        ('d495aefe-2d01-4b8d-995d-af5a377f3f4b','sitemap.xml','Sitemap XML','{"template": "templates/sitemap.template.php","prettify": false}',true,'xml'),
         ('56b4405d-0a99-4c61-8ce1-56bb94705ee3','blog/index','Blog','{}',true,'blog'),
         ('df056abc-dca6-41b1-9662-6b3b47e583ca','blog/article-1','Lorem ipsum','{}',true,'blog'),
         ('ee9c86f2-8e07-4168-9ab2-e04f3d3ebf09','blog/article-2','Lorem ipsum','{}',true,'blog'),
