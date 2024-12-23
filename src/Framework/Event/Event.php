@@ -3,7 +3,7 @@
 namespace Stradow\Framework\Event;
 
 use Stradow\Framework\DependencyResolver\Container;
-use Stradow\Framework\Event\Interfaces\StoppableEventInterface;
+use Stradow\Framework\Event\Interface\StoppableEventInterface;
 
 class Event
 {

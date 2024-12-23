@@ -2,7 +2,7 @@
 
 namespace Stradow\Framework\Event;
 
-use Stradow\Framework\Event\Interfaces\ListenerProviderInterface;
+use Stradow\Framework\Event\Interface\ListenerProviderInterface;
 
 class ListenerProvider implements ListenerProviderInterface
 {

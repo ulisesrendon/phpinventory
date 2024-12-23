@@ -1,6 +1,6 @@
 <?php
 
-namespace Stradow\Framework\Event\Interfaces;
+namespace Stradow\Framework\Event\Interface;
 
 /**
  * Mapper from an event to the listeners that are applicable to that event.

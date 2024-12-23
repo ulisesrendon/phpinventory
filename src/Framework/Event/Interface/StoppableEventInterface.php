@@ -1,6 +1,6 @@
 <?php
 
-namespace Stradow\Framework\Event\Interfaces;
+namespace Stradow\Framework\Event\Interface;
 
 /**
  * An Event whose processing may be interrupted when the event has been handled.
