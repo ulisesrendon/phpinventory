@@ -1,13 +1,12 @@
 <?php
+
 namespace Stradow\Framework\Render;
 
-use Stradow\Framework\Render\HyperNode;
-use Stradow\Framework\Render\HyperItemsRender;
 use Stradow\Framework\Render\Data\ContentState;
-use Stradow\Framework\Render\Interface\RepoInterface;
+use Stradow\Framework\Render\Interface\ContentStateInterface;
 use Stradow\Framework\Render\Interface\NestableInterface;
 use Stradow\Framework\Render\Interface\NodeStateInterface;
-use Stradow\Framework\Render\Interface\ContentStateInterface;
+use Stradow\Framework\Render\Interface\RepoInterface;
 
 final class HyperRenderApplication
 {
@@ -26,31 +25,25 @@ final class HyperRenderApplication
     private array $renderConfig;
 
     /**
-     * Summary of __construct
-     * @param scalar $id
-     * @param RepoInterface $Repo
-     * @param array $config
-     * @param array $renderConfig
-     * @param object|null $Content
-     * @param bool $renderLayout
+     *
+     * @param  scalar  $id
+     *
      * @throws \DomainException
      */
     public function __construct(
         int|float|string $id,
         RepoInterface $Repo,
         array $config,
-        array $renderConfig,
-        object|null $Content = null,
+        array $renderConfig, ?object $Content = null,
         bool $renderLayout = true,
-    )
-    {
+    ) {
         $this->HyperRender = new HyperItemsRender;
         $this->Repo = $Repo;
         $this->renderConfig = $renderConfig;
         $this->config = $config;
-        
+
         $this->Content = $Content ?? $this->Repo->getContent($id);
-        
+
         if (empty($this->Content)) {
             throw new \DomainException("Content not found ($id)");
         }
@@ -60,8 +53,8 @@ final class HyperRenderApplication
         $this->ContentState = $this->contentStateBuild();
 
         if (
-            $renderLayout 
-            && isset($this->Content->properties->layout) 
+            $renderLayout
+            && isset($this->Content->properties->layout)
             && isset($this->Content->properties->layoutContainer)
         ) {
             $this->ContentNodes = $this->addLayoutNodes($this->ContentNodes);

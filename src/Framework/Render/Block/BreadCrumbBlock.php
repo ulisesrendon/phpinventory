@@ -20,7 +20,7 @@ class BreadCrumbBlock implements RendereableInterface
             $this->BreadCrumbItemFactory(
                 url: $Content->getConfig('site_url'),
                 anchor: $State->getValue() ?? 'Index',
-            )
+            ),
         ];
 
         $nodeMap = [];
@@ -66,20 +66,14 @@ class BreadCrumbBlock implements RendereableInterface
         string $url,
         string $anchor,
         bool $isLast = false,
-    ): object
-    {
-        return new class(
-            $url,
-            $anchor,
-            $isLast,
-        ){
+    ): object {
+        return new class($url, $anchor, $isLast)
+        {
             public function __construct(
                 public string $url,
                 public string $anchor,
                 public bool $isLast,
-            ){
-
-            }
+            ) {}
         };
     }
 }

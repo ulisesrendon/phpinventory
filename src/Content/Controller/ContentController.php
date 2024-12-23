@@ -2,18 +2,18 @@
 
 namespace Stradow\Content\Controller;
 
-use PDO;
-use Stradow\Framework\Config;
-use Stradow\Framework\Validator;
+use Neuralpin\HTTPRouter\Interface\ResponseState;
+use Neuralpin\HTTPRouter\RequestData as Request;
 use Neuralpin\HTTPRouter\Response;
-use Stradow\Framework\Event\Event;
+use PDO;
 use Stradow\Content\Data\ContentRepo;
 use Stradow\Content\Event\ContentUpdated;
+use Stradow\Framework\Config;
 use Stradow\Framework\Database\DataBaseAccess;
-use Neuralpin\HTTPRouter\RequestData as Request;
-use Neuralpin\HTTPRouter\Interface\ResponseState;
 use Stradow\Framework\DependencyResolver\Container;
+use Stradow\Framework\Event\Event;
 use Stradow\Framework\Render\HyperRenderApplication;
+use Stradow\Framework\Validator;
 
 class ContentController
 {

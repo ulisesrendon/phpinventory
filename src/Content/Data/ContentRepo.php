@@ -2,10 +2,10 @@
 
 namespace Stradow\Content\Data;
 
-use Stradow\Framework\Validator;
-use Stradow\Framework\Database\UpsertHelper;
 use Stradow\Framework\Database\DataBaseAccess;
+use Stradow\Framework\Database\UpsertHelper;
 use Stradow\Framework\Render\Interface\RepoInterface;
+use Stradow\Framework\Validator;
 
 class ContentRepo implements RepoInterface
 {
@@ -56,7 +56,7 @@ class ContentRepo implements RepoInterface
     {
         $items = $this->DataBaseAccess->query($this->getContentNodesQuery('where content = :id'), ['id' => $content]);
 
-        if(empty($items)){
+        if (empty($items)) {
             return [];
         }
 

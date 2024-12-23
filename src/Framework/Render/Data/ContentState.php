@@ -7,6 +7,7 @@ use Stradow\Framework\Render\Interface\ContentStateInterface;
 class ContentState implements ContentStateInterface
 {
     private array $config = [];
+
     private array $renderConfig = [];
 
     private $id;

@@ -2,13 +2,10 @@
 
 namespace Stradow\Content\Controller;
 
-use Stradow\Framework\Config;
-use Stradow\Content\Data\ContentRepo;
-use Stradow\Framework\Render\HyperNode;
-use Stradow\Framework\Database\DataBaseAccess;
-use Stradow\Framework\Render\HyperItemsRender;
 use Neuralpin\HTTPRouter\Helper\TemplateRender;
-use Stradow\Framework\Render\Data\ContentState;
+use Stradow\Content\Data\ContentRepo;
+use Stradow\Framework\Config;
+use Stradow\Framework\Database\DataBaseAccess;
 use Stradow\Framework\DependencyResolver\Container;
 use Stradow\Framework\Render\HyperRenderApplication;
 
