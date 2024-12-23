@@ -2,11 +2,12 @@
 
 namespace Stradow\Framework\Render;
 
+use Stradow\Framework\Render\Interface\ContentStateInterface;
 use Stradow\Framework\Render\Interface\NestableInterface;
-use Stradow\Framework\Render\Interface\NodeContextInterface;
+use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 
-class HyperNode implements NestableInterface, NodeContextInterface
+class HyperNode implements NestableInterface, NodeStateInterface
 {
     private RendereableInterface $RenderEngine;
 
@@ -20,9 +21,7 @@ class HyperNode implements NestableInterface, NodeContextInterface
 
     private array $properties = [];
 
-    private HyperItemsRender $Root;
-
-    private readonly array $context;
+    private ContentStateInterface $Content;
 
     public function __construct(
         string|int|float $id,
@@ -31,7 +30,7 @@ class HyperNode implements NestableInterface, NodeContextInterface
         string|int|float $type,
         null|string|int|float $parent,
         RendereableInterface $RenderEngine,
-        array $context = [],
+        ContentStateInterface $Content,
     ) {
         $this->setId($id);
         $this->setValue($value);
@@ -42,8 +41,7 @@ class HyperNode implements NestableInterface, NodeContextInterface
         ]);
         $this->setParent($parent);
         $this->setRenderEngine($RenderEngine);
-
-        $this->context = $context;
+        $this->Content = $Content;
     }
 
     public function setValue(mixed $value)
@@ -68,7 +66,7 @@ class HyperNode implements NestableInterface, NodeContextInterface
 
     public function __toString(): string
     {
-        return $this->RenderEngine->render($this);
+        return $this->RenderEngine->render($this, $this->Content);
     }
 
     public function setId(mixed $id)
@@ -106,29 +104,18 @@ class HyperNode implements NestableInterface, NodeContextInterface
         $this->properties = $properties;
     }
 
-    // public function setProperty($property)
-    // {
-    //     $this->properties[] = $property;
-    // }
-
-    public function getProperties(?string $key = null): mixed
+    public function setProperty(string $name, mixed $value)
     {
-        return is_null($key) ? $this->properties : $this->properties[$key] ?? null;
+        $this->properties[$name] = $value;
     }
 
-    public function getExtra(?string $key = null): mixed
+    public function getProperty(string $key): mixed
     {
-        return is_null($key) ? $this->context : $this->context[$key] ?? null;
+        return isset($this->properties[$key]) ? $this->properties[$key] ?? null : null;
     }
 
-    public function getRoot(): HyperItemsRender
+    public function unsetProperty($name)
     {
-        return $this->Root;
+        unset($this->properties[$name]);
     }
-
-    public function setRoot(HyperItemsRender $Root)
-    {
-        $this->Root = $Root;
-    }
-
 }

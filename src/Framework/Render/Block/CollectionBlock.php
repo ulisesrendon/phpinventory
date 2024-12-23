@@ -3,42 +3,36 @@
 namespace Stradow\Framework\Render\Block;
 
 use Neuralpin\HTTPRouter\Helper\TemplateRender;
-use Stradow\Framework\Render\Interface\NodeContextInterface;
+use Stradow\Framework\Render\Interface\ContentStateInterface;
+use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 
 class CollectionBlock implements RendereableInterface
 {
-    public function render(NodeContextInterface $Context): string
-    {
-        /**
-         * @var \Stradow\Content\Data\ContentRepo $ContentRepo
-         */
-        $ContentRepo = $Context->getExtra('Repo');
+    public function render(
+        NodeStateInterface $State,
+        ContentStateInterface $Content,
+    ): string {
 
-        /**
-         * @var \Stradow\Framework\Config $Config
-         */
-        $Config = $Context->getExtra('Config');
+        $CollectionId = $State->getValue();
 
-        $CollectionId = $Context->getValue();
-
-        $Collection = $ContentRepo?->getCollection($CollectionId);
+        $Collection = $Content->getRepo()?->getCollection($CollectionId);
 
         if (is_null($Collection)) {
             $Collection = new \stdClass;
             $Collection->Contents = [];
         } else {
-            $Collection->Contents = $ContentRepo->getCollectionContents(
+            $Collection->Contents = $Content->getRepo()->getCollectionContents(
                 collectionId: $CollectionId,
-                limit: $Context->getProperties('limit'),
-                offset: $Context->getProperties('offset'),
-                orderBy: $Context->getProperties('orderBy'),
-                orderDirection: $Context->getProperties('orderDirection'),
-                siteUrl: $Config->get('site_url'),
+                limit: $State->getProperty('limit'),
+                offset: $State->getProperty('offset'),
+                orderBy: $State->getProperty('orderBy'),
+                orderDirection: $State->getProperty('orderDirection'),
+                siteUrl: $Content->getConfig('site_url'),
             );
         }
 
-        $template = $Context->getProperties('template') ?? $Collection?->properties?->template ?? 'templates/collection.template.php';
+        $template = $State->getProperty('template') ?? $Collection?->properties?->template ?? 'templates/collection.template.php';
 
         return (string) new TemplateRender(CONTENT_DIR."/$template", [
             'Collection' => $Collection,

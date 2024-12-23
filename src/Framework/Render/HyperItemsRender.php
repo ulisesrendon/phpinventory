@@ -3,19 +3,19 @@
 namespace Stradow\Framework\Render;
 
 use Stradow\Framework\Render\Interface\NestableInterface;
-use Stradow\Framework\Render\Interface\NodeContextInterface;
+use Stradow\Framework\Render\Interface\NodeStateInterface;
 
 class HyperItemsRender
 {
     /**
      * Summary of nodes
      *
-     * @var array<scalar,NestableInterface&NodeContextInterface>
+     * @var array<scalar,NestableInterface&NodeStateInterface>
      */
     private array $nodes = [];
 
     /**
-     * @param  NestableInterface&NodeContextInterface[]  $items
+     * @param  NestableInterface&NodeStateInterface[]  $items
      */
     public function __construct(
         array $items = [],
@@ -23,14 +23,14 @@ class HyperItemsRender
         $this->nodes = $this->mapGenerator($items);
     }
 
-    public function addNode(string|int|float $id, NestableInterface&NodeContextInterface $node)
+    public function addNode(NestableInterface&NodeStateInterface $Node)
     {
-        $this->nodes[$id] = $node;
+        $this->nodes[$Node->getId()] = $Node;
     }
 
     /**
-     * @param  NodeContextInterface[]  $items
-     * @return NodeContextInterface[]
+     * @param  NodeStateInterface[]  $items
+     * @return NodeStateInterface[]
      */
     protected function mapGenerator(array $items): array
     {
@@ -43,8 +43,8 @@ class HyperItemsRender
     }
 
     /**
-     * @param  NestableInterface&NodeContextInterface[]  $items
-     * @return NestableInterface&NodeContextInterface[]
+     * @param  NestableInterface&NodeStateInterface[]  $items
+     * @return NestableInterface&NodeStateInterface[]
      */
     protected function treeGenerator(array $items): array
     {

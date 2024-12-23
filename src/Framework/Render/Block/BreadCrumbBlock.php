@@ -3,29 +3,23 @@
 namespace Stradow\Framework\Render\Block;
 
 use Neuralpin\HTTPRouter\Helper\TemplateRender;
-use Stradow\Framework\Render\Interface\NodeContextInterface;
+use Stradow\Framework\Render\Interface\ContentStateInterface;
+use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 
 class BreadCrumbBlock implements RendereableInterface
 {
-    public function render(NodeContextInterface $Context): string
-    {
-        /**
-         * @var \Stradow\Content\Data\ContentRepo $ContentRepo
-         */
-        $ContentRepo = $Context->getExtra('Repo');
+    public function render(
+        NodeStateInterface $State,
+        ContentStateInterface $Content,
+    ): string {
 
-        /**
-         * @var \Stradow\Framework\Config $Config
-         */
-        $Config = $Context->getExtra('Config');
-
-        $AncestorNodes = $ContentRepo->getContentBranchRelatedNodes($Context->getExtra('Content')->id);
+        $AncestorNodes = $Content->getRepo()->getContentBranchRelatedNodes($Content->getId());
 
         $BreadCrumb = [
             (object) [
-                'url' => $Config->get('site_url'),
-                'anchor' => $Context->getValue() ?? 'Index',
+                'url' => $Content->getConfig('site_url'),
+                'anchor' => $State->getValue() ?? 'Index',
                 'isLast' => false,
             ],
         ];
@@ -48,7 +42,7 @@ class BreadCrumbBlock implements RendereableInterface
         $actualNode = $NodeList;
         while (true) {
             $Item = (object) [
-                'url' => "{$Config->get('site_url')}/{$actualNode->path}",
+                'url' => "{$Content->getConfig('site_url')}/{$actualNode->path}",
                 'anchor' => $actualNode->title,
                 'isLast' => false,
             ];
@@ -63,7 +57,7 @@ class BreadCrumbBlock implements RendereableInterface
             $actualNode = $actualNode->next;
         }
 
-        $template = $Context->getProperties('template') ?? 'templates/breadcrumb.template.php';
+        $template = $State->getProperty('template') ?? 'templates/breadcrumb.template.php';
 
         return (string) new TemplateRender(CONTENT_DIR."/$template", [
             'BreadCrumb' => $BreadCrumb,

@@ -2,16 +2,19 @@
 
 namespace Stradow\Framework\Render\Block;
 
-use Stradow\Framework\Render\Interface\NodeContextInterface;
+use Stradow\Framework\Render\Interface\ContentStateInterface;
+use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 
 class ContainerBlock implements RendereableInterface
 {
-    public function render(NodeContextInterface $Context): string
-    {
-        $content = array_reduce($Context->getChildren(), fn ($carry, $item) => $carry.$item);
+    public function render(
+        NodeStateInterface $State,
+        ContentStateInterface $Content,
+    ): string {
+        $content = array_reduce($State->getChildren(), fn ($carry, $item) => $carry.$item);
 
-        $tag = $Context->getProperties('tag') ?? 'div';
+        $tag = $State->getProperty('tag') ?? 'div';
 
         return "<$tag>$content</$tag>";
     }

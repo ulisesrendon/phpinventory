@@ -2,17 +2,20 @@
 
 namespace Stradow\Framework\Render\Block;
 
-use Stradow\Framework\Render\Interface\NodeContextInterface;
+use Stradow\Framework\Render\Interface\ContentStateInterface;
+use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 
 class HeadingBlock implements RendereableInterface
 {
-    public function render(NodeContextInterface $Context): string
-    {
-        $tag = $Context->getProperties('type');
+    public function render(
+        NodeStateInterface $State,
+        ContentStateInterface $Content,
+    ): string {
+        $tag = $State->getProperty('type');
 
-        $heading = $Context->getValue() ?? '';
-        $IdFragment = explode('-', $Context->getId())[0] ?? '';
+        $heading = $State->getValue() ?? '';
+        $IdFragment = explode('-', $State->getId())[0] ?? '';
 
         return "<$tag name=\"{$this->getSlug($heading)}-$IdFragment\">{$heading}</$tag>";
     }

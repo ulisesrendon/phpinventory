@@ -7,6 +7,7 @@ use Stradow\Content\Data\ContentRepo;
 use Stradow\Framework\Config;
 use Stradow\Framework\Database\DataBaseAccess;
 use Stradow\Framework\DependencyResolver\Container;
+use Stradow\Framework\Render\Data\ContentState;
 use Stradow\Framework\Render\HyperItemsRender;
 use Stradow\Framework\Render\HyperNode;
 
@@ -45,26 +46,28 @@ class StaticRenderCommand
 
             $Content = $ContentRepo->getContentByPath($Page->path);
 
-            $ContentNodes = $ContentRepo->getContentNodes($Content->id);
             $HyperRender = new HyperItemsRender;
-            foreach ($ContentNodes as $item) {
-                $HyperRender->addNode(
+            $ContentState = new ContentState(
+                id: $Content->id,
+                path: $Content->path,
+                title: $Content->title,
+                properties: $Content->properties,
+                active: $Content->active,
+                type: $Content->type,
+                Root: $HyperRender,
+                Repo: $ContentRepo,
+                config: $SiteConfig->get(),
+            );
+            foreach ($ContentRepo->getContentNodes($Content->id) as $item) {
+                $HyperRender->addNode(new HyperNode(
                     id: $item->id,
-                    node: new HyperNode(
-                        id: $item->id,
-                        value: $item->value,
-                        properties: $item->properties,
-                        type: $item->type ?? 'default',
-                        parent: $item->parent,
-                        RenderEngine: new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']),
-                        context: [
-                            'Content' => $Content,
-                            'Tree' => $HyperRender,
-                            'Repo' => $ContentRepo,
-                            'Config' => $SiteConfig,
-                        ],
-                    )
-                );
+                    value: $item->value,
+                    properties: $item->properties,
+                    type: $item->type ?? 'default',
+                    parent: $item->parent,
+                    RenderEngine: new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']),
+                    Content: $ContentState,
+                ));
             }
 
             $template = $Content?->properties?->template ?? 'templates/page.template.php';

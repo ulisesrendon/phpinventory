@@ -3,35 +3,26 @@
 namespace Stradow\Framework\Render\Block;
 
 use Neuralpin\HTTPRouter\Helper\TemplateRender;
-use Stradow\Framework\Render\Interface\NodeContextInterface;
+use Stradow\Framework\Render\Interface\ContentStateInterface;
+use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 
 class ArticlePrevNextBlock implements RendereableInterface
 {
-    public function render(NodeContextInterface $Context): string
-    {
-        /**
-         * @var \Stradow\Content\Data\ContentRepo $ContentRepo
-         */
-        $ContentRepo = $Context->getExtra('Repo');
-
-        /**
-         * @var \Stradow\Framework\Config $Config
-         */
-        $Config = $Context->getExtra('Config');
-
-        $Contents = $ContentRepo->getCollectionContents(
-            collectionId: $Context->getValue(),
-            orderBy: $Context->getProperties('orderBy'),
-            orderDirection: $Context->getProperties('orderDirection'),
-            siteUrl: $Config->get('site_url'),
+    public function render(
+        NodeStateInterface $State,
+        ContentStateInterface $Content,
+    ): string {
+        $Contents = $Content->getRepo()->getCollectionContents(
+            collectionId: $State->getValue(),
+            orderBy: $State->getProperty('orderBy'),
+            orderDirection: $State->getProperty('orderDirection'),
+            siteUrl: $Content->getConfig('site_url'),
         );
 
-        $ContentId = $Context->getExtra('Content')?->id;
-
         $actualIndex = null;
-        foreach ($Contents as $k => $Content) {
-            if ($Content->id == $ContentId) {
+        foreach ($Contents as $k => $Item) {
+            if ($Item->id == $Content->getId()) {
                 $actualIndex = $k;
                 break;
             }
@@ -41,9 +32,9 @@ class ArticlePrevNextBlock implements RendereableInterface
         $NextContent = $Contents[$actualIndex + 1] ?? null;
         $ActualContent = $Contents[$actualIndex] ?? null;
 
-        $template = $Context->getProperties('template') ?? 'templates/ArticlePrevNextBlock.template.php';
+        $template = $State->getProperty('template') ?? 'templates/ArticlePrevNextBlock.template.php';
 
-        return (string) new TemplateRender(CONTENT_DIR . "/$template", [
+        return (string) new TemplateRender(CONTENT_DIR."/$template", [
             'ActualContent' => $ActualContent,
             'PrevContent' => $ActualContent ? $PrevContent : null,
             'NextContent' => $ActualContent ? $NextContent : null,

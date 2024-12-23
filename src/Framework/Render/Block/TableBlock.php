@@ -2,33 +2,36 @@
 
 namespace Stradow\Framework\Render\Block;
 
-use Stradow\Framework\Render\Interface\NodeContextInterface;
+use Stradow\Framework\Render\Interface\ContentStateInterface;
+use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 
 class TableBlock implements RendereableInterface
 {
-    public function render(NodeContextInterface $Context): string
-    {
-        $type = $Context->getProperties('type');
+    public function render(
+        NodeStateInterface $State,
+        ContentStateInterface $Content,
+    ): string {
+        $type = $State->getProperty('type');
 
         $content = '';
 
         if ($type == 'table') {
             $tag = 'table';
-            foreach ($Context->getChildren() as $row) {
+            foreach ($State->getChildren() as $row) {
                 $content .= $row;
             }
         } elseif ($type == 'row') {
             $tag = 'tr';
-            foreach ($Context->getChildren() as $cell) {
+            foreach ($State->getChildren() as $cell) {
                 $content .= $cell;
             }
         } elseif ($type == 'cell') {
             $tag = 'td';
-            $content = $Context->getValue();
+            $content = $State->getValue();
         } elseif ($type == 'table-heading') {
             $tag = 'th';
-            $content = $Context->getValue();
+            $content = $State->getValue();
         }
 
         return "<{$tag}>{$content}</{$tag}>";
