@@ -8,10 +8,10 @@ use Stradow\Framework\Event\Interface\StoppableEventInterface;
 class Event
 {
     /**
-     * @template T
+     * @template T of object
      *
-     * @param  object<T>  $Event
-     * @return object<T>
+     * @param T $Event
+     * @return T
      */
     public static function dispatch(object $Event)
     {

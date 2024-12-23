@@ -9,26 +9,25 @@ use Stradow\Framework\DependencyResolver\Container;
 use Stradow\User\Data\UserCommand;
 use Stradow\User\Data\UserQuery;
 
-#[Attribute(Attribute::TARGET_CLASS_CONSTANT | Attribute::TARGET_PROPERTY)]
 class AuthController
 {
-    private readonly UserQuery $OrderLineQuery;
+    // private readonly UserQuery $OrderLineQuery;
 
-    private readonly UserCommand $OrderCommand;
+    // private readonly UserCommand $OrderCommand;
 
-    protected readonly DataBaseAccess $DataBaseAccess;
+    // protected readonly DataBaseAccess $DataBaseAccess;
 
-    public function __construct()
-    {
-        $this->DataBaseAccess = Container::get(DataBaseAccess::class);
-        $this->UserQuery = new UserQuery($this->DataBaseAccess);
-        $this->UserCommand = new UserCommand($this->DataBaseAccess);
-    }
+    // public function __construct()
+    // {
+    //     $this->DataBaseAccess = Container::get(DataBaseAccess::class);
+    //     $this->UserQuery = new UserQuery($this->DataBaseAccess);
+    //     $this->UserCommand = new UserCommand($this->DataBaseAccess);
+    // }
 
-    public function register(RequestData $Request)
-    {
-        return Response::json([
-            'status' => 'si',
-        ]);
-    }
+    // public function register(RequestData $Request)
+    // {
+    //     return Response::json([
+    //         'status' => 'si',
+    //     ]);
+    // }
 }

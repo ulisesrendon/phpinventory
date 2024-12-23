@@ -21,7 +21,7 @@ class ListenerProvider implements ListenerProviderInterface
     /**
      * Summary of getListenersForEvent
      *
-     * @template T
+     * @template T of object
      *
      * @param  T  $Event
      * @return iterable<callable>

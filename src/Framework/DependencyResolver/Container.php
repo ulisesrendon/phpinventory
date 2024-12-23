@@ -51,17 +51,13 @@ final class Container
     }
 
     /**
-     * Summary of add
-     *
-     * @template T
-     *
-     * @param  class-string  $className
-     * @param  object<T>  $instance
-     * @return object<T>
-     *
+     * @template T of object
+     * @param class-string<T> $className
+     * @param T $instance
+     * @return T
      * @throws ContainerException
      */
-    public static function add(string $className, object $instance)
+    public static function add(string $className, object $instance): object
     {
         if (is_null(self::$Instance)) {
             self::$Instance = new self;
