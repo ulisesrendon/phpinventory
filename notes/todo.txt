@@ -15,5 +15,6 @@
     -[block] create block: article tags/categories
     -[block] create block: multi-collection 
     -[block] create block: multidimensional-content listing
+    -[system] Render node attributes
 -Static render
     -Render multiple numbered pages

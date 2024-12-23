@@ -2,11 +2,12 @@
 
 namespace Stradow\Content\Data;
 
-use Stradow\Framework\Database\DataBaseAccess;
-use Stradow\Framework\Database\UpsertHelper;
 use Stradow\Framework\Validator;
+use Stradow\Framework\Database\UpsertHelper;
+use Stradow\Framework\Database\DataBaseAccess;
+use Stradow\Framework\Render\Interface\RepoInterface;
 
-class ContentRepo
+class ContentRepo implements RepoInterface
 {
     protected DataBaseAccess $DataBaseAccess;
 
@@ -51,9 +52,13 @@ class ContentRepo
         ";
     }
 
-    public function getContentNodes(string $content): ?array
+    public function getContentNodes(int|float|string $content): array
     {
         $items = $this->DataBaseAccess->query($this->getContentNodesQuery('where content = :id'), ['id' => $content]);
+
+        if(empty($items)){
+            return [];
+        }
 
         foreach ($items as $item) {
             $item->properties = json_decode($item->properties, true);
@@ -73,7 +78,7 @@ class ContentRepo
         return $items;
     }
 
-    public function getContent(string $id): ?object
+    public function getContent(int|float|string $id): ?object
     {
         $Content = $this->DataBaseAccess->select('SELECT id, path, title, properties, active, type from contents where id = :id ', ['id' => $id]);
 

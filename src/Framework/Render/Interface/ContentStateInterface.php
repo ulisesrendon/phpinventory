@@ -23,4 +23,6 @@ interface ContentStateInterface
     public function setConfig(string $name, mixed $value);
 
     public function deleteConfig(string $name);
+
+    public function getRenderConfig(): array;
 }

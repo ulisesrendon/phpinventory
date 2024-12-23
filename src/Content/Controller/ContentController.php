@@ -2,20 +2,18 @@
 
 namespace Stradow\Content\Controller;
 
-use Neuralpin\HTTPRouter\Interface\ResponseState;
-use Neuralpin\HTTPRouter\RequestData as Request;
-use Neuralpin\HTTPRouter\Response;
 use PDO;
+use Stradow\Framework\Config;
+use Stradow\Framework\Validator;
+use Neuralpin\HTTPRouter\Response;
+use Stradow\Framework\Event\Event;
 use Stradow\Content\Data\ContentRepo;
 use Stradow\Content\Event\ContentUpdated;
-use Stradow\Framework\Config;
 use Stradow\Framework\Database\DataBaseAccess;
+use Neuralpin\HTTPRouter\RequestData as Request;
+use Neuralpin\HTTPRouter\Interface\ResponseState;
 use Stradow\Framework\DependencyResolver\Container;
-use Stradow\Framework\Event\Event;
-use Stradow\Framework\Render\Data\ContentState;
-use Stradow\Framework\Render\HyperItemsRender;
-use Stradow\Framework\Render\HyperNode;
-use Stradow\Framework\Validator;
+use Stradow\Framework\Render\HyperRenderApplication;
 
 class ContentController
 {
@@ -45,41 +43,16 @@ class ContentController
 
         $SiteConfig = Container::get(Config::class);
 
-        $HyperRender = new HyperItemsRender;
-        $ContentState = new ContentState(
+        $HyperRenderApp = new HyperRenderApplication(
             id: $Content->id,
-            path: $Content->path,
-            title: $Content->title,
-            properties: $Content->properties,
-            active: $Content->active,
-            type: $Content->type,
-            Root: $HyperRender,
             Repo: $this->ContentRepo,
             config: $SiteConfig->get(),
+            renderConfig: RENDER_CONFIG,
+            Content: $Content,
+            renderLayout: true,
         );
 
-        $ContentNodes = $this->ContentRepo->getContentNodes($Content->id);
-
-        if (isset($Content->properties->layout) && isset($Content->properties->layoutContainer)) {
-            $RootNode = $Content->properties->layoutContainer;
-            $LayoutNodes = $this->ContentRepo->getContentNodes($Content->properties->layout);
-            foreach($ContentNodes as $item){
-                $item->parent ??= $RootNode;
-            }
-            $ContentNodes = [...$LayoutNodes, ...$ContentNodes];
-        }
-
-        foreach ($ContentNodes as $item) {
-            $HyperRender->addNode(new HyperNode(
-                id: $item->id,
-                value: $item->value,
-                properties: $item->properties,
-                type: $item->type,
-                parent: $item->parent,
-                RenderEngine: new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']),
-                Content: $ContentState,
-            ));
-        }
+        $HyperRender = $HyperRenderApp->getHyperRender();
 
         $template = $Content?->properties?->template ?? 'templates/page.template.php';
 

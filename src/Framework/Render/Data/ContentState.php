@@ -7,6 +7,7 @@ use Stradow\Framework\Render\Interface\ContentStateInterface;
 class ContentState implements ContentStateInterface
 {
     private array $config = [];
+    private array $renderConfig = [];
 
     private $id;
 
@@ -33,6 +34,7 @@ class ContentState implements ContentStateInterface
         object $Root,
         object $Repo,
         array $config,
+        array $renderConfig,
         ?string $path = null,
     ) {
         $this->id = $id;
@@ -44,6 +46,7 @@ class ContentState implements ContentStateInterface
         $this->Root = $Root;
         $this->Repo = $Repo;
         $this->config = $config;
+        $this->renderConfig = $renderConfig;
     }
 
     public function getId(): float|int|string
@@ -79,6 +82,11 @@ class ContentState implements ContentStateInterface
     public function getRepo(): object
     {
         return $this->Repo;
+    }
+
+    public function getRenderConfig(): array
+    {
+        return $this->renderConfig;
     }
 
     public function getConfig(?string $name = null): mixed

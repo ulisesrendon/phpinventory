@@ -2,14 +2,15 @@
 
 namespace Stradow\Content\Controller;
 
-use Neuralpin\HTTPRouter\Helper\TemplateRender;
-use Stradow\Content\Data\ContentRepo;
 use Stradow\Framework\Config;
-use Stradow\Framework\Database\DataBaseAccess;
-use Stradow\Framework\DependencyResolver\Container;
-use Stradow\Framework\Render\Data\ContentState;
-use Stradow\Framework\Render\HyperItemsRender;
+use Stradow\Content\Data\ContentRepo;
 use Stradow\Framework\Render\HyperNode;
+use Stradow\Framework\Database\DataBaseAccess;
+use Stradow\Framework\Render\HyperItemsRender;
+use Neuralpin\HTTPRouter\Helper\TemplateRender;
+use Stradow\Framework\Render\Data\ContentState;
+use Stradow\Framework\DependencyResolver\Container;
+use Stradow\Framework\Render\HyperRenderApplication;
 
 require __DIR__.'/../../../bootstrap/app.php';
 
@@ -30,7 +31,7 @@ class StaticRenderCommand
         $ContentRepo = new ContentRepo($DataBaseAccess);
 
         $Contents = $DataBaseAccess->query("SELECT 
-            contents.path
+            contents.id
             from contents 
             where 
             contents.active is true
@@ -44,31 +45,15 @@ class StaticRenderCommand
         $created = [];
         foreach ($Contents as $Page) {
 
-            $Content = $ContentRepo->getContentByPath($Page->path);
-
-            $HyperRender = new HyperItemsRender;
-            $ContentState = new ContentState(
-                id: $Content->id,
-                path: $Content->path,
-                title: $Content->title,
-                properties: $Content->properties,
-                active: $Content->active,
-                type: $Content->type,
-                Root: $HyperRender,
+            $HyperRenderApp = new HyperRenderApplication(
+                id: $Page->id,
                 Repo: $ContentRepo,
                 config: $SiteConfig->get(),
+                renderConfig: RENDER_CONFIG,
+                renderLayout: true,
             );
-            foreach ($ContentRepo->getContentNodes($Content->id) as $item) {
-                $HyperRender->addNode(new HyperNode(
-                    id: $item->id,
-                    value: $item->value,
-                    properties: $item->properties,
-                    type: $item->type ?? 'default',
-                    parent: $item->parent,
-                    RenderEngine: new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']),
-                    Content: $ContentState,
-                ));
-            }
+            $HyperRender = $HyperRenderApp->getHyperRender();
+            $Content = $HyperRenderApp->getContent();
 
             $template = $Content?->properties?->template ?? 'templates/page.template.php';
 
@@ -81,15 +66,15 @@ class StaticRenderCommand
                 ]
             );
 
-            $extension = pathinfo($Page->path)['extension'] ?? '';
+            $extension = pathinfo($Content->path)['extension'] ?? '';
 
             if (empty($extension)) {
-                $Page->path .= '.html';
+                $Content->path .= '.html';
             }
 
-            self::forceFilePutContents($staticDir."/{$Page->path}", (string) $Render);
+            self::forceFilePutContents($staticDir."/{$Content->path}", (string) $Render);
 
-            $created[] = $staticDir."/{$Page->path}";
+            $created[] = $staticDir."/{$Content->path}";
         }
 
         $dateTimeString = date('YmdHi');
