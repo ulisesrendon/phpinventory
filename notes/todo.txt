@@ -7,7 +7,6 @@
     -[api] add tree view endpoint
     -[api] add map view endpoint
     -[api] add render view endpoint
-    -[system] prepare contents type layout
 -Nodes
     -[api] allow partially patch for properties
     -[api] validation for node system (upsert,delete)

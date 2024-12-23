@@ -12,7 +12,7 @@ class HyperItemsRender
      *
      * @var array<scalar,NestableInterface&NodeStateInterface>
      */
-    private array $nodes = [];
+    public array $nodes = [];
 
     /**
      * @param  NestableInterface&NodeStateInterface[]  $items

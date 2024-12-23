@@ -58,12 +58,23 @@ class ContentController
             config: $SiteConfig->get(),
         );
 
-        foreach ($this->ContentRepo->getContentNodes($Content->id) as $item) {
+        $ContentNodes = $this->ContentRepo->getContentNodes($Content->id);
+
+        if (isset($Content->properties->layout) && isset($Content->properties->layoutContainer)) {
+            $RootNode = $Content->properties->layoutContainer;
+            $LayoutNodes = $this->ContentRepo->getContentNodes($Content->properties->layout);
+            foreach($ContentNodes as $item){
+                $item->parent ??= $RootNode;
+            }
+            $ContentNodes = [...$LayoutNodes, ...$ContentNodes];
+        }
+
+        foreach ($ContentNodes as $item) {
             $HyperRender->addNode(new HyperNode(
                 id: $item->id,
                 value: $item->value,
                 properties: $item->properties,
-                type: $item->type ?? 'default',
+                type: $item->type,
                 parent: $item->parent,
                 RenderEngine: new (RENDER_CONFIG[$item->type] ?? RENDER_CONFIG['default']),
                 Content: $ContentState,
