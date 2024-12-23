@@ -6,7 +6,7 @@ interface ContentStateInterface
 {
     public function getId(): int|float|string;
 
-    public function getPath(): string;
+    public function getPath(): ?string;
 
     public function getTitle(): string;
 

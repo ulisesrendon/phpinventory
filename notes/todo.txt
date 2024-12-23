@@ -7,13 +7,13 @@
     -[api] add tree view endpoint
     -[api] add map view endpoint
     -[api] add render view endpoint
+    -[system] prepare contents type layout
 -Nodes
     -[api] allow partially patch for properties
     -[api] validation for node system (upsert,delete)
     -[api] optimize node system upsert query
-    -[block] create block: table of contents 
+    -[block] create block: table of contents
     -[block] create block: article tags/categories
-    
     -[block] create block: multi-collection 
     -[block] create block: multidimensional-content listing
 -Static render

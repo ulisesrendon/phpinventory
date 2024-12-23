@@ -17,11 +17,10 @@ class BreadCrumbBlock implements RendereableInterface
         $AncestorNodes = $Content->getRepo()->getContentBranchRelatedNodes($Content->getId());
 
         $BreadCrumb = [
-            (object) [
-                'url' => $Content->getConfig('site_url'),
-                'anchor' => $State->getValue() ?? 'Index',
-                'isLast' => false,
-            ],
+            $this->BreadCrumbItemFactory(
+                url: $Content->getConfig('site_url'),
+                anchor: $State->getValue() ?? 'Index',
+            )
         ];
 
         $nodeMap = [];
@@ -41,11 +40,10 @@ class BreadCrumbBlock implements RendereableInterface
 
         $actualNode = $NodeList;
         while (true) {
-            $Item = (object) [
-                'url' => "{$Content->getConfig('site_url')}/{$actualNode->path}",
-                'anchor' => $actualNode->title,
-                'isLast' => false,
-            ];
+            $Item = $this->BreadCrumbItemFactory(
+                url: "{$Content->getConfig('site_url')}/{$actualNode->path}",
+                anchor: $actualNode->title,
+            );
 
             $BreadCrumb[] = $Item;
 
@@ -62,5 +60,26 @@ class BreadCrumbBlock implements RendereableInterface
         return (string) new TemplateRender(CONTENT_DIR."/$template", [
             'BreadCrumb' => $BreadCrumb,
         ]);
+    }
+
+    public function BreadCrumbItemFactory(
+        string $url,
+        string $anchor,
+        bool $isLast = false,
+    ): object
+    {
+        return new class(
+            $url,
+            $anchor,
+            $isLast,
+        ){
+            public function __construct(
+                public string $url,
+                public string $anchor,
+                public bool $isLast,
+            ){
+
+            }
+        };
     }
 }

@@ -10,7 +10,7 @@ class ContentState implements ContentStateInterface
 
     private $id;
 
-    private string $path;
+    private ?string $path;
 
     private string $title;
 
@@ -26,7 +26,6 @@ class ContentState implements ContentStateInterface
 
     public function __construct(
         int|float|string $id,
-        string $path,
         string $title,
         object $properties,
         bool $active,
@@ -34,6 +33,7 @@ class ContentState implements ContentStateInterface
         object $Root,
         object $Repo,
         array $config,
+        ?string $path = null,
     ) {
         $this->id = $id;
         $this->path = $path;
@@ -51,7 +51,7 @@ class ContentState implements ContentStateInterface
         return $this->id;
     }
 
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->path;
     }
