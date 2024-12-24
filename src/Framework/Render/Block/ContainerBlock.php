@@ -2,7 +2,6 @@
 
 namespace Stradow\Framework\Render\Block;
 
-use DOMDocument;
 use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 use Stradow\Framework\Render\Interface\ContentStateInterface;
@@ -17,31 +16,7 @@ class ContainerBlock implements RendereableInterface
 
         $tag = $State->getProperty('tag') ?? 'div';
 
-        $attributes = [];
-        if(
-            !is_null($State->getProperty('attributes'))
-        ){
-            $attributes = $State->getProperty('attributes');
-        }
-
-        if(
-            isset($attributes['class']) 
-            && 'string' === gettype($attributes['class'])
-        ){
-            $attributes['class'] = explode(' ', $attributes['class']);
-        }
-
-        if(
-            !is_null($State->getProperty('classList'))
-        ){
-            $attributes['class'] ??= [];
-
-            $attributes['class'] = array_unique([...$attributes['class'], ...$State->getProperty('classList')]);
-        }
-
-        if(isset($attributes['class'])){
-            $attributes['class'] = implode(' ', $attributes['class']);
-        }
+        $attributes = $State->getAttributes();
 
         $attributesPrepared = '';
         if(!empty($attributes)){

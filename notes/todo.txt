@@ -12,9 +12,14 @@
     -[api] validation for node system (upsert,delete)
     -[api] optimize node system upsert query
     -[block] create block: table of contents
+    -[block] create block for css/javascript src inserting
+    -[block] create block for css/javascript inline
     -[block] create block: article tags/categories
     -[block] create block: multi-collection 
     -[block] create block: multidimensional-content listing
     -[system] Render node attributes
+    -[system] strategy for minify->pretiffy php
 -Static render
     -Render multiple numbered pages
+    -Copy assets from source to distribution directory
+    -Prepare strategy for MatthiasMullie\Minify

@@ -87,6 +87,7 @@ class HyperItemsRender
             'tidy-mark' => 0,
             'indent-spaces' => 4,
             'strict-error-checking' => false,
+            'wrap' => 200,
         ];
 
         $replace = [
@@ -95,7 +96,6 @@ class HyperItemsRender
 
         $html = str_replace(array_keys($replace), array_values($replace), $html);
         $html = tidy_parse_string($html, $config, 'utf8');
-        tidy_clean_repair($html);
         $html = str_replace(array_values($replace), array_keys($replace), $html);
         return (string) $html;
     }
@@ -124,7 +124,7 @@ class HyperItemsRender
 
         $html = str_replace(array_keys($replace), array_values($replace), $html);
         $html = tidy_parse_string($html, $config, 'utf8');
-        tidy_clean_repair($html);
+        // tidy_clean_repair($html);
         $html = str_replace(array_values($replace), array_keys($replace), $html);
         return (string) $html;
     }

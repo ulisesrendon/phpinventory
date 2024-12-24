@@ -21,6 +21,6 @@ class ContentBlock implements RendereableInterface
             renderLayout: false,
         );
 
-        return $HyperRenderApp->getHyperRender()->render();
+        return $HyperRenderApp->getHyperRender()->render(false);
     }
 }

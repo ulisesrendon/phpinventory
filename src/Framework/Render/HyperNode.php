@@ -21,6 +21,8 @@ class HyperNode implements NestableInterface, NodeStateInterface
 
     private array $properties = [];
 
+    private array $attributes = [];
+
     private ContentStateInterface $Content;
 
     public function __construct(
@@ -39,6 +41,7 @@ class HyperNode implements NestableInterface, NodeStateInterface
             'id' => $id,
             'type' => $type,
         ]);
+        $this->setAttributes();
         $this->setParent($parent);
         $this->setRenderEngine($RenderEngine);
         $this->Content = $Content;
@@ -118,4 +121,37 @@ class HyperNode implements NestableInterface, NodeStateInterface
     {
         unset($this->properties[$name]);
     }
+
+    private function setAttributes(): void
+    {
+        $attributes = [];
+        if (!is_null($this->getProperty('attributes'))) {
+            $attributes = $this->getProperty('attributes');
+        }
+
+        if (
+            isset($attributes['class'])
+            && 'string' === gettype($attributes['class'])
+        ) {
+            $attributes['class'] = explode(' ', $attributes['class']);
+        }
+
+        if (!is_null($this->getProperty('classList'))) {
+            $attributes['class'] ??= [];
+            $attributes['class'] = array_unique([...$attributes['class'], ...$this->getProperty('classList')]);
+        }
+
+        if (isset($attributes['class'])) {
+            $attributes['class'] = implode(' ', $attributes['class']);
+        }
+
+        $this->attributes = $attributes;
+    }
+
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+
 }

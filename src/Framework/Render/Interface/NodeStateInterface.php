@@ -14,4 +14,6 @@ interface NodeStateInterface
     public function getChildren(): array;
 
     public function getProperty(string $key): mixed;
+
+    public function getAttributes(): array;
 }
