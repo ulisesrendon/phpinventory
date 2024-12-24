@@ -13,8 +13,6 @@ class OrderState
     protected ?int $paymentMethod;
 
     /**
-     * Summary of items
-     *
      * @var OrderLineItemInterface[]
      */
     protected array $items = [];
@@ -75,8 +73,6 @@ class OrderState
     }
 
     /**
-     * Summary of getItems
-     *
      * @return OrderLineItemInterface[]
      */
     public function getItems(): array

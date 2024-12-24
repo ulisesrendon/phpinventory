@@ -8,8 +8,6 @@ use Stradow\Framework\Render\Interface\NodeStateInterface;
 class HyperItemsRender
 {
     /**
-     * Summary of nodes
-     *
      * @var array<scalar,NestableInterface&NodeStateInterface>
      */
     public array $nodes = [];
@@ -88,10 +86,46 @@ class HyperItemsRender
             'new-inline-tags' => 'audio command datalist embed keygen mark menuitem meter output progress source time video wbr',
             'tidy-mark' => 0,
             'indent-spaces' => 4,
+            'strict-error-checking' => false,
         ];
+
+        $replace = [
+            '@' => 'at------',
+        ];
+
+        $html = str_replace(array_keys($replace), array_values($replace), $html);
         $html = tidy_parse_string($html, $config, 'utf8');
         tidy_clean_repair($html);
+        $html = str_replace(array_values($replace), array_keys($replace), $html);
+        return (string) $html;
+    }
 
+    public static function minify($html): string
+    {
+        $config = [
+            'show-body-only' => true,
+            'indent' => false,
+            'drop-empty-elements' => 0,
+            'new-blocklevel-tags' => 'article aside audio bdi canvas details dialog figcaption figure footer header hgroup main menu menuitem nav section source summary template track video',
+            'new-empty-tags' => 'command embed keygen source track wbr',
+            'new-inline-tags' => 'audio command datalist embed keygen mark menuitem meter output progress source time video wbr',
+            'tidy-mark' => 0,
+            'indent-spaces' => 4,
+            'strict-error-checking' => false,
+            'wrap' => 0,
+            'clean' => true,
+            'output-html' => true,
+            'hide-comments' => true,
+        ];
+
+        $replace = [
+            '@' => 'at------',
+        ];
+
+        $html = str_replace(array_keys($replace), array_values($replace), $html);
+        $html = tidy_parse_string($html, $config, 'utf8');
+        tidy_clean_repair($html);
+        $html = str_replace(array_values($replace), array_keys($replace), $html);
         return (string) $html;
     }
 }

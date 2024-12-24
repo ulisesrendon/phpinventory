@@ -5,8 +5,6 @@ namespace Stradow\Stock\Presentor;
 class ProductOptionGrouping
 {
     /**
-     * Summary of List
-     *
      * @var object[]
      */
     protected array $List = [];
@@ -65,8 +63,6 @@ class ProductOptionGrouping
     }
 
     /**
-     * Summary of get
-     *
      * @return object[]
      */
     public function get(): array

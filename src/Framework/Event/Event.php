@@ -10,7 +10,7 @@ class Event
     /**
      * @template T of object
      *
-     * @param T $Event
+     * @param  T  $Event
      * @return T
      */
     public static function dispatch(object $Event)

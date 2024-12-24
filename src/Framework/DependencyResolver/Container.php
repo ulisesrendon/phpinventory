@@ -10,8 +10,6 @@ final class Container
     private static ?object $Instance = null;
 
     /**
-     * Summary of resolve
-     *
      * @param  class-string  $className
      *
      * @throws ContainerException|NotFoundException
@@ -52,9 +50,11 @@ final class Container
 
     /**
      * @template T of object
-     * @param class-string<T> $className
-     * @param T $instance
+     *
+     * @param  class-string<T>  $className
+     * @param  T  $instance
      * @return T
+     *
      * @throws ContainerException
      */
     public static function add(string $className, object $instance): object
@@ -73,8 +73,6 @@ final class Container
     }
 
     /**
-     * Summary of get
-     *
      * @template T
      *
      * @param  class-string<T>  $className

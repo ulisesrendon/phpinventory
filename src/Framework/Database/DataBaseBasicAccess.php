@@ -14,9 +14,6 @@ class DataBaseBasicAccess implements DatabaseFetchQuery, DatabaseSendCommand, Da
 {
     protected readonly PDO $PDO;
 
-    /**
-     * Summary of __construct
-     */
     public function __construct(PDO $PDO)
     {
         $this->PDO = $PDO;

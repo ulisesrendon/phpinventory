@@ -25,7 +25,6 @@ final class HyperRenderApplication
     private array $renderConfig;
 
     /**
-     *
      * @param  scalar  $id
      *
      * @throws \DomainException
@@ -34,7 +33,8 @@ final class HyperRenderApplication
         int|float|string $id,
         RepoInterface $Repo,
         array $config,
-        array $renderConfig, ?object $Content = null,
+        array $renderConfig,
+        ?object $Content = null,
         bool $renderLayout = true,
     ) {
         $this->HyperRender = new HyperItemsRender;

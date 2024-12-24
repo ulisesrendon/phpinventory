@@ -7,8 +7,6 @@ use Stradow\Framework\Event\Interface\ListenerProviderInterface;
 class ListenerProvider implements ListenerProviderInterface
 {
     /**
-     * Summary of listeners
-     *
      * @var array<class-string, list<callable()>>
      */
     protected array $listeners;
@@ -19,8 +17,6 @@ class ListenerProvider implements ListenerProviderInterface
     }
 
     /**
-     * Summary of getListenersForEvent
-     *
      * @template T of object
      *
      * @param  T  $Event
