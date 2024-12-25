@@ -86,7 +86,6 @@ class HyperItemsRender
             'new-inline-tags' => 'audio command datalist embed keygen mark menuitem meter output progress source time video wbr',
             'tidy-mark' => 0,
             'indent-spaces' => 4,
-            'strict-error-checking' => false,
             'wrap' => 200,
         ];
 

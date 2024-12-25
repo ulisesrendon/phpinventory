@@ -11,7 +11,8 @@ $DataBaseAccess->command("INSERT INTO config (name,value) VALUES
 	('site_url','http://phpinventory.localhost'),
 	('site_name','Stradow'),
 	('site_description','Lorem ipsum dolor sit amet'),
-	('staticpath','public/static')
+	('staticpath','public/static'),
+	('assetspath','content/neuralpin/')
 ");
 
 $DataBaseAccess->command("CREATE TABLE contentnodes (

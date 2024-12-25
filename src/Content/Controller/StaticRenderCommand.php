@@ -2,10 +2,13 @@
 
 namespace Stradow\Content\Controller;
 
-use Neuralpin\HTTPRouter\Helper\TemplateRender;
-use Stradow\Content\Data\ContentRepo;
+use Stradow\Framework\Log;
 use Stradow\Framework\Config;
+use Stradow\Framework\FileCopier;
+use Stradow\Content\Data\ContentRepo;
+use Stradow\Framework\DirectoryCleaner;
 use Stradow\Framework\Database\DataBaseAccess;
+use Neuralpin\HTTPRouter\Helper\TemplateRender;
 use Stradow\Framework\DependencyResolver\Container;
 use Stradow\Framework\Render\HyperRenderApplication;
 
@@ -36,8 +39,32 @@ class StaticRenderCommand
         ");
 
         $SiteConfig = Container::get(Config::class);
+
         $staticPath = $SiteConfig->get('staticpath') ?? 'public/static';
         $staticDir = realpath(BASE_DIR."/$staticPath");
+
+        $assetsPath = $SiteConfig->get('assetspath') ?? 'content/assets';
+        $assetsDir = realpath(BASE_DIR."/$assetsPath");
+
+        try {
+            $directoryCleaner = new DirectoryCleaner($staticDir);
+            $directoryCleaner->deleteFiles();
+            file_put_contents('php://output', 'Cleaning output static dir...'.PHP_EOL);
+        } catch (\Exception $e) {
+            log::append(json_encode($e, JSON_PRETTY_PRINT));
+            file_put_contents('php://output', 'Error trying to clean dir'.PHP_EOL);
+            exit();
+        }
+
+        try {
+            $fileCopier = new FileCopier($assetsDir, $staticDir);
+            $fileCopier->copyFiles();
+            file_put_contents('php://output', 'Copying asset files...'.PHP_EOL);
+        } catch (\Exception|\Throwable $e) {
+            log::append(json_encode($e->getMessage(), JSON_PRETTY_PRINT));
+            file_put_contents('php://output', 'Error while trying to copy files'.PHP_EOL);
+            exit();
+        }
 
         $created = [];
         foreach ($Contents as $Page) {
@@ -77,6 +104,7 @@ class StaticRenderCommand
         $dateTimeString = date('YmdHi');
         $logFilePath = BASE_DIR."/logs/render_list_$dateTimeString.json";
         self::forceFilePutContents($logFilePath, json_encode($created, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        file_put_contents('php://output', 'Generating content files...'.PHP_EOL);
 
         file_put_contents('php://output', 'Static Render Complete: '.realpath($logFilePath).PHP_EOL);
     }

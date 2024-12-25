@@ -3,7 +3,7 @@
 $DataBaseAccess->command("CREATE TABLE accounts(
 	id integer NOT NULL primary key auto_increment,
 	name varchar(255) NOT NULL DEFAULT '',
-	data json DEFAULT '{}' NOT NULL,
+	data text DEFAULT '{}' NOT NULL,
 	deleted_at timestamp NULL,
 	created_at timestamp NULL default current_timestamp,
 	updated_at timestamp NULL default current_timestamp

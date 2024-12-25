@@ -12,6 +12,6 @@ class ImgBlock implements RendereableInterface
         NodeStateInterface $State,
         ContentStateInterface $Content,
     ): string {
-        return htmlspecialchars("<img src=\"{$State->getValue()}\">");
+        return "<img src=\"{$State->getValue()}\">";
     }
 }

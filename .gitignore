@@ -4,3 +4,4 @@
 !/logs/.gitkeep
 composer.lock
 /public/static/*
+/content/assets/*
