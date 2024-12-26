@@ -23,7 +23,7 @@ class ListBlock implements RendereableInterface
         return (string) new TagRender(
             tag: $State->getProperty('type') ?? 'ul',
             attributes: $attributes,
-            content: array_reduce(
+            content: (string) array_reduce(
                 array: $State->getChildren(),
                 callback: fn ($carry, $item) => "{$carry}{$this->renderChildTag($item)}"
             ),

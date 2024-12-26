@@ -16,7 +16,10 @@ class ContainerBlock implements RendereableInterface
         return (string) new TagRender(
             tag: $State->getProperty('tag') ?? 'div',
             attributes: $State->getAttributes(),
-            content: array_reduce($State->getChildren(), fn ($carry, $item) => $carry.$item),
+            content: (string) array_reduce(
+                array: $State->getChildren(), 
+                callback: fn ($carry, $item) => $carry.$item
+            ),
             isEmpty: false,
         );
     }

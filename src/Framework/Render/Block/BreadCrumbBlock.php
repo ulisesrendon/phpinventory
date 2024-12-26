@@ -39,6 +39,8 @@ class BreadCrumbBlock implements RendereableInterface
         $template = $State->getProperty('template') ?? 'templates/breadcrumb.template.php';
 
         return (string) new TemplateRender(CONTENT_DIR."/$template", [
+            'Content' => $Content,
+            'Block' => $State,
             'BreadCrumb' => $BreadCrumb,
         ]);
     }

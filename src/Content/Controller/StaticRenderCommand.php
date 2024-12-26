@@ -43,7 +43,8 @@ class StaticRenderCommand
         $staticPath = $SiteConfig->get('staticpath') ?? 'public/static';
         $staticDir = realpath(BASE_DIR."/$staticPath");
 
-        $assetsPath = $SiteConfig->get('assetspath') ?? 'content/assets';
+        $assetsPath = $SiteConfig->get('assetspath');
+        $shouldCopyAssets = !empty($assetsPath);
         $assetsDir = realpath(BASE_DIR."/$assetsPath");
 
         try {
@@ -56,14 +57,16 @@ class StaticRenderCommand
             exit();
         }
 
-        try {
-            $fileCopier = new FileCopier($assetsDir, $staticDir);
-            $fileCopier->copyFiles();
-            file_put_contents('php://output', 'Copying asset files...'.PHP_EOL);
-        } catch (\Exception|\Throwable $e) {
-            log::append(json_encode($e->getMessage(), JSON_PRETTY_PRINT));
-            file_put_contents('php://output', 'Error while trying to copy files'.PHP_EOL);
-            exit();
+        if($shouldCopyAssets){
+            try {
+                $fileCopier = new FileCopier($assetsDir, $staticDir);
+                $fileCopier->copyFiles();
+                file_put_contents('php://output', 'Copying asset files...'.PHP_EOL);
+            } catch (\Exception|\Throwable $e) {
+                log::append(json_encode($e->getMessage(), JSON_PRETTY_PRINT));
+                file_put_contents('php://output', 'Error while trying to copy files'.PHP_EOL);
+                exit();
+            }
         }
 
         $created = [];

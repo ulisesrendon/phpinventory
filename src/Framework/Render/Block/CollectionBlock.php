@@ -35,6 +35,8 @@ class CollectionBlock implements RendereableInterface
         $template = $State->getProperty('template') ?? $Collection?->properties?->template ?? 'templates/collection.template.php';
 
         return (string) new TemplateRender(CONTENT_DIR."/$template", [
+            'Content' => $Content,
+            'Block' => $State,
             'Collection' => $Collection,
         ]);
     }

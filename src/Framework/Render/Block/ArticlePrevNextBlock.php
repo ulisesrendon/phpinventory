@@ -35,6 +35,8 @@ class ArticlePrevNextBlock implements RendereableInterface
         $template = $State->getProperty('template') ?? 'templates/ArticlePrevNextBlock.template.php';
 
         return (string) new TemplateRender(CONTENT_DIR."/$template", [
+            'Content' => $Content,
+            'Block' => $State,
             'ActualContent' => $ActualContent,
             'PrevContent' => $ActualContent ? $PrevContent : null,
             'NextContent' => $ActualContent ? $NextContent : null,
