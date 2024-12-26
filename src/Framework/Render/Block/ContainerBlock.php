@@ -2,9 +2,10 @@
 
 namespace Stradow\Framework\Render\Block;
 
+use Stradow\Framework\Render\Interface\ContentStateInterface;
 use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
-use Stradow\Framework\Render\Interface\ContentStateInterface;
+use Stradow\Framework\Render\TagRender;
 
 class ContainerBlock implements RendereableInterface
 {
@@ -12,22 +13,11 @@ class ContainerBlock implements RendereableInterface
         NodeStateInterface $State,
         ContentStateInterface $Content,
     ): string {
-        $ChildContent = array_reduce($State->getChildren(), fn ($carry, $item) => $carry.$item);
-
-        $tag = $State->getProperty('tag') ?? 'div';
-
-        $attributes = $State->getAttributes();
-
-        $attributesPrepared = '';
-        if(!empty($attributes)){
-            ksort($attributes);
-            $attributesPrepared = [];
-            foreach($attributes as $name => $value){
-                $attributesPrepared[] = "$name=\"$value\"";
-            }
-            $attributesPrepared = ' '.implode(' ', $attributesPrepared);
-        }
-
-        return "<{$tag}{$attributesPrepared}>$ChildContent</$tag>";
+        return (string) new TagRender(
+            tag: $State->getProperty('tag') ?? 'div',
+            attributes: $State->getAttributes(),
+            content: array_reduce($State->getChildren(), fn ($carry, $item) => $carry.$item),
+            isEmpty: false,
+        );
     }
 }

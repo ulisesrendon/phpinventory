@@ -125,18 +125,18 @@ class HyperNode implements NestableInterface, NodeStateInterface
     private function setAttributes(): void
     {
         $attributes = [];
-        if (!is_null($this->getProperty('attributes'))) {
+        if (! is_null($this->getProperty('attributes'))) {
             $attributes = $this->getProperty('attributes');
         }
 
         if (
             isset($attributes['class'])
-            && 'string' === gettype($attributes['class'])
+            && gettype($attributes['class']) === 'string'
         ) {
             $attributes['class'] = explode(' ', $attributes['class']);
         }
 
-        if (!is_null($this->getProperty('classList'))) {
+        if (! is_null($this->getProperty('classList'))) {
             $attributes['class'] ??= [];
             $attributes['class'] = array_unique([...$attributes['class'], ...$this->getProperty('classList')]);
         }
@@ -152,6 +152,4 @@ class HyperNode implements NestableInterface, NodeStateInterface
     {
         return $this->attributes;
     }
-
-
 }

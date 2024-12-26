@@ -13,9 +13,6 @@ class BreadCrumbBlock implements RendereableInterface
         NodeStateInterface $State,
         ContentStateInterface $Content,
     ): string {
-
-        $AncestorNodes = $Content->getRepo()->getContentBranchRelatedNodes($Content->getId());
-
         $BreadCrumb = [
             $this->BreadCrumbItemFactory(
                 url: $Content->getConfig('site_url'),
@@ -23,37 +20,21 @@ class BreadCrumbBlock implements RendereableInterface
             ),
         ];
 
-        $nodeMap = [];
-        foreach ($AncestorNodes as $k => $Node) {
-            $nodeMap[$Node->id] = $Node;
-        }
+        $this->linkedListGenerator(
+            list: $Content->getRepo()->getContentBranchRelatedNodes($Content->getId(), 'asc'),
+            callback: function (object $actualNode) use ($Content, &$BreadCrumb) {
+                $Item = $this->BreadCrumbItemFactory(
+                    url: "{$Content->getConfig('site_url')}/{$actualNode->path}",
+                    anchor: $actualNode->title,
+                );
 
-        $NodeList = [];
-        foreach ($nodeMap as $k => $Node) {
-            $nodeMap[$k]->next ??= null;
-            if (isset($nodeMap[$Node->parent])) {
-                $nodeMap[$Node->parent]->next = $Node;
-            } else {
-                $NodeList = $Node;
+                if (is_null($actualNode->next)) {
+                    $Item->isLast = true;
+                }
+
+                $BreadCrumb[] = $Item;
             }
-        }
-
-        $actualNode = $NodeList;
-        while (true) {
-            $Item = $this->BreadCrumbItemFactory(
-                url: "{$Content->getConfig('site_url')}/{$actualNode->path}",
-                anchor: $actualNode->title,
-            );
-
-            $BreadCrumb[] = $Item;
-
-            if (is_null($actualNode->next)) {
-                $Item->isLast = true;
-                break;
-            }
-
-            $actualNode = $actualNode->next;
-        }
+        );
 
         $template = $State->getProperty('template') ?? 'templates/breadcrumb.template.php';
 
@@ -75,5 +56,41 @@ class BreadCrumbBlock implements RendereableInterface
                 public bool $isLast,
             ) {}
         };
+    }
+
+    /**
+     * @param  object[]  $Nodes
+     */
+    public function createLinkedList(array $Nodes): ?object
+    {
+        $nodeMap = [];
+        foreach ($Nodes as $k => $Node) {
+            $nodeMap[$Node->id] = $Node;
+        }
+
+        $LinkedList = null;
+        foreach ($nodeMap as $k => $Node) {
+            $nodeMap[$k]->next ??= null;
+            if (isset($nodeMap[$Node->parent ?? null])) {
+                $nodeMap[$Node->parent]->next = $Node;
+            } else {
+                $LinkedList = $Node;
+            }
+        }
+
+        return $LinkedList;
+    }
+
+    /**
+     * @param  object[]  $list
+     * @param  callable(object)  $callback
+     */
+    public function linkedListGenerator(array $list, \Closure $callback): void
+    {
+        $actualNode = $this->createLinkedList($list);
+        while ($actualNode) {
+            $callback($actualNode);
+            $actualNode = $actualNode->next;
+        }
     }
 }

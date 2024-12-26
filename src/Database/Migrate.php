@@ -2,9 +2,9 @@
 
 namespace Stradow\Database;
 
-use Stradow\Framework\Log;
 use Stradow\Framework\Database\DataBaseAccess;
 use Stradow\Framework\DependencyResolver\Container;
+use Stradow\Framework\Log;
 
 require __DIR__.'/../../bootstrap/app.php';
 
@@ -24,7 +24,7 @@ class Migrate
 
             file_put_contents('php://output', 'Migration Complete!'.PHP_EOL);
         } catch (\Exception $e) {
-            Log::append(json_encode($e, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES));
+            Log::append(json_encode($e, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
             file_put_contents('php://output', 'Migration Failed! - Data may be corrupt'.PHP_EOL);
         }
 

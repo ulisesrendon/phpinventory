@@ -5,6 +5,7 @@ namespace Stradow\Framework\Render\Block;
 use Stradow\Framework\Render\Interface\ContentStateInterface;
 use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
+use Stradow\Framework\Render\TagRender;
 
 class PlainCodeBlock implements RendereableInterface
 {
@@ -14,6 +15,11 @@ class PlainCodeBlock implements RendereableInterface
     ): string {
         $value = htmlspecialchars($State->getValue());
 
-        return "<pre><code>$value</code></pre>";
+        return (string) new TagRender(
+            tag: $State->getProperty('tag') ?? 'pre',
+            attributes: $State->getAttributes(),
+            content: "<code>$value</code>",
+            isEmpty: false,
+        );
     }
 }

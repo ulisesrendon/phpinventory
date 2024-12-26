@@ -5,6 +5,7 @@ namespace Stradow\Framework\Render\Block;
 use Stradow\Framework\Render\Interface\ContentStateInterface;
 use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
+use Stradow\Framework\Render\TagRender;
 
 class HeadingBlock implements RendereableInterface
 {
@@ -12,18 +13,29 @@ class HeadingBlock implements RendereableInterface
         NodeStateInterface $State,
         ContentStateInterface $Content,
     ): string {
-        $tag = $State->getProperty('type');
-
         $heading = $State->getValue() ?? '';
-        $IdFragment = explode('-', $State->getId())[0] ?? '';
 
-        return "<$tag name=\"{$this->getSlug($heading)}-$IdFragment\">{$heading}</$tag>";
+        $attributes = $State->getAttributes();
+        $attributes['name'] ??= $this->generateName($heading, $State->getId());
+
+        return (string) new TagRender(
+            tag: $State->getProperty('type') ?? 'h1',
+            attributes: $attributes,
+            content: $heading,
+            isEmpty: false,
+        );
     }
 
-    public static function getSlug(string $string): string
+    public function getSlug(string $string): string
     {
-        $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $string);
+        return preg_replace('/[^A-Za-z0-9-]+/', '-', $string);
+    }
 
-        return $slug;
+    public function generateName(string $text, $id)
+    {
+        $text = strtolower($text);
+        $IdFragment = explode('-', $id)[0] ?? '';
+
+        return "{$this->getSlug($text)}-$IdFragment";
     }
 }

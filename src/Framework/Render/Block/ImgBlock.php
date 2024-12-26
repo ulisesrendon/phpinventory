@@ -5,6 +5,7 @@ namespace Stradow\Framework\Render\Block;
 use Stradow\Framework\Render\Interface\ContentStateInterface;
 use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
+use Stradow\Framework\Render\TagRender;
 
 class ImgBlock implements RendereableInterface
 {
@@ -12,6 +13,13 @@ class ImgBlock implements RendereableInterface
         NodeStateInterface $State,
         ContentStateInterface $Content,
     ): string {
-        return "<img src=\"{$State->getValue()}\">";
+        $attributes = $State->getAttributes();
+        $attributes['src'] ??= $State->getValue();
+
+        return (string) new TagRender(
+            tag: $State->getProperty('tag') ?? 'img',
+            attributes: $attributes,
+            isEmpty: true,
+        );
     }
 }
