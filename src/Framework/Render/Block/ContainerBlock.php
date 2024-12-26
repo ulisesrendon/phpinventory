@@ -17,7 +17,7 @@ class ContainerBlock implements RendereableInterface
             tag: $State->getProperty('tag') ?? 'div',
             attributes: $State->getAttributes(),
             content: (string) array_reduce(
-                array: $State->getChildren(), 
+                array: $State->getChildren(),
                 callback: fn ($carry, $item) => $carry.$item
             ),
             isEmpty: false,

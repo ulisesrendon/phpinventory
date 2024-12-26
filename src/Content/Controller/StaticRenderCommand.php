@@ -44,7 +44,7 @@ class StaticRenderCommand
         $staticDir = realpath(BASE_DIR."/$staticPath");
 
         $assetsPath = $SiteConfig->get('assetspath');
-        $shouldCopyAssets = !empty($assetsPath);
+        $shouldCopyAssets = ! empty($assetsPath);
         $assetsDir = realpath(BASE_DIR."/$assetsPath");
 
         try {
@@ -57,7 +57,7 @@ class StaticRenderCommand
             exit();
         }
 
-        if($shouldCopyAssets){
+        if ($shouldCopyAssets) {
             try {
                 $fileCopier = new FileCopier($assetsDir, $staticDir);
                 $fileCopier->copyFiles();

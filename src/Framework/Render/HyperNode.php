@@ -19,6 +19,8 @@ class HyperNode implements NestableInterface, NodeStateInterface
 
     private mixed $value;
 
+    private string $type;
+
     private array $properties = [];
 
     private array $attributes = [];
@@ -45,6 +47,7 @@ class HyperNode implements NestableInterface, NodeStateInterface
         $this->setParent($parent);
         $this->setRenderEngine($RenderEngine);
         $this->Content = $Content;
+        $this->type = $type;
     }
 
     public function setValue(mixed $value)
@@ -110,6 +113,16 @@ class HyperNode implements NestableInterface, NodeStateInterface
     public function setProperty(string $name, mixed $value)
     {
         $this->properties[$name] = $value;
+    }
+
+    public function getProperties(): array
+    {
+        return $this->properties;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
     }
 
     public function getProperty(string $key): mixed

@@ -15,5 +15,9 @@ interface NodeStateInterface
 
     public function getProperty(string $key): mixed;
 
+    public function getProperties(): array;
+
     public function getAttributes(): array;
+
+    public function getType(): string;
 }

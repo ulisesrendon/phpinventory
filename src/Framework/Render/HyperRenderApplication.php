@@ -36,6 +36,7 @@ final class HyperRenderApplication
         array $renderConfig,
         ?object $Content = null,
         bool $renderLayout = true,
+        array $extraNodes = [],
     ) {
         $this->HyperRender = new HyperItemsRender;
         $this->Repo = $Repo;
@@ -48,7 +49,10 @@ final class HyperRenderApplication
             throw new \DomainException("Content not found ($id)");
         }
 
-        $this->ContentNodes = $this->Repo->getContentNodes($this->Content->id);
+        $this->ContentNodes = [
+            ...$this->Repo->getContentNodes($this->Content->id),
+            ...$extraNodes,
+        ];
 
         $this->ContentState = $this->contentStateBuild();
 
