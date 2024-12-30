@@ -23,4 +23,11 @@
     -[system] allow item value or item properties to auto reference content and node data
 -Static render
     -Render multiple numbered pages
-    -Prepare strategy for MatthiasMullie\Minify
+    -Prepare strategy for Minify (MatthiasMullie\Minify)
+-System
+    -Implement composition over inheritance on dbal
+    -Inject evenhandlers in dbal
+    -Create events for dbal
+    -Inject evenhandlers in route system
+    -Inject dependency resolver in route system
+    -Create events for route system

@@ -2,10 +2,82 @@
 
 namespace Stradow\Framework\Database;
 
+use PDO;
 use InvalidArgumentException;
+use Stradow\Framework\Database\Interface\DatabaseFetchQuery;
+use Stradow\Framework\Database\Interface\DatabaseSendCommand;
+use Stradow\Framework\Database\Interface\DatabaseTransaction;
 
-class DataBaseAccess extends DataBaseBasicAccess
+class DataBaseAccess implements DatabaseFetchQuery, DatabaseSendCommand, DatabaseTransaction
 {
+    private readonly PDO $PDO;
+
+    public function __construct(PDO $PDO)
+    {
+        $this->PDO = $PDO;
+    }
+
+    public function getQueryString(string $query, array $params = []): string
+    {
+        $replacement = [];
+        foreach ($params as $key => $value) {
+            $replacement["/\:$key/"] = (is_string($value)) ? "\"$value\"" : $value;
+        }
+
+        return (string) preg_replace(array_keys($replacement), array_values($replacement), $query);
+    }
+
+    /**
+     * Execute a database command
+     */
+    public function command(string $query, array $params = []): bool
+    {
+        $PDOStatement = $this->PDO->prepare($query);
+
+        return $PDOStatement->execute($params);
+    }
+
+    /**
+     * Fetch all the results from a query
+     */
+    public function query(
+        string $query, 
+        array $params = [],
+        ?string $class = null,
+    ): ?array
+    {
+        $PDOStatement = $this->PDO->prepare($query);
+        $result = $PDOStatement->execute($params);
+        if ($result) {
+            if(!is_null($class)){
+                return $PDOStatement->fetchAll(PDO::FETCH_CLASS, $class);
+            }
+            return $PDOStatement->fetchAll(PDO::FETCH_OBJ);
+        }
+
+        return null;
+    }
+
+    public function beginTransaction(): bool
+    {
+        return $this->PDO->beginTransaction();
+    }
+
+    public function commit(): bool
+    {
+        return $this->PDO->commit();
+    }
+
+    public function rollBack(): bool
+    {
+        return $this->PDO->rollBack();
+    }
+
+    public function getConnection(): PDO
+    {
+        return $this->PDO;
+    }
+
     /**
      * Execute a database insert command and return last inserted id
      */
@@ -63,9 +135,9 @@ class DataBaseAccess extends DataBaseBasicAccess
         return $result;
     }
 
-    public function select(string $query, array $params = []): ?object
+    public function select(string $query, array $params = [], ?string $class = null,): ?object
     {
-        $result = $this->query($query, $params);
+        $result = $this->query($query, $params, $class);
         if (! empty($result)) {
             return $result[0];
         }
