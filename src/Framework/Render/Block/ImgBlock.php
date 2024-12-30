@@ -2,7 +2,6 @@
 
 namespace Stradow\Framework\Render\Block;
 
-use Stradow\Framework\Render\HyperRenderApplication;
 use Stradow\Framework\Render\Interface\ContentStateInterface;
 use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;

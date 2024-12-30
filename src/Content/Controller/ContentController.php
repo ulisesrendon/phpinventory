@@ -52,7 +52,6 @@ class ContentController
             config: $SiteConfig->get(),
             renderConfig: RENDER_CONFIG,
             Content: $Content,
-            renderLayout: true,
         );
 
         $HyperRender = $HyperRenderApp->getHyperRender();

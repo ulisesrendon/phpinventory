@@ -73,30 +73,6 @@ class HyperNode implements NestableInterface, NodeStateInterface
 
     public function __toString(): string
     {
-        if($this->getProperty('layout') && $this->getProperty('layoutContainer')){
-            $properties = $this->getProperties();
-            unset($properties['layout']);
-            unset($properties['layoutContainer']);
-
-            $HyperRenderApp = new HyperRenderApplication(
-                id: $this->getProperty('layout'),
-                Repo: $this->Content->getRepo(),
-                config: $this->Content->getConfig(),
-                renderConfig: $this->Content->getRenderConfig(),
-                renderLayout: false,
-                extraNodes: [
-                    (object) [
-                        'id' => $this->getId(),
-                        'parent' => $this->getProperty('layoutContainer'),
-                        'value' => $this->getValue(),
-                        'properties' => $properties,
-                        'type' => $this->getType(),
-                    ],
-                ],
-            );
-
-            return $HyperRenderApp->getHyperRender()->render(false);
-        }
         return $this->RenderEngine->render($this, $this->Content);
     }
 

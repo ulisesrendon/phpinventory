@@ -39,16 +39,46 @@ class ContentRepo implements RepoInterface
 
     public function getContentNodesQuery(string $extraParts = ''): string
     {
-        return "SELECT 
+        return "WITH RECURSIVE nodes as (
+                SELECT 
+                    id,
+                    content,
+                    parent,
+                    value,
+                    properties,
+                    weight,
+                    type
+                from contentnodes
+                $extraParts
+                UNION ALL
+                SELECT 
+                    offnodes.id,
+                    offnodes.content,
+                    offnodes.parent,
+                    offnodes.value,
+                    offnodes.properties,
+                    offnodes.weight,
+                    offnodes.type
+                FROM contentnodes offnodes
+                INNER JOIN nodes ON JSON_VALUE(nodes.properties, '$.layout') = offnodes.content
+            )
+            select 
+            nodes.*,
+            JSON_VALUE(properties, '$.layout') as layout,
+            JSON_VALUE(properties, '$.layoutContainer') as layoutContainer
+            from nodes
+            group by 
                 id,
+                content,
                 parent,
                 value,
                 properties,
                 weight,
                 type
-            from contentnodes
-            $extraParts
-            order by parent, weight
+            order by 
+                content,
+                parent,
+                weight
         ";
     }
 

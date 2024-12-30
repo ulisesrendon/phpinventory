@@ -77,7 +77,6 @@ class StaticRenderCommand
                 Repo: $ContentRepo,
                 config: $SiteConfig->get(),
                 renderConfig: RENDER_CONFIG,
-                renderLayout: true,
             );
             $HyperRender = $HyperRenderApp->getHyperRender();
             $Content = $HyperRenderApp->getContent();

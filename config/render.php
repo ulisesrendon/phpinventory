@@ -4,7 +4,6 @@ use Stradow\Framework\Render\Block\ArticlePrevNextBlock;
 use Stradow\Framework\Render\Block\BreadCrumbBlock;
 use Stradow\Framework\Render\Block\CollectionBlock;
 use Stradow\Framework\Render\Block\ContainerBlock;
-use Stradow\Framework\Render\Block\ContentBlock;
 use Stradow\Framework\Render\Block\DefaultBlock;
 use Stradow\Framework\Render\Block\HeadingBlock;
 use Stradow\Framework\Render\Block\HtmlBlock;
@@ -35,7 +34,6 @@ return [
     'table-heading' => TableBlock::class,
     'cell' => TableBlock::class,
     'collection' => CollectionBlock::class,
-    'content' => ContentBlock::class,
     'html' => HtmlBlock::class,
     'prev-next-links' => ArticlePrevNextBlock::class,
     'breadcrumb' => BreadCrumbBlock::class,
