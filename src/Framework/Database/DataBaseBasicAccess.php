@@ -47,6 +47,11 @@ class DataBaseBasicAccess implements DatabaseFetchQuery, DatabaseSendCommand, Da
      */
     public function query(string $query, array $params = []): ?array
     {
+        // \Stradow\Framework\Log::append(json_encode([
+        //     'query' => $query,
+        //     'params' => $params,
+        // ], JSON_PRETTY_PRINT | JSON_UNESCAPED_LINE_TERMINATORS));
+
         $PDOStatement = $this->PDO->prepare($query);
         $result = $PDOStatement->execute($params);
         if ($result) {

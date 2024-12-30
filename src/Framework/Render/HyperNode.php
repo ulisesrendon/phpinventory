@@ -2,10 +2,11 @@
 
 namespace Stradow\Framework\Render;
 
-use Stradow\Framework\Render\Interface\ContentStateInterface;
+use Stradow\Framework\Render\HyperRenderApplication;
 use Stradow\Framework\Render\Interface\NestableInterface;
 use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
+use Stradow\Framework\Render\Interface\ContentStateInterface;
 
 class HyperNode implements NestableInterface, NodeStateInterface
 {
@@ -72,6 +73,30 @@ class HyperNode implements NestableInterface, NodeStateInterface
 
     public function __toString(): string
     {
+        if($this->getProperty('layout') && $this->getProperty('layoutContainer')){
+            $properties = $this->getProperties();
+            unset($properties['layout']);
+            unset($properties['layoutContainer']);
+
+            $HyperRenderApp = new HyperRenderApplication(
+                id: $this->getProperty('layout'),
+                Repo: $this->Content->getRepo(),
+                config: $this->Content->getConfig(),
+                renderConfig: $this->Content->getRenderConfig(),
+                renderLayout: false,
+                extraNodes: [
+                    (object) [
+                        'id' => $this->getId(),
+                        'parent' => $this->getProperty('layoutContainer'),
+                        'value' => $this->getValue(),
+                        'properties' => $properties,
+                        'type' => $this->getType(),
+                    ],
+                ],
+            );
+
+            return $HyperRenderApp->getHyperRender()->render(false);
+        }
         return $this->RenderEngine->render($this, $this->Content);
     }
 

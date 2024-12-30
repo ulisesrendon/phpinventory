@@ -11,13 +11,15 @@
     -[api] allow partially patch for properties
     -[api] validation for node system (upsert,delete)
     -[api] optimize node system upsert query
-    -[block] create block: table of contents
     -[block] create block: article tags/categories
     -[block] create block: multi-collection 
     -[block] create block: multidimensional-content listing
+    -[block] create block: related content 
     -[system] strategy for minify->pretiffy php
     -[system] implement custom template per node
-    -[system] implement custom layout per node
+    -[system] improve custom node layout
+    -[system] allow multiple nodes per layout
+    -[system] allow custom ordering for node layout
     -[system] allow item value or item properties to auto reference content and node data
 -Static render
     -Render multiple numbered pages
