@@ -15,7 +15,6 @@
     -[block] create block: multi-collection 
     -[block] create block: multidimensional-content listing
     -[block] create block: related content 
-    -[system] strategy for minify->pretiffy php
     -[system] implement custom template per node
     -[system] improve custom node layout
     -[system] allow multiple nodes per layout
@@ -25,9 +24,5 @@
     -Render multiple numbered pages
     -Prepare strategy for Minify (MatthiasMullie\Minify)
 -System
-    -Implement composition over inheritance on dbal
-    -Inject evenhandlers in dbal
-    -Create events for dbal
-    -Inject evenhandlers in route system
     -Inject dependency resolver in route system
     -Create events for route system

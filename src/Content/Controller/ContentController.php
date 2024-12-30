@@ -23,10 +23,13 @@ class ContentController
 
     private ContentRepo $ContentRepo;
 
+    private Event $EventDispatcher;
+
     public function __construct()
     {
         $this->DataBaseAccess = Container::get(DataBaseAccess::class);
         $this->ContentRepo = new ContentRepo($this->DataBaseAccess);
+        $this->EventDispatcher = Container::get(Event::class);
     }
 
     /**
@@ -378,7 +381,7 @@ class ContentController
         }
 
         if ($result || ! empty($nodesToAdd)) {
-            Event::dispatch(new ContentUpdated([
+            $this->EventDispatcher->dispatch(new ContentUpdated([
                 'id' => $id,
             ]));
 

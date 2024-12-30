@@ -4,19 +4,27 @@ namespace Stradow\Framework\Event;
 
 use Stradow\Framework\DependencyResolver\Container;
 use Stradow\Framework\Event\Interface\StoppableEventInterface;
+use Stradow\Framework\Event\Interface\ListenerProviderInterface;
 
 class Event
 {
+    public ListenerProviderInterface $ListenerProvider;
+
+    public function __construct(ListenerProviderInterface $ListenerProvider)
+    {
+        $this->ListenerProvider = $ListenerProvider;
+    }
+
     /**
      * @template T of object
      *
      * @param  T  $Event
      * @return T
      */
-    public static function dispatch(object $Event)
+    public function dispatch(object $Event)
     {
 
-        $Listeners = Container::get(ListenerProvider::class)->getListenersForEvent($Event);
+        $Listeners = $this->ListenerProvider->getListenersForEvent($Event);
 
         foreach ($Listeners as $Listener) {
             call_user_func($Listener, $Event);

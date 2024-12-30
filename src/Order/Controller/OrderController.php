@@ -2,18 +2,19 @@
 
 namespace Stradow\Order\Controller;
 
-use Neuralpin\HTTPRouter\Interface\ResponseState;
-use Neuralpin\HTTPRouter\RequestData;
+use Stradow\Framework\Validator;
 use Neuralpin\HTTPRouter\Response;
 use Stradow\Framework\Event\Event;
-use Stradow\Framework\HTTP\DefaultController;
-use Stradow\Framework\Validator;
-use Stradow\Order\Data\OrderCommand;
-use Stradow\Order\Data\OrderLineQuery;
 use Stradow\Order\Data\OrderQuery;
 use Stradow\Order\Data\OrderState;
+use Stradow\Order\Data\OrderCommand;
+use Neuralpin\HTTPRouter\RequestData;
 use Stradow\Order\Event\OrderCreated;
+use Stradow\Order\Data\OrderLineQuery;
 use Stradow\Product\Data\ProductQuery;
+use Stradow\Framework\HTTP\DefaultController;
+use Neuralpin\HTTPRouter\Interface\ResponseState;
+use Stradow\Framework\DependencyResolver\Container;
 
 class OrderController extends DefaultController
 {
@@ -25,6 +26,8 @@ class OrderController extends DefaultController
 
     private readonly ProductQuery $ProductQuery;
 
+    private Event $EventDispatcher;
+
     public function __construct()
     {
         parent::__construct();
@@ -32,6 +35,7 @@ class OrderController extends DefaultController
         $this->OrderCommand = new OrderCommand($this->DataBaseAccess);
         $this->ProductQuery = new ProductQuery($this->DataBaseAccess);
         $this->OrderLineQuery = new OrderLineQuery($this->DataBaseAccess);
+        $this->EventDispatcher = Container::get(Event::class);
     }
 
     public function list(): ResponseState
@@ -180,7 +184,7 @@ class OrderController extends DefaultController
             'paymentMethod' => $paymentMethod,
         ];
 
-        Event::dispatch(new OrderCreated($OrderData));
+        $this->EventDispatcher->dispatch(new OrderCreated($OrderData));
 
         return Response::json($OrderData, 201);
     }
