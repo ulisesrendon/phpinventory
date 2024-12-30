@@ -58,34 +58,25 @@ final class HyperRenderApplication
         $this->ContentNodes = $contentGroups[$id];
 
         foreach($this->ContentNodes as $k => $Node){
-            if('content' === $Node->type){
+            if('content' === $Node->type || !is_null($Node->layoutContainer)){
+                $uuid = Uuid::guidv4();
+                $oldIds = [];
                 $newNodes = [];
                 foreach($contentGroups[$Node->layout] as $Item){
-                    if(is_null($Item->parent)){
-                        $newNodes[$Node->id] = clone $Item;
-                        $newNodes[$Node->id]->id = $Node->id;
-                        $newNodes[$Node->id]->parent = $Node->parent;
-                    }else{
-                        $newNodes[$Item->id] = clone $Item;
-                    }
+                    $newNodes[] = clone $Item;
                 }
 
                 unset($this->ContentNodes[$k]);
                 $this->ContentNodes = [...$this->ContentNodes, ...$newNodes];
+            }
+            
+            if('content' === $Node->type){
+                unset($this->ContentNodes[$k]);
             }else if(!is_null($Node->layoutContainer)){
-                $newNodes = [];
-                foreach ($contentGroups[$Node->layout] as $Item) {
-                    $uuid = Uuid::guidv4();
-                    $oldIds = [];
-                    if (is_null($Item->parent)) {
-                        $newNodes[$Item->id] = clone $Item;
-                        $newNodes[$Item->id]->parent = $Node->parent;
-                    } else {
-                        $newNodes[$Item->id] = clone $Item;
-                    }
-                }
-
                 $Node->parent = $Node->layoutContainer;
+            }
+
+            if('content' === $Node->type || is_null($Node->layoutContainer)){
                 $this->ContentNodes = [...$this->ContentNodes, ...$newNodes];
             }
         }
