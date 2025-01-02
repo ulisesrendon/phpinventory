@@ -2,23 +2,30 @@
 
 namespace Stradow\Framework\Render;
 
+use Stradow\Framework\Render\Helper\HyperCodePrettify;
 use Stradow\Framework\Render\Interface\NestableInterface;
 use Stradow\Framework\Render\Interface\NodeStateInterface;
+use Stradow\Framework\Render\Interface\PrettifierInterface;
 
-class HyperItemsRender
+final class HyperItemsRender
 {
     /**
      * @var array<scalar,NestableInterface&NodeStateInterface>
      */
     public array $nodes = [];
 
+    private PrettifierInterface $Prettifier;
+
     /**
      * @param  NestableInterface&NodeStateInterface[]  $items
+     * @param  class-string<PrettifierInterface>  $Prettifier
      */
     public function __construct(
         array $items = [],
+        string $Prettifier = HyperCodePrettify::class,
     ) {
         $this->nodes = $this->mapGenerator($items);
+        $this->Prettifier = new $Prettifier;
     }
 
     public function addNode(NestableInterface&NodeStateInterface $Node)
@@ -30,7 +37,7 @@ class HyperItemsRender
      * @param  NodeStateInterface[]  $items
      * @return NodeStateInterface[]
      */
-    protected function mapGenerator(array $items): array
+    private function mapGenerator(array $items): array
     {
         $nodeMap = [];
         foreach ($items as $k => $item) {
@@ -44,7 +51,7 @@ class HyperItemsRender
      * @param  NestableInterface&NodeStateInterface[]  $items
      * @return NestableInterface&NodeStateInterface[]
      */
-    protected function treeGenerator(array $items): array
+    private function treeGenerator(array $items): array
     {
         $nodeTree = [];
         foreach ($items as $k => $item) {
@@ -65,68 +72,25 @@ class HyperItemsRender
 
         $renderOutput = array_reduce(
             array: $nodeTree,
-            callback: fn (?string $carry, \Stringable $item): string => $carry.$item
+            callback: [$this, 'reducer']
         ) ?? '';
 
         if ($prettify) {
-            $renderOutput = self::class::prettify($renderOutput);
+            $renderOutput = $this->Prettifier->prettify($renderOutput);
         }
 
         return $renderOutput;
     }
 
-    public static function prettify($html): string
+    public function reducer(?string $carry, NodeStateInterface $Item): string
     {
-        $config = [
-            'show-body-only' => true,
-            'indent' => true,
-            'drop-empty-elements' => 0,
-            'new-blocklevel-tags' => 'article aside audio bdi canvas details dialog figcaption figure footer header hgroup main menu menuitem nav section source summary template track video',
-            'new-empty-tags' => 'command embed keygen source track wbr',
-            'new-inline-tags' => 'audio command datalist embed keygen mark menuitem meter output progress source time video wbr',
-            'tidy-mark' => 0,
-            'indent-spaces' => 4,
-            'wrap' => 200,
-        ];
+        $LayoutNodes = $Item->getLayoutNodes();
+        if (! is_null($LayoutNodes)) {
+            $render = $Item->getLayoutNodes()->render();
+        } else {
+            $render = $Item->getRender();
+        }
 
-        $replace = [
-            '@' => 'at------',
-        ];
-
-        $html = str_replace(array_keys($replace), array_values($replace), $html);
-        $html = tidy_parse_string($html, $config, 'utf8');
-        $html = str_replace(array_values($replace), array_keys($replace), $html);
-
-        return (string) $html;
-    }
-
-    public static function minify($html): string
-    {
-        $config = [
-            'show-body-only' => true,
-            'indent' => false,
-            'drop-empty-elements' => 0,
-            'new-blocklevel-tags' => 'article aside audio bdi canvas details dialog figcaption figure footer header hgroup main menu menuitem nav section source summary template track video',
-            'new-empty-tags' => 'command embed keygen source track wbr',
-            'new-inline-tags' => 'audio command datalist embed keygen mark menuitem meter output progress source time video wbr',
-            'tidy-mark' => 0,
-            'indent-spaces' => 4,
-            'strict-error-checking' => false,
-            'wrap' => 0,
-            'clean' => true,
-            'output-html' => true,
-            'hide-comments' => true,
-        ];
-
-        $replace = [
-            '@' => 'at------',
-        ];
-
-        $html = str_replace(array_keys($replace), array_values($replace), $html);
-        $html = tidy_parse_string($html, $config, 'utf8');
-        // tidy_clean_repair($html);
-        $html = str_replace(array_values($replace), array_keys($replace), $html);
-
-        return (string) $html;
+        return $carry.$render;
     }
 }

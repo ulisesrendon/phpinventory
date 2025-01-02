@@ -2,10 +2,10 @@
 
 namespace Stradow\Framework\Database;
 
-use PDO;
 use InvalidArgumentException;
-use Stradow\Framework\Database\Event\QueryExecuted;
+use PDO;
 use Stradow\Framework\Database\Event\CommandExecuted;
+use Stradow\Framework\Database\Event\QueryExecuted;
 use Stradow\Framework\Database\Interface\DatabaseFetchQuery;
 use Stradow\Framework\Database\Interface\DatabaseSendCommand;
 use Stradow\Framework\Database\Interface\DatabaseTransaction;
@@ -13,13 +13,13 @@ use Stradow\Framework\Database\Interface\DatabaseTransaction;
 class DataBaseAccess implements DatabaseFetchQuery, DatabaseSendCommand, DatabaseTransaction
 {
     private readonly PDO $PDO;
+
     private ?object $EventDispatcher;
 
     public function __construct(
         PDO $PDO,
         ?object $EventDispatcher = null,
-    )
-    {
+    ) {
         $this->PDO = $PDO;
         $this->EventDispatcher = $EventDispatcher;
     }
@@ -39,7 +39,7 @@ class DataBaseAccess implements DatabaseFetchQuery, DatabaseSendCommand, Databas
      */
     public function command(string $query, array $params = []): bool
     {
-        if (!is_null(value: $this->EventDispatcher)) {
+        if (! is_null(value: $this->EventDispatcher)) {
             $this->EventDispatcher->dispatch(new CommandExecuted($query, $params));
         }
 
@@ -52,21 +52,21 @@ class DataBaseAccess implements DatabaseFetchQuery, DatabaseSendCommand, Databas
      * Fetch all the results from a query
      */
     public function query(
-        string $query, 
+        string $query,
         array $params = [],
         ?string $class = null,
-    ): ?array
-    {
-        if(!is_null(value: $this->EventDispatcher)){
+    ): ?array {
+        if (! is_null(value: $this->EventDispatcher)) {
             $this->EventDispatcher->dispatch(new QueryExecuted($query, $params));
         }
 
         $PDOStatement = $this->PDO->prepare($query);
         $result = $PDOStatement->execute($params);
         if ($result) {
-            if(!is_null($class)){
+            if (! is_null($class)) {
                 return $PDOStatement->fetchAll(PDO::FETCH_CLASS, $class);
             }
+
             return $PDOStatement->fetchAll(PDO::FETCH_OBJ);
         }
 
@@ -150,7 +150,7 @@ class DataBaseAccess implements DatabaseFetchQuery, DatabaseSendCommand, Databas
         return $result;
     }
 
-    public function select(string $query, array $params = [], ?string $class = null,): ?object
+    public function select(string $query, array $params = [], ?string $class = null): ?object
     {
         $result = $this->query($query, $params, $class);
         if (! empty($result)) {

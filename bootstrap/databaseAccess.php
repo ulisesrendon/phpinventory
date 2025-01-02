@@ -1,10 +1,10 @@
 <?php
 
 use Stradow\Framework\Config;
-use Stradow\Framework\Event\Event;
 use Stradow\Framework\Config\Data\ConfigRepo;
 use Stradow\Framework\Database\DataBaseAccess;
 use Stradow\Framework\DependencyResolver\Container;
+use Stradow\Framework\Event\Event;
 
 function instancePDO(
     string $drive,

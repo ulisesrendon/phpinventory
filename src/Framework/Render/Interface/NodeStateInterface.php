@@ -2,6 +2,8 @@
 
 namespace Stradow\Framework\Render\Interface;
 
+use Stradow\Framework\Render\HyperItemsRender;
+
 interface NodeStateInterface
 {
     public function getValue();
@@ -20,4 +22,8 @@ interface NodeStateInterface
     public function getAttributes(): array;
 
     public function getType(): string;
+
+    public function getLayoutNodes(): ?HyperItemsRender;
+
+    public function getRender(): string;
 }

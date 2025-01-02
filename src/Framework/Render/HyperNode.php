@@ -2,13 +2,12 @@
 
 namespace Stradow\Framework\Render;
 
-use Stradow\Framework\Render\HyperRenderApplication;
+use Stradow\Framework\Render\Interface\ContentStateInterface;
 use Stradow\Framework\Render\Interface\NestableInterface;
 use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
-use Stradow\Framework\Render\Interface\ContentStateInterface;
 
-class HyperNode implements NestableInterface, NodeStateInterface
+final class HyperNode implements \Stringable, NestableInterface, NodeStateInterface
 {
     private RendereableInterface $RenderEngine;
 
@@ -26,6 +25,8 @@ class HyperNode implements NestableInterface, NodeStateInterface
 
     private array $attributes = [];
 
+    private ?HyperItemsRender $LayoutNodes;
+
     private ContentStateInterface $Content;
 
     public function __construct(
@@ -36,6 +37,7 @@ class HyperNode implements NestableInterface, NodeStateInterface
         null|string|int|float $parent,
         RendereableInterface $RenderEngine,
         ContentStateInterface $Content,
+        ?HyperItemsRender $LayoutNodes = null,
     ) {
         $this->setId($id);
         $this->setValue($value);
@@ -49,6 +51,7 @@ class HyperNode implements NestableInterface, NodeStateInterface
         $this->setRenderEngine($RenderEngine);
         $this->Content = $Content;
         $this->type = $type;
+        $this->LayoutNodes = $LayoutNodes;
     }
 
     public function setValue(mixed $value)
@@ -71,9 +74,14 @@ class HyperNode implements NestableInterface, NodeStateInterface
         $this->RenderEngine = $RenderEngine;
     }
 
-    public function __toString(): string
+    public function getRender(): string
     {
         return $this->RenderEngine->render($this, $this->Content);
+    }
+
+    public function __toString(): string
+    {
+        return $this->getRender();
     }
 
     public function setId(mixed $id)
@@ -165,5 +173,10 @@ class HyperNode implements NestableInterface, NodeStateInterface
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    public function getLayoutNodes(): ?HyperItemsRender
+    {
+        return $this->LayoutNodes;
     }
 }

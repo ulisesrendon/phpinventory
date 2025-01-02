@@ -1,8 +1,8 @@
 <?php
 
+use Stradow\Framework\DependencyResolver\Container;
 use Stradow\Framework\Event\Event;
 use Stradow\Framework\Event\ListenerProvider;
-use Stradow\Framework\DependencyResolver\Container;
 
 require __DIR__.'/../vendor/autoload.php';
 
@@ -11,7 +11,7 @@ require __DIR__.'/environment.php';
 /**
  * @var array EVENT_CONFIG
  */
-define('EVENT_CONFIG', require __DIR__ . '/../config/events.php');
+define('EVENT_CONFIG', require __DIR__.'/../config/events.php');
 Container::add(Event::class, new Event(new ListenerProvider(EVENT_CONFIG)));
 
 /**

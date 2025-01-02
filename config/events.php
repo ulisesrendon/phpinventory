@@ -22,12 +22,12 @@ return [
     CollectionContentRemoved::class => [
     ],
     QueryExecuted::class => [
-        function(QueryExecuted $Event){
+        function (QueryExecuted $Event) {
             \Stradow\Framework\Log::append(json_encode([
                 'query' => $Event->getquery(),
                 'params' => $Event->getParams(),
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_LINE_TERMINATORS | JSON_UNESCAPED_SLASHES));
-        }
+        },
     ],
     CommandExecuted::class => [
         function (CommandExecuted $Event) {
@@ -35,6 +35,6 @@ return [
                 'query' => $Event->getquery(),
                 'params' => $Event->getParams(),
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_LINE_TERMINATORS | JSON_UNESCAPED_SLASHES));
-        }
+        },
     ],
 ];

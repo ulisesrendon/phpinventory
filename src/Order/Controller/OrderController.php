@@ -2,19 +2,19 @@
 
 namespace Stradow\Order\Controller;
 
-use Stradow\Framework\Validator;
+use Neuralpin\HTTPRouter\Interface\ResponseState;
+use Neuralpin\HTTPRouter\RequestData;
 use Neuralpin\HTTPRouter\Response;
+use Stradow\Framework\DependencyResolver\Container;
 use Stradow\Framework\Event\Event;
+use Stradow\Framework\HTTP\DefaultController;
+use Stradow\Framework\Validator;
+use Stradow\Order\Data\OrderCommand;
+use Stradow\Order\Data\OrderLineQuery;
 use Stradow\Order\Data\OrderQuery;
 use Stradow\Order\Data\OrderState;
-use Stradow\Order\Data\OrderCommand;
-use Neuralpin\HTTPRouter\RequestData;
 use Stradow\Order\Event\OrderCreated;
-use Stradow\Order\Data\OrderLineQuery;
 use Stradow\Product\Data\ProductQuery;
-use Stradow\Framework\HTTP\DefaultController;
-use Neuralpin\HTTPRouter\Interface\ResponseState;
-use Stradow\Framework\DependencyResolver\Container;
 
 class OrderController extends DefaultController
 {

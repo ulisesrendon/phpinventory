@@ -1,4 +1,5 @@
 <?php
+
 namespace Stradow\Framework\Helper;
 
 class Dump
