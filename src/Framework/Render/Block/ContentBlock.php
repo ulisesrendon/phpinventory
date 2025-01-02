@@ -13,6 +13,8 @@ class ContentBlock implements RendereableInterface
         NodeStateInterface $State,
         ContentStateInterface $Content,
     ): string {
+        dd($State);
+        dd($State->getLayoutNodes());
         // $HyperRenderApp = new HyperRenderApplication(
         //     id: $State->getValue(),
         //     Repo: $Content->getRepo(),
@@ -21,7 +23,6 @@ class ContentBlock implements RendereableInterface
         // );
 
         // return $HyperRenderApp->getHyperRender()->render(false);
-
         return '11111111111111111111111111111111111111111111';
     }
 }

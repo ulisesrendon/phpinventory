@@ -105,7 +105,7 @@ final class HyperRenderApplication
         $MainNodes = $contentGroups[$this->Content->id];
 
         foreach ($MainNodes as $k => $Node) {
-            if ($Node->type === 'content' || ! is_null($Node->layoutContainer)) {
+            if (! is_null($Node->layout)) {
                 $LayoutNodes = new HyperItemsRender;
                 foreach ($contentGroups[$Node->layout] as $Item) {
                     $NewItem = clone $Item;
