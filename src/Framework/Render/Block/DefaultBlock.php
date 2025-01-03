@@ -2,15 +2,15 @@
 
 namespace Stradow\Framework\Render\Block;
 
-use Stradow\Framework\Render\Interface\ContentStateInterface;
-use Stradow\Framework\Render\Interface\NodeStateInterface;
+use Stradow\Framework\Render\Interface\BlockStateInterface;
+use Stradow\Framework\Render\Interface\GlobalStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 
 class DefaultBlock implements RendereableInterface
 {
     public function render(
-        NodeStateInterface $State,
-        ContentStateInterface $Content,
+        BlockStateInterface $State,
+        GlobalStateInterface $GlobalState,
     ): string {
 
         $children = [];

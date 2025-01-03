@@ -18,8 +18,8 @@
     -[block] create block: multi-collection 
     -[block] create block: multidimensional-content listing
     -[block] create block: related content
+    -[block] create multiple nested tag from same single node (main->article->div, pre->code)
     -[system] allow render block and access to render code before full document render
-    -[system] implement custom template per node
     -[system] allow single layout for multiple nodes
     -[system] allow custom ordering for node layout
     -[system] allow item value or item properties to auto reference content and node data

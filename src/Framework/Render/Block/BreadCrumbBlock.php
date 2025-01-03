@@ -3,28 +3,33 @@
 namespace Stradow\Framework\Render\Block;
 
 use Neuralpin\HTTPRouter\Helper\TemplateRender;
-use Stradow\Framework\Render\Interface\ContentStateInterface;
-use Stradow\Framework\Render\Interface\NodeStateInterface;
+use Stradow\Framework\Render\Interface\BlockStateInterface;
+use Stradow\Framework\Render\Interface\GlobalStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 
 class BreadCrumbBlock implements RendereableInterface
 {
+    protected static array $List = [];
+
     public function render(
-        NodeStateInterface $State,
-        ContentStateInterface $Content,
+        BlockStateInterface $State,
+        GlobalStateInterface $GlobalState,
     ): string {
         $BreadCrumb = [
             $this->BreadCrumbItemFactory(
-                url: $Content->getConfig('site_url'),
+                url: $GlobalState->getConfig('site_url'),
                 anchor: $State->getValue() ?? 'Index',
             ),
         ];
 
+        $id = $GlobalState->getId();
+        self::$List[$id] ??= $GlobalState->getRepo()->getContentBranchRelatedNodes($id, 'asc');
+
         $this->linkedListGenerator(
-            list: $Content->getRepo()->getContentBranchRelatedNodes($Content->getId(), 'asc'),
-            callback: function (object $actualNode) use ($Content, &$BreadCrumb) {
+            list: self::$List[$id],
+            callback: function (object $actualNode) use ($GlobalState, &$BreadCrumb) {
                 $Item = $this->BreadCrumbItemFactory(
-                    url: "{$Content->getConfig('site_url')}/{$actualNode->path}",
+                    url: "{$GlobalState->getConfig('site_url')}/{$actualNode->path}",
                     anchor: $actualNode->title,
                 );
 
@@ -39,8 +44,8 @@ class BreadCrumbBlock implements RendereableInterface
         $template = $State->getProperty('template') ?? 'templates/breadcrumb.template.php';
 
         return (string) new TemplateRender(CONTENT_DIR."/$template", [
-            'Content' => $Content,
             'Block' => $State,
+            'Content' => $GlobalState,
             'BreadCrumb' => $BreadCrumb,
         ]);
     }

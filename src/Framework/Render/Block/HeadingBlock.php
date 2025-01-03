@@ -2,19 +2,28 @@
 
 namespace Stradow\Framework\Render\Block;
 
-use Stradow\Framework\Render\Interface\ContentStateInterface;
-use Stradow\Framework\Render\Interface\NodeStateInterface;
+use Neuralpin\HTTPRouter\Helper\TemplateRender;
+use Stradow\Framework\Render\Interface\BlockStateInterface;
+use Stradow\Framework\Render\Interface\GlobalStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 use Stradow\Framework\Render\TagRender;
 
 class HeadingBlock implements RendereableInterface
 {
     public function render(
-        NodeStateInterface $State,
-        ContentStateInterface $Content,
+        BlockStateInterface $State,
+        GlobalStateInterface $GlobalState,
     ): string {
-        $heading = $State->getValue() ?? '';
+        if ($State->isTemplated()) {
+            return (string) new TemplateRender(CONTENT_DIR."/{$State->getProperty('template')}", [
+                'BlockState' => $State,
+                'GlobalState' => $GlobalState,
+                'TagRender' => TagRender::class,
+                'TemplateRender' => TemplateRender::class,
+            ]);
+        }
 
+        $heading = $State->getValue() ?? '';
         $attributes = $State->getAttributes();
         $attributes['name'] ??= $this->generateName($heading, $State->getId());
 

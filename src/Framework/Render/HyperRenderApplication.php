@@ -2,10 +2,10 @@
 
 namespace Stradow\Framework\Render;
 
-use Stradow\Framework\Render\Data\ContentState;
-use Stradow\Framework\Render\Interface\ContentStateInterface;
+use Stradow\Framework\Render\Data\GlobalState;
+use Stradow\Framework\Render\Interface\BlockStateInterface;
+use Stradow\Framework\Render\Interface\GlobalStateInterface;
 use Stradow\Framework\Render\Interface\NestableInterface;
-use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RepoInterface;
 
 final class HyperRenderApplication
@@ -14,7 +14,7 @@ final class HyperRenderApplication
 
     private RepoInterface $Repo;
 
-    private ContentStateInterface $ContentState;
+    private GlobalStateInterface $GlobalState;
 
     private HyperItemsRender $HyperRender;
 
@@ -23,6 +23,8 @@ final class HyperRenderApplication
     private array $config;
 
     private array $renderConfig;
+
+    private static array $Contents = [];
 
     /**
      * @param  scalar  $id
@@ -35,22 +37,25 @@ final class HyperRenderApplication
         array $config,
         array $renderConfig,
         ?object $Content = null,
+        ?object $HyperRender = null,
+        ?array $ContentNodes = null,
     ) {
-        $this->HyperRender = new HyperItemsRender;
+        $this->HyperRender = $HyperRender ?? new HyperItemsRender;
         $this->Repo = $Repo;
         $this->renderConfig = $renderConfig;
         $this->config = $config;
 
-        $this->Content = $Content ?? $this->Repo->getContent($id);
+        self::$Contents[$id] ??= $this->Repo->getContent($id);
+
+        $this->Content = $Content ?? self::$Contents[$id];
 
         if (empty($this->Content)) {
             throw new \DomainException("Content not found ($id)");
         }
 
-        $this->ContentState = $this->contentStateBuild();
+        $this->GlobalState = $this->contentStateBuild();
 
-        $this->ContentNodes = $this->prepareContentNodes();
-
+        $this->ContentNodes = $ContentNodes ?? $this->prepareContentNodes();
     }
 
     private function addLayoutNodes(array $ContentNodes)
@@ -64,9 +69,9 @@ final class HyperRenderApplication
         return [...$LayoutNodes, ...$ContentNodes];
     }
 
-    private function contentStateBuild(): ContentStateInterface
+    private function contentStateBuild(): GlobalStateInterface
     {
-        return new ContentState(
+        return new GlobalState(
             id: $this->Content->id,
             path: $this->Content->path,
             title: $this->Content->title,
@@ -80,7 +85,7 @@ final class HyperRenderApplication
         );
     }
 
-    private function hyperNodeBuild(object $Item, object $ContentState): NestableInterface&NodeStateInterface
+    private function hyperNodeBuild(object $Item, object $ContentState): NestableInterface&BlockStateInterface
     {
         return new HyperNode(
             id: $Item->id,
@@ -89,7 +94,7 @@ final class HyperRenderApplication
             type: $Item->type,
             parent: $Item->parent,
             RenderEngine: new ($this->renderConfig[$Item->type] ?? $this->renderConfig['default']),
-            Content: $ContentState,
+            GlobalState: $ContentState,
             LayoutNodes: $Item->LayoutNodes,
         );
     }
@@ -105,36 +110,43 @@ final class HyperRenderApplication
         $MainNodes = $contentGroups[$this->Content->id];
 
         foreach ($MainNodes as $k => $Node) {
-            if (! is_null($Node->layout)) {
-                $LayoutNodes = new HyperItemsRender;
-                foreach ($contentGroups[$Node->layout] as $Item) {
-                    $NewItem = clone $Item;
-                    if (is_null($NewItem->parent)) {
-                        $NewItem->weight = $Node->weight;
-                    }
-
-                    $LayoutNodes->addNode($this->hyperNodeBuild($NewItem, $this->ContentState));
-                }
-
-                if ($Node->type !== 'content') {
-                    $SelfNestedNode = clone $Node;
-                    $SelfNestedNode->parent = $SelfNestedNode->layoutContainer;
-                    $LayoutNodes->addNode($this->hyperNodeBuild($SelfNestedNode, $this->ContentState));
-                }
-
-                $MainNodes[$k]->LayoutNodes = $LayoutNodes;
-            }
-
-            $this->HyperRender->addNode($this->hyperNodeBuild($Node, $this->ContentState));
+            $this->prepareLayoutNodes($Node, $contentGroups);
+            $this->HyperRender->addNode($this->hyperNodeBuild($Node, $this->GlobalState));
         }
 
         // usort($ContentNodes, function ($a, $b) {
         //     return ($a->weight < $b->weight) ? -1 : 1;
         // });
 
-        // \Stradow\Framework\Helper\Dump::json($this->ContentNodes);
-
         return $MainNodes;
+    }
+
+    public function prepareLayoutNodes($Node, array $OffNodes)
+    {
+        if (! is_null($Node->layout)) {
+            $LayoutNodes = new HyperItemsRender;
+            $LayoutList = $OffNodes[$Node->layout];
+
+            foreach ($LayoutList as $Item) {
+                if (! is_null($Item->layout)) {
+                    $this->prepareLayoutNodes($Item, $OffNodes);
+                }
+                $NewItem = clone $Item;
+                if (is_null($NewItem->parent)) {
+                    $NewItem->weight = $Node->weight;
+                }
+
+                $LayoutNodes->addNode($this->hyperNodeBuild($NewItem, $this->GlobalState));
+            }
+
+            if ($Node->type !== 'content') {
+                $SelfNestedNode = clone $Node;
+                $SelfNestedNode->parent = $SelfNestedNode->layoutContainer;
+                $LayoutNodes->addNode($this->hyperNodeBuild($SelfNestedNode, $this->GlobalState));
+            }
+
+            $Node->LayoutNodes = $LayoutNodes;
+        }
     }
 
     public function getHyperRender(): HyperItemsRender

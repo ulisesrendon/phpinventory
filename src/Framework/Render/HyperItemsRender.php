@@ -3,21 +3,21 @@
 namespace Stradow\Framework\Render;
 
 use Stradow\Framework\Render\Helper\HyperCodePrettify;
+use Stradow\Framework\Render\Interface\BlockStateInterface;
 use Stradow\Framework\Render\Interface\NestableInterface;
-use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\PrettifierInterface;
 
 final class HyperItemsRender
 {
     /**
-     * @var array<scalar,NestableInterface&NodeStateInterface>
+     * @var array<scalar,NestableInterface&BlockStateInterface>
      */
     public array $nodes = [];
 
     private PrettifierInterface $Prettifier;
 
     /**
-     * @param  NestableInterface&NodeStateInterface[]  $items
+     * @param  NestableInterface&BlockStateInterface[]  $items
      * @param  class-string<PrettifierInterface>  $Prettifier
      */
     public function __construct(
@@ -28,14 +28,14 @@ final class HyperItemsRender
         $this->Prettifier = new $Prettifier;
     }
 
-    public function addNode(NestableInterface&NodeStateInterface $Node)
+    public function addNode(NestableInterface&BlockStateInterface $Node)
     {
         $this->nodes[$Node->getId()] = $Node;
     }
 
     /**
-     * @param  NodeStateInterface[]  $items
-     * @return NodeStateInterface[]
+     * @param  BlockStateInterface[]  $items
+     * @return BlockStateInterface[]
      */
     private function mapGenerator(array $items): array
     {
@@ -48,8 +48,8 @@ final class HyperItemsRender
     }
 
     /**
-     * @param  NestableInterface&NodeStateInterface[]  $items
-     * @return NestableInterface&NodeStateInterface[]
+     * @param  NestableInterface&BlockStateInterface[]  $items
+     * @return NestableInterface&BlockStateInterface[]
      */
     private function treeGenerator(array $items): array
     {
@@ -82,7 +82,7 @@ final class HyperItemsRender
         return $renderOutput;
     }
 
-    public function reducer(?string $carry, NodeStateInterface $Item): string
+    public function reducer(?string $carry, BlockStateInterface $Item): string
     {
         $LayoutNodes = $Item->getLayoutNodes();
         if (! is_null($LayoutNodes)) {

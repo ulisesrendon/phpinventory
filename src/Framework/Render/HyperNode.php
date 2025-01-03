@@ -2,12 +2,12 @@
 
 namespace Stradow\Framework\Render;
 
-use Stradow\Framework\Render\Interface\ContentStateInterface;
+use Stradow\Framework\Render\Interface\BlockStateInterface;
+use Stradow\Framework\Render\Interface\GlobalStateInterface;
 use Stradow\Framework\Render\Interface\NestableInterface;
-use Stradow\Framework\Render\Interface\NodeStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 
-final class HyperNode implements \Stringable, NestableInterface, NodeStateInterface
+final class HyperNode implements \Stringable, BlockStateInterface, NestableInterface
 {
     private RendereableInterface $RenderEngine;
 
@@ -27,7 +27,9 @@ final class HyperNode implements \Stringable, NestableInterface, NodeStateInterf
 
     private ?HyperItemsRender $LayoutNodes;
 
-    private ContentStateInterface $Content;
+    private GlobalStateInterface $GlobalState;
+
+    private $isTemplated = false;
 
     public function __construct(
         string|int|float $id,
@@ -36,7 +38,7 @@ final class HyperNode implements \Stringable, NestableInterface, NodeStateInterf
         string|int|float $type,
         null|string|int|float $parent,
         RendereableInterface $RenderEngine,
-        ContentStateInterface $Content,
+        GlobalStateInterface $GlobalState,
         ?HyperItemsRender $LayoutNodes = null,
     ) {
         $this->setId($id);
@@ -49,9 +51,13 @@ final class HyperNode implements \Stringable, NestableInterface, NodeStateInterf
         $this->setAttributes();
         $this->setParent($parent);
         $this->setRenderEngine($RenderEngine);
-        $this->Content = $Content;
+        $this->GlobalState = $GlobalState;
         $this->type = $type;
         $this->LayoutNodes = $LayoutNodes;
+
+        if (isset($properties['template'])) {
+            $this->isTemplated = true;
+        }
     }
 
     public function setValue(mixed $value)
@@ -76,7 +82,7 @@ final class HyperNode implements \Stringable, NestableInterface, NodeStateInterf
 
     public function getRender(): string
     {
-        return $this->RenderEngine->render($this, $this->Content);
+        return $this->RenderEngine->render($this, $this->GlobalState);
     }
 
     public function __toString(): string
@@ -178,5 +184,10 @@ final class HyperNode implements \Stringable, NestableInterface, NodeStateInterf
     public function getLayoutNodes(): ?HyperItemsRender
     {
         return $this->LayoutNodes;
+    }
+
+    public function isTemplated(): bool
+    {
+        return $this->isTemplated;
     }
 }

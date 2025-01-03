@@ -4,14 +4,14 @@ namespace Stradow\Framework\Render\Interface;
 
 use Stradow\Framework\Render\HyperItemsRender;
 
-interface NodeStateInterface
+interface BlockStateInterface
 {
     public function getValue();
 
     public function getId();
 
     /**
-     * @return NodeStateInterface[]
+     * @return BlockStateInterface[]
      */
     public function getChildren(): array;
 
@@ -26,4 +26,6 @@ interface NodeStateInterface
     public function getLayoutNodes(): ?HyperItemsRender;
 
     public function getRender(): string;
+
+    public function isTemplated(): bool;
 }

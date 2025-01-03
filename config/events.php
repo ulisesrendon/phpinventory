@@ -26,6 +26,7 @@ return [
             \Stradow\Framework\Log::append(json_encode([
                 'query' => $Event->getquery(),
                 'params' => $Event->getParams(),
+                // 'trace' => debug_backtrace(),
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_LINE_TERMINATORS | JSON_UNESCAPED_SLASHES));
         },
     ],
@@ -34,6 +35,7 @@ return [
             \Stradow\Framework\Log::append(json_encode([
                 'query' => $Event->getquery(),
                 'params' => $Event->getParams(),
+                // 'trace' => debug_backtrace(),
             ], JSON_PRETTY_PRINT | JSON_UNESCAPED_LINE_TERMINATORS | JSON_UNESCAPED_SLASHES));
         },
     ],

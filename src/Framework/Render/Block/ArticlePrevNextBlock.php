@@ -3,26 +3,30 @@
 namespace Stradow\Framework\Render\Block;
 
 use Neuralpin\HTTPRouter\Helper\TemplateRender;
-use Stradow\Framework\Render\Interface\ContentStateInterface;
-use Stradow\Framework\Render\Interface\NodeStateInterface;
+use Stradow\Framework\Render\Interface\BlockStateInterface;
+use Stradow\Framework\Render\Interface\GlobalStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 
 class ArticlePrevNextBlock implements RendereableInterface
 {
+    private static array $Contents = [];
+
     public function render(
-        NodeStateInterface $State,
-        ContentStateInterface $Content,
+        BlockStateInterface $State,
+        GlobalStateInterface $GlobalState,
     ): string {
-        $Contents = $Content->getRepo()->getCollectionContents(
+        self::$Contents[$State->getValue()] ??= $GlobalState->getRepo()->getCollectionContents(
             collectionId: $State->getValue(),
             orderBy: $State->getProperty('orderBy'),
             orderDirection: $State->getProperty('orderDirection'),
-            siteUrl: $Content->getConfig('site_url'),
+            siteUrl: $GlobalState->getConfig('site_url'),
         );
+
+        $Contents = self::$Contents[$State->getValue()];
 
         $actualIndex = null;
         foreach ($Contents as $k => $Item) {
-            if ($Item->id == $Content->getId()) {
+            if ($Item->id == $GlobalState->getId()) {
                 $actualIndex = $k;
                 break;
             }
@@ -35,7 +39,7 @@ class ArticlePrevNextBlock implements RendereableInterface
         $template = $State->getProperty('template') ?? 'templates/ArticlePrevNextBlock.template.php';
 
         return (string) new TemplateRender(CONTENT_DIR."/$template", [
-            'Content' => $Content,
+            'Content' => $GlobalState,
             'Block' => $State,
             'ActualContent' => $ActualContent,
             'PrevContent' => $ActualContent ? $PrevContent : null,

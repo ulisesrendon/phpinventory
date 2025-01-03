@@ -2,9 +2,9 @@
 
 namespace Stradow\Framework\Render\Data;
 
-use Stradow\Framework\Render\Interface\ContentStateInterface;
+use Stradow\Framework\Render\Interface\GlobalStateInterface;
 
-class ContentState implements ContentStateInterface
+class GlobalState implements GlobalStateInterface
 {
     private array $config = [];
 

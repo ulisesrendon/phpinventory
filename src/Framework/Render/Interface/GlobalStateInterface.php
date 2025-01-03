@@ -2,7 +2,7 @@
 
 namespace Stradow\Framework\Render\Interface;
 
-interface ContentStateInterface
+interface GlobalStateInterface
 {
     public function getId(): int|float|string;
 
