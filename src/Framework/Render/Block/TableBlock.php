@@ -20,12 +20,10 @@ class TableBlock implements RendereableInterface
             'cell' => 'td',
         ];
 
-        $tag = $State->getProperty('tag') ?? $tags[$State->getProperty('type')] ?? 'table';
-
         $childrenContent = array_reduce($State->getChildren(), fn(?string $carry, $Item): string => $carry.$Item) ?? '';
 
         return (string) new TagRender(
-            tag: $tag,
+            tag: $State->getProperty('tag') ?? $tags[$State->getProperty('type')] ?? 'table',
             attributes: $State->getAttributes(),
             content: !empty($childrenContent) ? $childrenContent : $State->getValue() ?? '',
             isEmpty: false,
