@@ -13,16 +13,13 @@ class ContentBlock implements RendereableInterface
         NodeStateInterface $State,
         ContentStateInterface $Content,
     ): string {
-        dd($State);
-        dd($State->getLayoutNodes());
-        // $HyperRenderApp = new HyperRenderApplication(
-        //     id: $State->getValue(),
-        //     Repo: $Content->getRepo(),
-        //     config: $Content->getConfig(),
-        //     renderConfig: $Content->getRenderConfig(),
-        // );
+        $HyperRenderApp = new HyperRenderApplication(
+            id: $State->getValue() ?? $State->getProperty('layout'),
+            Repo: $Content->getRepo(),
+            config: $Content->getConfig(),
+            renderConfig: $Content->getRenderConfig(),
+        );
 
-        // return $HyperRenderApp->getHyperRender()->render(false);
-        return '11111111111111111111111111111111111111111111';
+        return $HyperRenderApp->getHyperRender()->render(false);
     }
 }

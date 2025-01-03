@@ -6,18 +6,21 @@
     -[api] add pagination to content list
     -[api] add tree view endpoint
     -[api] add map view endpoint
+    -[api] add pre render view endpoint
     -[api] add render view endpoint
+    -[system] nested contents should have access to their own content data
 -Nodes
+    -[api] management for single nodes
     -[api] allow partially patch for properties
     -[api] validation for node system (upsert,delete)
     -[api] optimize node system upsert query
     -[block] create block: article tags/categories
     -[block] create block: multi-collection 
     -[block] create block: multidimensional-content listing
-    -[block] create block: related content 
+    -[block] create block: related content
+    -[system] allow render block and access to render code before full document render
     -[system] implement custom template per node
-    -[system] improve custom node layout
-    -[system] allow multiple nodes per layout
+    -[system] allow single layout for multiple nodes
     -[system] allow custom ordering for node layout
     -[system] allow item value or item properties to auto reference content and node data
 -Static render
