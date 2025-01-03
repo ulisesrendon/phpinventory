@@ -13,32 +13,21 @@ class TableBlock implements RendereableInterface
         NodeStateInterface $State,
         ContentStateInterface $Content,
     ): string {
-        $type = $State->getProperty('type');
+        $tags = [
+            'table' => 'table',
+            'row' => 'tr',
+            'table-heading' => 'th',
+            'cell' => 'td',
+        ];
 
-        $content = '';
+        $tag = $State->getProperty('tag') ?? $tags[$State->getProperty('type')] ?? 'table';
 
-        if ($type == 'table') {
-            $tag = $State->getProperty('tag') ?? 'table';
-            foreach ($State->getChildren() as $row) {
-                $content .= $row;
-            }
-        } elseif ($type == 'row') {
-            $tag = $State->getProperty('tag') ?? 'tr';
-            foreach ($State->getChildren() as $cell) {
-                $content .= $cell;
-            }
-        } elseif ($type == 'cell') {
-            $tag = $State->getProperty('tag') ?? 'td';
-            $content = $State->getValue();
-        } elseif ($type == 'table-heading') {
-            $tag = $State->getProperty('tag') ?? 'th';
-            $content = $State->getValue();
-        }
+        $childrenContent = array_reduce($State->getChildren(), fn(?string $carry, $Item): string => $carry.$Item) ?? '';
 
         return (string) new TagRender(
             tag: $tag,
             attributes: $State->getAttributes(),
-            content: $content,
+            content: !empty($childrenContent) ? $childrenContent : $State->getValue() ?? '',
             isEmpty: false,
         );
     }
