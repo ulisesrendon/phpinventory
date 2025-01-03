@@ -29,3 +29,4 @@
 -System
     -Inject dependency resolver in route system
     -Create events for route system
+    -Set PDO to direct fetch node objects
