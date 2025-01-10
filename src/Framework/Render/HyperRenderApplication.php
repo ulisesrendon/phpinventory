@@ -28,6 +28,7 @@ final class HyperRenderApplication
 
     /**
      * @param  scalar  $id
+     * @param  class-string[]  $renderConfig
      *
      * @throws \DomainException
      */
@@ -121,7 +122,7 @@ final class HyperRenderApplication
         return $MainNodes;
     }
 
-    public function prepareLayoutNodes($Node, array $OffNodes)
+    private function prepareLayoutNodes($Node, array $OffNodes)
     {
         if (! is_null($Node->layout)) {
             $LayoutNodes = new HyperItemsRender;

@@ -2,17 +2,21 @@
 
 namespace Stradow\Framework\Render;
 
+use ArrayIterator;
+use Countable;
+use IteratorAggregate;
 use Stradow\Framework\Render\Helper\HyperCodePrettify;
 use Stradow\Framework\Render\Interface\BlockStateInterface;
 use Stradow\Framework\Render\Interface\NestableInterface;
 use Stradow\Framework\Render\Interface\PrettifierInterface;
+use Traversable;
 
-final class HyperItemsRender
+final class HyperItemsRender implements Countable, IteratorAggregate
 {
     /**
      * @var array<scalar,NestableInterface&BlockStateInterface>
      */
-    public array $nodes = [];
+    private array $nodes = [];
 
     private PrettifierInterface $Prettifier;
 
@@ -82,7 +86,7 @@ final class HyperItemsRender
         return $renderOutput;
     }
 
-    public function reducer(?string $carry, BlockStateInterface $Item): string
+    private function reducer(?string $carry, BlockStateInterface $Item): string
     {
         $LayoutNodes = $Item->getLayoutNodes();
         if (! is_null($LayoutNodes)) {
@@ -92,5 +96,60 @@ final class HyperItemsRender
         }
 
         return $carry.$render;
+    }
+
+    /**
+     * Returns a summary of the collection of nodes in a map-like schema
+     *
+     * @param  class-string[]  $renderConfig
+     */
+    public function getMapSchema(array $renderConfig = []): array
+    {
+        $schema = [];
+
+        foreach ($this->nodes as $k => $node) {
+            $schema[$k] = [
+                'value' => $node->getValue(),
+                'parent' => $node->getParent(),
+                'properties' => $node->getProperties(),
+                'render' => $renderConfig[$node->getType()] ?? null,
+            ];
+        }
+
+        return $schema;
+    }
+
+    /**
+     * Returns a summary of the collection of nodes in a tree-like schema
+     *
+     * @param  class-string[]  $renderConfig
+     */
+    public function getTreeSchema(array $renderConfig = []): array
+    {
+        $items = $this->getMapSchema($renderConfig);
+
+        $nodeTree = [];
+        foreach ($items as $k => $item) {
+            $items[$k]['children'] ??= [];
+            $item['children'] ??= [];
+
+            if (! is_null($item['parent']) && isset($items[$item['parent']])) {
+                $items[$item['parent']]['children'][] = $item;
+            } else {
+                $nodeTree[$k] = &$items[$k];
+            }
+        }
+
+        return $nodeTree;
+    }
+
+    public function count(): int
+    {
+        return count($this->nodes);
+    }
+
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->nodes);
     }
 }

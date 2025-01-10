@@ -26,6 +26,10 @@ class GlobalState implements GlobalStateInterface
 
     private object $Repo;
 
+    /**
+     * @param  scalar  $id
+     * @param  class-string[]  $renderConfig
+     */
     public function __construct(
         int|float|string $id,
         string $title,
