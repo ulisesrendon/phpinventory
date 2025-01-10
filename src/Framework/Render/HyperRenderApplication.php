@@ -59,16 +59,16 @@ final class HyperRenderApplication
         $this->ContentNodes = $ContentNodes ?? $this->prepareContentNodes();
     }
 
-    private function addLayoutNodes(array $ContentNodes)
-    {
-        $RootNode = $this->Content->properties->layoutContainer;
-        $LayoutNodes = $this->Repo->getContentNodes($this->Content->properties->layout);
-        foreach ($ContentNodes as $Item) {
-            $Item->parent ??= $RootNode;
-        }
+    // private function addLayoutNodes(array $ContentNodes): array
+    // {
+    //     $RootNode = $this->Content->properties->layoutContainer;
+    //     $LayoutNodes = $this->Repo->getContentNodes($this->Content->properties->layout);
+    //     foreach ($ContentNodes as $Item) {
+    //         $Item->parent ??= $RootNode;
+    //     }
 
-        return [...$LayoutNodes, ...$ContentNodes];
-    }
+    //     return [...$LayoutNodes, ...$ContentNodes];
+    // }
 
     private function contentStateBuild(): GlobalStateInterface
     {
@@ -108,7 +108,7 @@ final class HyperRenderApplication
             $Node->LayoutNodes = null;
             $contentGroups[$Node->content][] = $Node;
         }
-        $MainNodes = $contentGroups[$this->Content->id];
+        $MainNodes = $contentGroups[$this->Content->id] ?? [];
 
         foreach ($MainNodes as $k => $Node) {
             $this->prepareLayoutNodes($Node, $contentGroups);
