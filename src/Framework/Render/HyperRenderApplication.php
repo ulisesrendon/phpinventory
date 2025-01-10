@@ -16,7 +16,7 @@ final class HyperRenderApplication
 
     private GlobalStateInterface $GlobalState;
 
-    private HyperItemsRender $HyperRender;
+    private HyperRender $HyperRender;
 
     private array $ContentNodes;
 
@@ -41,7 +41,7 @@ final class HyperRenderApplication
         ?object $HyperRender = null,
         ?array $ContentNodes = null,
     ) {
-        $this->HyperRender = $HyperRender ?? new HyperItemsRender;
+        $this->HyperRender = $HyperRender ?? new HyperRender;
         $this->Repo = $Repo;
         $this->renderConfig = $renderConfig;
         $this->config = $config;
@@ -125,7 +125,7 @@ final class HyperRenderApplication
     private function prepareLayoutNodes($Node, array $OffNodes)
     {
         if (! is_null($Node->layout)) {
-            $LayoutNodes = new HyperItemsRender;
+            $LayoutNodes = new HyperRender;
             $LayoutList = $OffNodes[$Node->layout];
 
             foreach ($LayoutList as $Item) {
@@ -150,7 +150,7 @@ final class HyperRenderApplication
         }
     }
 
-    public function getHyperRender(): HyperItemsRender
+    public function getHyperRender(): HyperRender
     {
         return $this->HyperRender;
     }

@@ -2,7 +2,7 @@
 
 namespace Stradow\Framework\Render\Interface;
 
-use Stradow\Framework\Render\HyperItemsRender;
+use Stradow\Framework\Render\HyperRender;
 
 interface BlockStateInterface
 {
@@ -23,7 +23,7 @@ interface BlockStateInterface
 
     public function getType(): string;
 
-    public function getLayoutNodes(): ?HyperItemsRender;
+    public function getLayoutNodes(): ?HyperRender;
 
     public function getRender(): string;
 

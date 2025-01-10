@@ -11,7 +11,7 @@ use Stradow\Framework\Render\Interface\NestableInterface;
 use Stradow\Framework\Render\Interface\PrettifierInterface;
 use Traversable;
 
-final class HyperItemsRender implements Countable, IteratorAggregate
+final class HyperRender implements Countable, IteratorAggregate
 {
     /**
      * @var array<scalar,NestableInterface&BlockStateInterface>

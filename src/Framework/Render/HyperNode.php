@@ -25,7 +25,7 @@ final class HyperNode implements \Stringable, BlockStateInterface, NestableInter
 
     private array $attributes = [];
 
-    private ?HyperItemsRender $LayoutNodes;
+    private ?HyperRender $LayoutNodes;
 
     private GlobalStateInterface $GlobalState;
 
@@ -39,7 +39,7 @@ final class HyperNode implements \Stringable, BlockStateInterface, NestableInter
         null|string|int|float $parent,
         RendereableInterface $RenderEngine,
         GlobalStateInterface $GlobalState,
-        ?HyperItemsRender $LayoutNodes = null,
+        ?HyperRender $LayoutNodes = null,
     ) {
         $this->setId($id);
         $this->setValue($value);
@@ -181,7 +181,7 @@ final class HyperNode implements \Stringable, BlockStateInterface, NestableInter
         return $this->attributes;
     }
 
-    public function getLayoutNodes(): ?HyperItemsRender
+    public function getLayoutNodes(): ?HyperRender
     {
         return $this->LayoutNodes;
     }
