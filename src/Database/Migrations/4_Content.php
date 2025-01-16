@@ -12,7 +12,7 @@ $DataBaseAccess->command("INSERT INTO config (name,value) VALUES
 	('site_name','Stradow'),
 	('site_description','Lorem ipsum dolor sit amet'),
 	('staticpath','public/static'),
-	('assetspath','content/neuralpin/')
+	('assetspath','content/assets')
 ");
 
 $DataBaseAccess->command("CREATE TABLE contentnodes (
