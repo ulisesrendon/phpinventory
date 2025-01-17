@@ -235,6 +235,8 @@ class ContentRepo implements RepoInterface
             $orderBy = "collections_contents.$orderBy";
         } elseif ($orderBy === 'url') {
             $orderBy = 'contents.path';
+        }elseif ($orderBy === 'date') {
+            $orderBy = "JSON_EXTRACT(contents.properties, '$.created_at')";
         }
 
         $orderDirection ??= 'asc';

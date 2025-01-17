@@ -37,7 +37,6 @@ class ContentController
      */
     public function get(string $path): ResponseState
     {
-
         $Content = $this->ContentRepo->getContentByPath($path);
 
         if (empty($Content)) {
@@ -49,7 +48,7 @@ class ContentController
         $HyperRenderApp = new HyperRenderApplication(
             id: $Content->id,
             Repo: $this->ContentRepo,
-            config: $SiteConfig->get(),
+            config: $SiteConfig,
             renderConfig: RENDER_CONFIG,
             Content: $Content,
         );
@@ -122,10 +121,10 @@ class ContentController
         }
 
         $page = $Request->getParam('page');
-        $perPage = $Request->getParam('perpage');
+        $perPage = $Request->getParam('perPage');
         $offset = null;
-        $orderDirection = $Request->getParam('orderdirection');
-        $orderBy = $Request->getParam('orderby');
+        $orderDirection = $Request->getParam('orderDirection');
+        $orderBy = $Request->getParam('orderBy');
 
         if (! is_null($page) || ! is_null($perPage)) {
             $page = is_null($page) ? 1 : (int) $page;

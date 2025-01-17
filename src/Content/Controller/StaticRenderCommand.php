@@ -75,7 +75,7 @@ class StaticRenderCommand
             $HyperRenderApp = new HyperRenderApplication(
                 id: $Page->id,
                 Repo: $ContentRepo,
-                config: $SiteConfig->get(),
+                config: $SiteConfig,
                 renderConfig: RENDER_CONFIG,
             );
             $HyperRender = $HyperRenderApp->getHyperRender();
@@ -95,10 +95,10 @@ class StaticRenderCommand
             $extension = pathinfo($Content->path)['extension'] ?? '';
 
             if (empty($extension)) {
-                $Content->path .= '.html';
+                $extension = '.html';
             }
 
-            self::forceFilePutContents($staticDir."/{$Content->path}", (string) $Render);
+            self::forceFilePutContents($staticDir."/{$Content->path}{$extension}", (string) $Render);
 
             $created[] = $staticDir."/{$Content->path}";
         }

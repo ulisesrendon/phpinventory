@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $Content->title ?> - <?php echo $Config->get('site_name') ?></title>
+    <link rel="icon" href="<?php echo $Config->get('site_url') ?>/favicon.ico" />
+
+    <link rel="canonical" href="<?php echo $Config->get('site_url') ?>/<?php echo $Content->path ?>" />
+    <meta property="og:title" content="<?php echo $Content->title ?> - <?php echo $Config->get('site_name') ?>">
+    <?php if(isset($Content->properties->description)){?>
+    <meta name="description" content="<?php echo $Content->properties->description ?>" />
+    <?php } ?>
+    <meta property='og:image' content='<?php echo $Config->get('site_url') ?>/<?php echo $Content->properties->cover ?? 'media/covers/default.jpg' ?>'>
+    <meta property='og:type' content='article'>
     <style>
         body{
             background-color: #222;

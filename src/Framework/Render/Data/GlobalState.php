@@ -6,7 +6,7 @@ use Stradow\Framework\Render\Interface\GlobalStateInterface;
 
 class GlobalState implements GlobalStateInterface
 {
-    private array $config = [];
+    private object $config;
 
     private array $renderConfig = [];
 
@@ -38,7 +38,7 @@ class GlobalState implements GlobalStateInterface
         string $type,
         object $Root,
         object $Repo,
-        array $config,
+        object $config,
         array $renderConfig,
         ?string $path = null,
     ) {
@@ -96,7 +96,7 @@ class GlobalState implements GlobalStateInterface
 
     public function getConfig(?string $name = null): mixed
     {
-        return is_null($name) ? $this->config : $this->config[$name] ?? null;
+        return is_null($name) ? $this->config->get() : $this->config->get($name) ?? null;
     }
 
     public function setConfig(string $name, mixed $value): void

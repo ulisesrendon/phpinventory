@@ -20,7 +20,7 @@ final class HyperRenderApplication
 
     private array $ContentNodes;
 
-    private array $config;
+    private object $config;
 
     private array $renderConfig;
 
@@ -35,7 +35,7 @@ final class HyperRenderApplication
     public function __construct(
         int|float|string $id,
         RepoInterface $Repo,
-        array $config,
+        object $config,
         array $renderConfig,
         ?object $Content = null,
         ?object $HyperRender = null,
