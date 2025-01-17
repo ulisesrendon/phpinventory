@@ -18,6 +18,7 @@ class ContainerBlock implements RendereableInterface
             return (string) new TemplateRender(CONTENT_DIR."/{$State->getProperty('template')}", [
                 'BlockState' => $State,
                 'GlobalState' => $GlobalState,
+                'Config' => $GlobalState->getConfig(),
                 'TagRender' => TagRender::class,
                 'TemplateRender' => TemplateRender::class,
             ]);

@@ -46,6 +46,7 @@ class BreadCrumbBlock implements RendereableInterface
         return (string) new TemplateRender(CONTENT_DIR."/$template", [
             'Block' => $State,
             'Content' => $GlobalState,
+            'Config' => $GlobalState->getConfig(),
             'BreadCrumb' => $BreadCrumb,
         ]);
     }

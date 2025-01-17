@@ -40,6 +40,7 @@ class ArticlePrevNextBlock implements RendereableInterface
 
         return (string) new TemplateRender(CONTENT_DIR."/$template", [
             'Content' => $GlobalState,
+            'Config' => $GlobalState->getConfig(),
             'Block' => $State,
             'ActualContent' => $ActualContent,
             'PrevContent' => $ActualContent ? $PrevContent : null,
