@@ -17,7 +17,7 @@ class ContentBlock implements RendereableInterface
         $HyperRenderApp = new HyperRenderApplication(
             id: $State->getValue() ?? $State->getProperty('layout'),
             HyperRender: $State->getLayoutNodes(),
-            ContentNodes: [],
+            ContentNodes: null,
             Repo: $GlobalState->getRepo(),
             config: $GlobalState->getConfig(),
             renderConfig: $GlobalState->getRenderConfig(),

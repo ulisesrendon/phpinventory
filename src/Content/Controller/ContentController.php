@@ -83,7 +83,7 @@ class ContentController
     /**
      * Shows content data by id
      */
-    public function getContent(string $id): ResponseState
+    public function getContent(string $id, Request $Request): ResponseState
     {
         $Content = $this->ContentRepo->getContent($id);
 
@@ -92,6 +92,13 @@ class ContentController
         }
 
         $Content->nodes = $this->ContentRepo->getContentNodes($Content->id);
+
+        if(!is_null($Request->getParam('escaped'))){
+            foreach($Content->nodes as $k => $node){
+                $Content->nodes[$k]->value = htmlspecialchars($node->value);
+            }
+        }
+
 
         return Response::json($Content);
     }

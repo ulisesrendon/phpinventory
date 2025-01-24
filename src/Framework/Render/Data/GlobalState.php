@@ -96,7 +96,7 @@ class GlobalState implements GlobalStateInterface
 
     public function getConfig(?string $name = null): mixed
     {
-        return is_null($name) ? $this->config->get() : $this->config->get($name) ?? null;
+        return is_null($name) ? $this->config : $this->config->get($name) ?? null;
     }
 
     public function setConfig(string $name, mixed $value): void
