@@ -74,6 +74,8 @@ final class HyperRender implements Countable, IteratorAggregate
         // Generate tree structure
         $nodeTree = $this->treeGenerator($this->nodes);
 
+        // dd($nodeTree);
+
         $renderOutput = array_reduce(
             array: $nodeTree,
             callback: [$this, 'reducer']
@@ -88,14 +90,7 @@ final class HyperRender implements Countable, IteratorAggregate
 
     private function reducer(?string $carry, BlockStateInterface $Item): string
     {
-        $LayoutNodes = $Item->getLayoutNodes();
-        if (! is_null($LayoutNodes)) {
-            $render = $Item->getLayoutNodes()->render();
-        } else {
-            $render = $Item->getRender();
-        }
-
-        return $carry.$render;
+        return $carry.$Item->getRender();
     }
 
     /**

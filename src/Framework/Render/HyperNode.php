@@ -82,6 +82,15 @@ final class HyperNode implements \Stringable, BlockStateInterface, NestableInter
 
     public function getRender(): string
     {
+        if (! empty($this->LayoutNodes)) {
+            $this->setParent($this->getProperty('layoutContainer'));
+            $LayoutNodes = clone $this->LayoutNodes;
+            $this->LayoutNodes = null;
+            $LayoutNodes->addNode($this);
+
+            return $LayoutNodes->render();
+        }
+
         return $this->RenderEngine->render($this, $this->GlobalState);
     }
 

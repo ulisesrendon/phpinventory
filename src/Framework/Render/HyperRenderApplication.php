@@ -59,17 +59,6 @@ final class HyperRenderApplication
         $this->ContentNodes = $ContentNodes ?? $this->prepareContentNodes();
     }
 
-    // private function addLayoutNodes(array $ContentNodes): array
-    // {
-    //     $RootNode = $this->Content->properties->layoutContainer;
-    //     $LayoutNodes = $this->Repo->getContentNodes($this->Content->properties->layout);
-    //     foreach ($ContentNodes as $Item) {
-    //         $Item->parent ??= $RootNode;
-    //     }
-
-    //     return [...$LayoutNodes, ...$ContentNodes];
-    // }
-
     private function contentStateBuild(): GlobalStateInterface
     {
         return new GlobalState(
@@ -111,43 +100,16 @@ final class HyperRenderApplication
         $MainNodes = $contentGroups[$this->Content->id] ?? [];
 
         foreach ($MainNodes as $k => $Node) {
-            $this->prepareLayoutNodes($Node, $contentGroups);
+            if (! is_null($Node->layout)) {
+                $Node->LayoutNodes = new HyperRender;
+                foreach ($contentGroups[$Node->layout] as $subNode) {
+                    $Node->LayoutNodes->addNode($this->hyperNodeBuild($subNode, $this->GlobalState));
+                }
+            }
             $this->HyperRender->addNode($this->hyperNodeBuild($Node, $this->GlobalState));
         }
 
-        // usort($ContentNodes, function ($a, $b) {
-        //     return ($a->weight < $b->weight) ? -1 : 1;
-        // });
-
-        return $MainNodes;
-    }
-
-    private function prepareLayoutNodes($Node, array $OffNodes)
-    {
-        if (! is_null($Node->layout)) {
-            $LayoutNodes = new HyperRender;
-            $LayoutList = $OffNodes[$Node->layout];
-
-            foreach ($LayoutList as $Item) {
-                if (! is_null($Item->layout)) {
-                    $this->prepareLayoutNodes($Item, $OffNodes);
-                }
-                $NewItem = clone $Item;
-                if (is_null($NewItem->parent)) {
-                    $NewItem->weight = $Node->weight;
-                }
-
-                $LayoutNodes->addNode($this->hyperNodeBuild($NewItem, $this->GlobalState));
-            }
-
-            if ($Node->type !== 'content') {
-                $SelfNestedNode = clone $Node;
-                $SelfNestedNode->parent = $SelfNestedNode->layoutContainer;
-                $LayoutNodes->addNode($this->hyperNodeBuild($SelfNestedNode, $this->GlobalState));
-            }
-
-            $Node->LayoutNodes = $LayoutNodes;
-        }
+        return $ContentNodes;
     }
 
     public function getHyperRender(): HyperRender

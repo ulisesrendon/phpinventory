@@ -28,4 +28,6 @@ interface BlockStateInterface
     public function getRender(): string;
 
     public function isTemplated(): bool;
+
+    public function setParent($parent);
 }

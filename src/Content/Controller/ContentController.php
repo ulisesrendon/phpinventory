@@ -57,7 +57,7 @@ class ContentController
 
         $template = $Content?->properties?->template ?? 'templates/page.template.php';
 
-        return Response::template(
+        $render = Response::template(
             content: CONTENT_DIR."/$template",
             context: [
                 'Content' => $Content,
@@ -65,6 +65,8 @@ class ContentController
                 'render' => $HyperRender->render($Content->properties->prettify ?? true),
             ]
         );
+
+        return $render;
     }
 
     /**
@@ -93,12 +95,11 @@ class ContentController
 
         $Content->nodes = $this->ContentRepo->getContentNodes($Content->id);
 
-        if(!is_null($Request->getParam('escaped'))){
-            foreach($Content->nodes as $k => $node){
+        if (! is_null($Request->getParam('escaped'))) {
+            foreach ($Content->nodes as $k => $node) {
                 $Content->nodes[$k]->value = htmlspecialchars($node->value);
             }
         }
-
 
         return Response::json($Content);
     }

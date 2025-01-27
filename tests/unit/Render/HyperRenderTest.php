@@ -1,15 +1,19 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
 use Stradow\Framework\Render\HyperRender;
-use Stradow\Framework\Render\Interface\NestableInterface;
 use Stradow\Framework\Render\Interface\BlockStateInterface;
+use Stradow\Framework\Render\Interface\NestableInterface;
 use Stradow\Framework\Render\Interface\PrettifierInterface;
 
 final class HyperRenderTest extends TestCase
 {
     private $mockPrettifier;
+
     private $mockNode1;
+
     private $mockNode2;
+
     private $mockNode3;
 
     protected function setUp(): void
@@ -38,20 +42,20 @@ final class HyperRenderTest extends TestCase
         Mockery::close();
     }
 
-    public function testConstructor(): void
+    public function test_constructor(): void
     {
         $hyperRender = new HyperRender([$this->mockNode1, $this->mockNode2]);
         $this->assertCount(2, $hyperRender);
     }
 
-    public function testAddNode(): void
+    public function test_add_node(): void
     {
-        $hyperRender = new HyperRender();
+        $hyperRender = new HyperRender;
         $hyperRender->addNode($this->mockNode1);
         $this->assertCount(1, $hyperRender);
     }
 
-    public function testRender(): void
+    public function test_render(): void
     {
         $this->mockNode1->shouldReceive('getLayoutNodes')->andReturnNull();
         $this->mockNode1->shouldReceive('getRender')->andReturn('Node1Render');
@@ -64,7 +68,7 @@ final class HyperRenderTest extends TestCase
         $this->assertEquals('Node1Render', $output);
     }
 
-    public function testGetMapSchema(): void
+    public function test_get_map_schema(): void
     {
         $this->mockNode1->shouldReceive('getValue')->andReturn('Node1Value');
         $this->mockNode1->shouldReceive('getProperties')->andReturn(['property1' => 'value1']);
@@ -112,7 +116,7 @@ final class HyperRenderTest extends TestCase
         $this->assertEquals($expectedSchemaWithConfig, $hyperRender->getMapSchema($renderConfig));
     }
 
-    public function testGetTreeSchema(): void
+    public function test_get_tree_schema(): void
     {
         $this->mockNode1->shouldReceive('getValue')->andReturn('Node1Value');
         $this->mockNode1->shouldReceive('getParent')->andReturnNull();
@@ -147,13 +151,13 @@ final class HyperRenderTest extends TestCase
         $this->assertEquals($expectedTree, $hyperRender->getTreeSchema());
     }
 
-    public function testCount(): void
+    public function test_count(): void
     {
         $hyperRender = new HyperRender([$this->mockNode1, $this->mockNode2]);
         $this->assertEquals(2, $hyperRender->count());
     }
 
-    public function testGetIterator(): void
+    public function test_get_iterator(): void
     {
         $hyperRender = new HyperRender([$this->mockNode1, $this->mockNode2]);
         $iterator = $hyperRender->getIterator();

@@ -2,23 +2,26 @@
 
 namespace Stradow\Framework\Render;
 
+use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use Stradow\Framework\Render\Data\GlobalState;
 use Stradow\Framework\Render\Interface\BlockStateInterface;
-use Stradow\Framework\Render\Interface\GlobalStateInterface;
 use Stradow\Framework\Render\Interface\NestableInterface;
 use Stradow\Framework\Render\Interface\RepoInterface;
-use Mockery as m;
 
 final class HyperRenderApplicationTest extends TestCase
 {
     private $mockRepo;
+
     private $mockContent;
 
     private $mockNode1;
+
     private $mockNode2;
+
     private $mockNode3;
+
     private $config;
+
     private $renderConfig;
 
     protected function setUp(): void
@@ -65,7 +68,7 @@ final class HyperRenderApplicationTest extends TestCase
         $this->mockContent->id = 'contentId';
         $this->mockContent->path = '/path/to/content';
         $this->mockContent->title = 'Content Title';
-        $this->mockContent->properties = (object)['layoutContainer' => 'root', 'layout' => 'mainLayout'];
+        $this->mockContent->properties = (object) ['layoutContainer' => 'root', 'layout' => 'mainLayout'];
         $this->mockContent->active = true;
         $this->mockContent->type = 'page';
 
@@ -117,8 +120,6 @@ final class HyperRenderApplicationTest extends TestCase
     //     $HyperRender = $app->getHyperRender();
     //     $this->assertSame('contentId', $HyperRender->render());
     // }
-
-
 
     // public function testPrepareContentNodes(): void
     // {

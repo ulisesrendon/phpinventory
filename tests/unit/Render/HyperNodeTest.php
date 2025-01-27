@@ -1,16 +1,18 @@
 <?php
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Stradow\Framework\Render\HyperNode;
 use Stradow\Framework\Render\HyperRender;
-use PHPUnit\Framework\MockObject\MockObject;
 use Stradow\Framework\Render\Interface\GlobalStateInterface;
 use Stradow\Framework\Render\Interface\RendereableInterface;
 
 final class HyperNodeTest extends TestCase
 {
     private RendereableInterface&MockObject $mockRenderEngine;
+
     private GlobalStateInterface&MockObject $mockGlobalState;
+
     private ?HyperRender $mockLayoutNodes = null;
 
     protected function setUp(): void
@@ -19,7 +21,7 @@ final class HyperNodeTest extends TestCase
         $this->mockGlobalState = $this->createMock(GlobalStateInterface::class);
     }
 
-    public function testConstructor(): void
+    public function test_constructor(): void
     {
         $id = 'test-id';
         $value = 'test-value';
@@ -63,7 +65,7 @@ final class HyperNodeTest extends TestCase
         $this->assertTrue($node->isTemplated());
     }
 
-    public function testSettersAndGetters(): void
+    public function test_setters_and_getters(): void
     {
         $node = new HyperNode(
             'test-id',
@@ -80,7 +82,7 @@ final class HyperNodeTest extends TestCase
         $node->setValue($newValue);
         $this->assertSame($newValue, $node->getValue());
 
-        $newChildren = [new stdClass(), new stdClass()];
+        $newChildren = [new stdClass, new stdClass];
         $node->setChildren($newChildren);
         $this->assertSame($newChildren, $node->getChildren());
 
@@ -105,7 +107,7 @@ final class HyperNodeTest extends TestCase
         $this->assertNull($node->getProperty('new-property'));
     }
 
-    public function testAddChild(): void
+    public function test_add_child(): void
     {
         $node = new HyperNode(
             'test-id',
@@ -118,8 +120,8 @@ final class HyperNodeTest extends TestCase
             $this->mockLayoutNodes
         );
 
-        $child1 = new stdClass();
-        $child2 = new stdClass();
+        $child1 = new stdClass;
+        $child2 = new stdClass;
 
         $node->addChild($child1);
         $node->addChild($child2);
@@ -127,7 +129,7 @@ final class HyperNodeTest extends TestCase
         $this->assertEquals([$child1, $child2], $node->getChildren());
     }
 
-    public function testGetRender(): void
+    public function test_get_render(): void
     {
         $node = new HyperNode(
             'test-id',
@@ -148,7 +150,7 @@ final class HyperNodeTest extends TestCase
         $this->assertEquals('rendered-output', $node->getRender());
     }
 
-    public function testToString(): void
+    public function test_to_string(): void
     {
         $node = new HyperNode(
             'test-id',
@@ -169,7 +171,7 @@ final class HyperNodeTest extends TestCase
         $this->assertEquals('rendered-output', (string) $node);
     }
 
-    public function testSetAttributes(): void
+    public function test_set_attributes(): void
     {
         $node = new HyperNode(
             'test-id',
@@ -214,7 +216,7 @@ final class HyperNodeTest extends TestCase
         $this->assertEquals(['class' => 'class1 class2 class3 class4'], $node->getAttributes());
     }
 
-    public function testGetLayoutNodes(): void
+    public function test_get_layout_nodes(): void
     {
         $node = new HyperNode(
             'test-id',

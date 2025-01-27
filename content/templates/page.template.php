@@ -8,7 +8,7 @@
 
     <link rel="canonical" href="<?php echo $Config->get('site_url') ?>/<?php echo $Content->path ?>" />
     <meta property="og:title" content="<?php echo $Content->title ?> - <?php echo $Config->get('site_name') ?>">
-    <?php if(isset($Content->properties->description)){?>
+    <?php if (isset($Content->properties->description)) {?>
     <meta name="description" content="<?php echo $Content->properties->description ?>" />
     <?php } ?>
     <meta property='og:image' content='<?php echo $Config->get('site_url') ?>/<?php echo $Content->properties->cover ?? 'media/covers/default.jpg' ?>'>
