@@ -12,6 +12,8 @@ interface GlobalStateInterface
 
     public function getProperties(): object;
 
+    public function getProperty($property): mixed;
+
     public function isActive(): bool;
 
     public function getRepo(): object;

@@ -74,6 +74,11 @@ class GlobalState implements GlobalStateInterface
         return $this->properties;
     }
 
+    public function getProperty($property): mixed
+    {
+        return $this->properties->$property ?? null;
+    }
+
     public function isActive(): bool
     {
         return $this->active;
