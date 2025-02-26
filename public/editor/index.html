@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="dark">
+    <div class="container">
+        <h2>Content editor</h2>
+
+        <div class="form-field">
+            <h4>Model:</h4>
+            <textarea class="form-field-block" name="result" id="result" rows="18"></textarea>
+        </div>
+
+        <div id="treeBase" class="list-group-item nested-sortable"></div>
+    </div>
+    <script>
+        const ContentNodes = [
+            {
+                "id": "030f80a5-bdef-44e7-9f84-fb8563a8e050",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": null,
+                "value": null,
+                "properties": {
+                "listType": "I"
+                },
+                "weight": 100,
+                "type": "ol",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "1bccc7b7-94bb-4384-ab97-24093bb71a01",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": null,
+                "value": "Hello world!",
+                "properties": [],
+                "weight": 100,
+                "type": "h1",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "1e971939-f285-4afa-bbbc-ce56b71b3599",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": null,
+                "value": "174f184d-edc2-46d8-a3f6-6e757554900a",
+                "properties": [],
+                "weight": 100,
+                "type": "collection",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "4f1ffe71-cdde-49de-8f7b-8b23ac7f9af8",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": null,
+                "value": null,
+                "properties": [],
+                "weight": 100,
+                "type": "container",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "53afa943-ed66-44c6-a94b-3730877f54fe",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": null,
+                "value": "<h1>Hello world!</h1>\r\n<div>\r\n\t<div class=\"text\">\r\n\t\t<p>lorem ipsum dolor</p>\r\n\t\t<p>sit amet consectetur</p>\r\n\t\t<p><img src=\"https://picsum.photos/200/300\"></p>\r\n\t</div>\r\n\t<ul>\r\n\t\t<li>lorem ipsum dolor</li>\r\n\t\t<li>sit amet consectetur</li>\r\n\t</ul>\r\n</div>",
+                "properties": [],
+                "weight": 100,
+                "type": "code-plain",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "6f91c4c7-faf8-4fe5-88a6-65f21ed3d71c",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": null,
+                "value": "f596b3c9-a1fa-4d3d-be13-fd7d0ef29d11",
+                "properties": {
+                "template": "templates/nav.template.php"
+                },
+                "weight": 100,
+                "type": "collection",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "a4ce0b7a-5d1f-4a49-85f7-41cbfb0dd6fb",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": null,
+                "value": null,
+                "properties": [],
+                "weight": 100,
+                "type": "container",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "bcfd6865-3c55-4e26-acff-493a413a44c2",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": null,
+                "value": null,
+                "properties": [],
+                "weight": 100,
+                "type": "table",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "1169c2c0-f071-40a0-8f08-5a410aa1fea0",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "030f80a5-bdef-44e7-9f84-fb8563a8e050",
+                "value": "dolor",
+                "properties": [],
+                "weight": 100,
+                "type": "item",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "afd9253c-2234-47ee-88d0-7f978568e5c4",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "030f80a5-bdef-44e7-9f84-fb8563a8e050",
+                "value": "ipsum",
+                "properties": [],
+                "weight": 100,
+                "type": "item",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "dc842927-3e69-4515-b3a8-c05417bdc2f0",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "030f80a5-bdef-44e7-9f84-fb8563a8e050",
+                "value": "lorem",
+                "properties": [],
+                "weight": 100,
+                "type": "item",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "ec6b9ea6-d971-426c-9cd2-c76d27398b3a",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "049c355c-7d6b-4354-9690-48e72edd56e0",
+                "value": null,
+                "properties": [],
+                "weight": 100,
+                "type": "text",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "82cd5a12-c6e4-4b3d-b5d3-b0e73d60865d",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "4f1ffe71-cdde-49de-8f7b-8b23ac7f9af8",
+                "value": "A level 2 heading",
+                "properties": [],
+                "weight": 100,
+                "type": "h2",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "1b5fdfec-0060-4497-ba15-1ce31a910b38",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "9cf6f60a-520f-4e3a-85e9-a2779af1a502",
+                "value": "Heading 1",
+                "properties": [],
+                "weight": 50,
+                "type": "table-heading",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "7eeb89bd-9f11-4a4e-8154-8751bcb321a9",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "9cf6f60a-520f-4e3a-85e9-a2779af1a502",
+                "value": "Heading 2",
+                "properties": [],
+                "weight": 100,
+                "type": "table-heading",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "b3c2ba84-dec5-4458-91bd-9a08413278d3",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "9fc45f27-6d83-4ff9-8ccc-865bc85ed65c",
+                "value": "value 1.1",
+                "properties": [],
+                "weight": 50,
+                "type": "cell",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "5850ae47-d049-4745-b4c2-74a038c7d889",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "9fc45f27-6d83-4ff9-8ccc-865bc85ed65c",
+                "value": "value 1.2",
+                "properties": [],
+                "weight": 100,
+                "type": "cell",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "049c355c-7d6b-4354-9690-48e72edd56e0",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "a4ce0b7a-5d1f-4a49-85f7-41cbfb0dd6fb",
+                "value": null,
+                "properties": [],
+                "weight": 100,
+                "type": "container",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "b5dd35c0-a18b-41b6-8af4-9ddeb0eb7f87",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "a4ce0b7a-5d1f-4a49-85f7-41cbfb0dd6fb",
+                "value": null,
+                "properties": [],
+                "weight": 100,
+                "type": "ul",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "abc56ea7-b014-409c-b724-1be0d7191fbc",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "b5dd35c0-a18b-41b6-8af4-9ddeb0eb7f87",
+                "value": "lorem ipsum dolor",
+                "properties": [],
+                "weight": 100,
+                "type": "item",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "db85a32e-b50e-4c72-8ce5-5b38dd702a19",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "b5dd35c0-a18b-41b6-8af4-9ddeb0eb7f87",
+                "value": "sit amet consectetur",
+                "properties": [],
+                "weight": 100,
+                "type": "item",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "9cf6f60a-520f-4e3a-85e9-a2779af1a502",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "bcfd6865-3c55-4e26-acff-493a413a44c2",
+                "value": null,
+                "properties": [],
+                "weight": 25,
+                "type": "row",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "9fc45f27-6d83-4ff9-8ccc-865bc85ed65c",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "bcfd6865-3c55-4e26-acff-493a413a44c2",
+                "value": null,
+                "properties": [],
+                "weight": 50,
+                "type": "row",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "e3551475-7ab9-4762-9b37-9c35c935ce8b",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "bcfd6865-3c55-4e26-acff-493a413a44c2",
+                "value": null,
+                "properties": [],
+                "weight": 100,
+                "type": "row",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "b8216a10-8476-4802-b6c4-9bfb31dbfba9",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "e3551475-7ab9-4762-9b37-9c35c935ce8b",
+                "value": "value 2.1",
+                "properties": [],
+                "weight": 50,
+                "type": "cell",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "22deb290-de7f-41f9-bda9-169d465f678b",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "e3551475-7ab9-4762-9b37-9c35c935ce8b",
+                "value": "value 2.2",
+                "properties": [],
+                "weight": 100,
+                "type": "cell",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "45a6ba9e-b3ef-4f74-994e-1e932c0115a0",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "ec6b9ea6-d971-426c-9cd2-c76d27398b3a",
+                "value": "lorem ipsum dolor",
+                "properties": [],
+                "weight": 90,
+                "type": "item",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "4206ea2d-380f-4e83-a5df-59ccd3a5c3be",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "ec6b9ea6-d971-426c-9cd2-c76d27398b3a",
+                "value": "https://picsum.photos/200/300",
+                "properties": [],
+                "weight": 100,
+                "type": "img",
+                "layout": null,
+                "layoutContainer": null
+            },
+            {
+                "id": "9e433cf7-8645-452c-bab5-592b5bb33fa3",
+                "content": "df056abc-dca6-41b1-9662-6b3b47e583ca",
+                "parent": "ec6b9ea6-d971-426c-9cd2-c76d27398b3a",
+                "value": "sit amet consectetur",
+                "properties": [],
+                "weight": 100,
+                "type": "item",
+                "layout": null,
+                "layoutContainer": null
+            }
+    ];
+    </script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.15.1/beautify.min.js" crossorigin="anonymous"></script>
+    <script defer src="js/Sortable.min.js"></script>
+    <script defer src="js/hypereditor.js"></script>
+    <script defer src="js/hypereditor-implement.js"></script>
+</body>
+</html>

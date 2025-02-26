@@ -100,6 +100,9 @@ const prepareOptionList = function(nodeOptionList){
     return optionSelect;
 };
 
+/**
+ * @param Array nodeOptionList
+ */
 const presentOptionNodeList = function (nodeOptionList){
     let nodeOptionMap = [];
     for(let i = 0; i<nodeOptionList.length; i++){

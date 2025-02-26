@@ -28,7 +28,7 @@ $DataBaseAccess->command("CREATE TABLE contentnodes (
 $DataBaseAccess->command("CREATE TABLE contents (
 	id varchar(255) NOT NULL PRIMARY KEY,
 	path varchar(255) NULL default null,
-    title varchar(255) NULL default null,
+    title TEXT NULL default null,
 	properties json NOT NULL DEFAULT ('{}'),
 	active boolean NOT NULL DEFAULT false,
 	type varchar(150) not null default 'page',
